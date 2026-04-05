@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Login | Scale Platform</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eeeef0",
+                        "outline": "#78767d",
+                        "tertiary-fixed-dim": "#9ecaff",
+                        "on-tertiary-container": "#0088e2",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#e2e0fc",
+                        "primary-container": "#002116",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#000103",
+                        "on-secondary-fixed": "#1a1a2e",
+                        "on-error": "#ffffff",
+                        "background": "#f9f9fb",
+                        "tertiary-fixed": "#d1e4ff",
+                        "surface-container-low": "#f3f3f5",
+                        "surface-variant": "#e2e2e4",
+                        "on-primary-fixed": "#002116",
+                        "on-surface-variant": "#47464c",
+                        "surface": "#f9f9fb",
+                        "error-container": "#ffdad6",
+                        "primary": "#000101",
+                        "on-primary-container": "#009670",
+                        "secondary-fixed": "#e2e0fc",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#3adfab",
+                        "surface-container-high": "#e8e8ea",
+                        "on-tertiary-fixed": "#001d36",
+                        "surface-dim": "#d9dadc",
+                        "primary-fixed-dim": "#3adfab",
+                        "on-primary-fixed-variant": "#00513b",
+                        "inverse-surface": "#2f3132",
+                        "on-tertiary-fixed-variant": "#00497d",
+                        "secondary-fixed-dim": "#c6c4df",
+                        "on-secondary-container": "#63627a",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9fb",
+                        "primary-fixed": "#60fcc6",
+                        "secondary": "#5d5c74",
+                        "outline-variant": "#c8c5cd",
+                        "surface-container-highest": "#e2e2e4",
+                        "on-surface": "#1a1c1d",
+                        "on-background": "#1a1c1d",
+                        "inverse-on-surface": "#f0f0f2",
+                        "on-secondary-fixed-variant": "#45455b",
+                        "surface-tint": "#006c4f",
+                        "tertiary-container": "#001d37",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.5rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "data": ["DM Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-headline { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .font-data { font-family: 'DM Mono', monospace; }
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+    </style>
+</head>
+<body class="bg-on-secondary-fixed min-h-screen flex items-center justify-center p-6 relative overflow-hidden">
+<div class="absolute inset-0 z-0">
+<div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-on-primary-container/20 rounded-full blur-[120px]"></div>
+<div class="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-secondary/10 rounded-full blur-[120px]"></div>
+</div>
+<main class="relative z-10 w-full max-w-[480px]">
+<div class="glass-panel rounded-xl shadow-2xl p-10 border border-outline-variant/10">
+<div class="flex flex-col items-center mb-10">
+<div class="flex items-center gap-2 mb-2">
+<span class="font-headline font-black text-3xl tracking-tighter text-on-primary-container">SCALE</span>
+</div>
+<p class="text-on-secondary-fixed-variant font-medium text-sm">The Digital Architect</p>
+</div>
+<form class="space-y-6">
+<div class="space-y-1.5">
+<label class="text-xs font-semibold uppercase tracking-wider text-on-secondary-fixed-variant ml-1" for="email">Email Address</label>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">alternate_email</span>
+</div>
+<input class="block w-full pl-11 pr-4 py-3.5 bg-surface-container-high border-none rounded-lg focus:ring-2 focus:ring-on-primary-container/20 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline/60 text-sm" id="email" name="email" placeholder="architect@scale.io" type="email"/>
+</div>
+</div>
+<div class="space-y-1.5">
+<div class="flex justify-between items-center px-1">
+<label class="text-xs font-semibold uppercase tracking-wider text-on-secondary-fixed-variant" for="password">Password</label>
+<a class="text-[11px] font-bold text-on-primary-container hover:opacity-80 transition-opacity" href="#">Forgot?</a>
+</div>
+<div class="relative group">
+<div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-outline">
+<span class="material-symbols-outlined text-[20px]">lock</span>
+</div>
+<input class="block w-full pl-11 pr-12 py-3.5 bg-surface-container-high border-none rounded-lg focus:ring-2 focus:ring-on-primary-container/20 focus:bg-surface-container-lowest transition-all text-on-surface placeholder:text-outline/60 text-sm" id="password" name="password" placeholder="••••••••••••" type="password"/>
+<button class="absolute inset-y-0 right-0 pr-4 flex items-center text-outline hover:text-on-primary-container transition-colors" type="button">
+<span class="material-symbols-outlined text-[20px]">visibility</span>
+</button>
+</div>
+</div>
+<div class="flex items-center space-x-2 px-1">
+<input class="w-4 h-4 rounded border-outline-variant text-on-primary-container focus:ring-on-primary-container" id="remember" type="checkbox"/>
+<label class="text-xs text-on-secondary-fixed-variant font-medium" for="remember">Keep me signed in for 30 days</label>
+</div>
+<button class="w-full group flex items-center justify-center gap-2 py-4 px-6 rounded-lg bg-gradient-to-r from-on-primary-container to-primary-fixed text-on-primary font-headline font-bold text-sm shadow-lg shadow-on-primary-container/20 hover:shadow-on-primary-container/40 active:scale-[0.98] transition-all" type="submit">
+<span>Sign In to Platform</span>
+<span class="material-symbols-outlined text-[18px] group-hover:translate-x-1 transition-transform">arrow_forward</span>
+</button>
+</form>
+<div class="mt-12">
+<div class="flex items-center gap-3 mb-4">
+<div class="h-px flex-1 bg-outline-variant/30"></div>
+<span class="text-[10px] font-bold uppercase tracking-widest text-outline">Quick Access Demo</span>
+<div class="h-px flex-1 bg-outline-variant/30"></div>
+</div>
+<div class="grid grid-cols-2 gap-3">
+<button class="flex flex-col items-start p-4 rounded-lg bg-surface-container hover:bg-surface-container-highest transition-colors text-left group">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px] text-on-primary-container" data-weight="fill">shield_person</span>
+<span class="text-[11px] font-bold text-on-surface">Admin Access</span>
+</div>
+<span class="font-data text-[10px] text-on-secondary-fixed-variant opacity-70 group-hover:opacity-100 transition-opacity">admin@scale.demo</span>
+</button>
+<button class="flex flex-col items-start p-4 rounded-lg bg-surface-container hover:bg-surface-container-highest transition-colors text-left group">
+<div class="flex items-center gap-2 mb-1">
+<span class="material-symbols-outlined text-[16px] text-on-tertiary-container" data-weight="fill">support_agent</span>
+<span class="text-[11px] font-bold text-on-surface">Agent Portal</span>
+</div>
+<span class="font-data text-[10px] text-on-secondary-fixed-variant opacity-70 group-hover:opacity-100 transition-opacity">agent_01@scale.demo</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-8 flex justify-center items-center gap-6">
+<a class="text-[11px] font-semibold text-outline hover:text-primary-fixed-dim transition-colors" href="#">Security Audit</a>
+<div class="w-1 h-1 rounded-full bg-outline/30"></div>
+<a class="text-[11px] font-semibold text-outline hover:text-primary-fixed-dim transition-colors" href="#">Privacy Framework</a>
+<div class="w-1 h-1 rounded-full bg-outline/30"></div>
+<a class="text-[11px] font-semibold text-outline hover:text-primary-fixed-dim transition-colors" href="#">v4.2.0-stable</a>
+</div>
+</main>
+<div class="fixed bottom-6 left-6 z-20">
+<div class="flex items-center gap-3 glass-panel px-4 py-2 rounded-full border border-outline-variant/20 shadow-sm">
+<div class="w-2 h-2 rounded-full bg-on-primary-container animate-pulse"></div>
+<span class="text-[10px] font-bold tracking-tight text-on-secondary-fixed-variant uppercase">All Systems Operational</span>
+</div>
+</div>
+</body></html>

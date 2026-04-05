@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sign In | Scale AI</title>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-highest": "#e7e1e3",
+                      "on-primary-container": "#8aadec",
+                      "surface-container-high": "#ede6e9",
+                      "primary-fixed-dim": "#aac7ff",
+                      "tertiary-fixed": "#97f1f6",
+                      "on-tertiary-fixed-variant": "#004f53",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "secondary-fixed-dim": "#8fd0e5",
+                      "secondary-container": "#a8eaff",
+                      "tertiary": "#003032",
+                      "on-surface": "#1d1b1d",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f8f2f4",
+                      "on-secondary-fixed": "#001f27",
+                      "on-primary-fixed": "#001b3e",
+                      "on-background": "#1d1b1d",
+                      "primary-container": "#164078",
+                      "inverse-primary": "#aac7ff",
+                      "inverse-on-surface": "#f5eff2",
+                      "tertiary-fixed-dim": "#7ad5da",
+                      "error": "#ba1a1a",
+                      "surface-tint": "#3a5e98",
+                      "surface-container": "#f3ecef",
+                      "primary": "#002a59",
+                      "on-secondary-fixed-variant": "#004e5e",
+                      "on-tertiary-container": "#5fbabf",
+                      "on-primary-fixed-variant": "#1f467f",
+                      "secondary": "#1c6779",
+                      "outline": "#737781",
+                      "on-primary": "#ffffff",
+                      "surface-bright": "#fef8fa",
+                      "secondary-fixed": "#b0ecff",
+                      "surface": "#fef8fa",
+                      "primary-fixed": "#d6e3ff",
+                      "inverse-surface": "#323032",
+                      "on-tertiary-fixed": "#002021",
+                      "tertiary-container": "#00484b",
+                      "on-error-container": "#93000a",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#e7e1e3",
+                      "on-error": "#ffffff",
+                      "background": "#fef8fa",
+                      "surface-dim": "#ded8db",
+                      "outline-variant": "#c3c6d1",
+                      "on-secondary-container": "#236b7d",
+                      "on-surface-variant": "#434750"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.125rem",
+                      "lg": "0.25rem",
+                      "xl": "0.5rem",
+                      "full": "0.75rem"
+              },
+              "fontFamily": {
+                      "headline": ["Plus Jakarta Sans"],
+                      "body": ["Plus Jakarta Sans"],
+                      "label": ["Plus Jakarta Sans"]
+              }
+            },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .mesh-gradient {
+            background-color: #fef8fa;
+            background-image: 
+                radial-gradient(at 0% 0%, #164078 0px, transparent 50%),
+                radial-gradient(at 100% 0%, #22888D 0px, transparent 50%),
+                radial-gradient(at 100% 100%, #1c6779 0px, transparent 50%),
+                radial-gradient(at 0% 100%, #164078 0px, transparent 50%);
+            background-size: 100% 100%;
+            opacity: 0.08;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col items-center justify-center relative overflow-hidden">
+<div class="absolute inset-0 mesh-gradient z-0"></div>
+<div class="w-full max-w-md px-8 z-10">
+<div class="mb-12 text-center">
+<div class="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-primary-container mb-6 shadow-2xl">
+<span class="material-symbols-outlined text-white text-3xl" style="font-variation-settings: 'FILL' 1;">architecture</span>
+</div>
+<h1 class="text-[2.5rem] font-extrabold tracking-tighter text-primary-container leading-none mb-2">Scale</h1>
+<p class="text-on-surface-variant tracking-wide font-medium text-sm uppercase">The Digital Architect for Sales</p>
+</div>
+<div class="bg-surface-container-lowest p-10 rounded-xl shadow-[0px_20px_40px_rgba(22,20,22,0.04)] relative">
+<div class="mb-8">
+<h2 class="text-2xl font-bold text-on-surface tracking-tight mb-1">Welcome back</h2>
+<p class="text-on-surface-variant text-sm">Enter your credentials to access your dashboard.</p>
+</div>
+<form class="space-y-6">
+<div class="group">
+<label class="block text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant mb-2 group-focus-within:text-primary transition-colors" for="email">Email Address</label>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-outline-variant/20 focus:border-primary focus:ring-0 px-0 py-3 text-on-surface transition-all placeholder:text-outline-variant/60 font-medium" id="email" name="email" placeholder="name@company.ai" type="email"/>
+</div>
+</div>
+<div class="group">
+<div class="flex justify-between items-center mb-2">
+<label class="block text-[0.75rem] font-bold uppercase tracking-wider text-on-surface-variant group-focus-within:text-primary transition-colors" for="password">Password</label>
+<a class="text-[0.75rem] font-bold text-primary hover:text-secondary transition-colors tracking-tight" href="#">Forgot password?</a>
+</div>
+<div class="relative">
+<input class="w-full bg-surface-container-low border-0 border-b-2 border-outline-variant/20 focus:border-primary focus:ring-0 px-0 py-3 text-on-surface transition-all placeholder:text-outline-variant/60 font-medium" id="password" name="password" placeholder="••••••••" type="password"/>
+</div>
+</div>
+<div class="pt-4">
+<button class="w-full bg-primary-container text-on-primary py-4 px-6 rounded-lg font-bold tracking-tight hover:bg-primary transition-all shadow-lg shadow-primary-container/20 active:scale-[0.98]" type="submit">
+                        Sign In
+                    </button>
+</div>
+</form>
+<div class="mt-10 pt-8 border-t border-surface-container-high">
+<div class="flex items-center gap-4">
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+<span class="text-[0.65rem] font-bold uppercase tracking-[0.2em] text-outline">Quick Access</span>
+<div class="h-[1px] flex-1 bg-outline-variant/20"></div>
+</div>
+<div class="mt-6 flex flex-col gap-3">
+<button class="flex items-center justify-between p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">person</span>
+</div>
+<div class="text-left">
+<p class="text-[0.75rem] font-bold text-on-surface leading-tight">Admin Demo</p>
+<p class="text-[0.65rem] text-on-surface-variant">Full platform access</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-primary transition-colors">chevron_right</span>
+</button>
+<button class="flex items-center justify-between p-4 rounded-lg bg-surface-container-low hover:bg-surface-container-high transition-colors group">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded bg-secondary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-secondary text-sm">groups</span>
+</div>
+<div class="text-left">
+<p class="text-[0.75rem] font-bold text-on-surface leading-tight">Team Demo</p>
+<p class="text-[0.65rem] text-on-surface-variant">Lead management view</p>
+</div>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-secondary transition-colors">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+<div class="mt-12 text-center">
+<p class="text-on-surface-variant text-sm">
+                Don't have an account? 
+                <a class="text-primary font-bold hover:underline underline-offset-4 decoration-2" href="#">Request Enterprise Access</a>
+</p>
+</div>
+<div class="mt-16 flex justify-center gap-8">
+<img alt="Partner Logo 1" class="h-5 opacity-30 grayscale filter invert dark:invert-0" data-alt="Monochrome minimalist tech logo with clean geometric lines on a light grey background for corporate partner display" src="https://lh3.googleusercontent.com/aida-public/AB6AXuC6gtN6gCfMEjKSjT6z-M38jLshj7LBVrCE93jiHEbHrsrpHsWk2UhJwVgW4OC6udIWuKmp3l86a6v4pr3wml-IX5Lx7GMqgmmajlbHUF3gSUbG0WOVg-Q6XARFhJaZ41gfnYNYDS0Tc1B6s8QP9sgVQxtUedcsnhHLqFZqf5nuj3Qxe49tw1nyBuCiwPJASH3u9Xb9jQXUN9cR-JHZmPJwkt-pRv2bqsDFZuLey1DjXFEBdlSGkDGSJIrXNkPvTDeKIKIolqD8IHlb"/>
+<img alt="Partner Logo 2" class="h-5 opacity-30 grayscale filter invert dark:invert-0" data-alt="Abstract geometric emblem in black and white featuring sharp architectural angles and professional corporate aesthetic" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAM24BBR23auT7WvPTe5FlXnQ-pXqfgwkzqbd5ww5rA-hSUkFj8DHwiHRcqUm9ecmv1HgtzA0aFcQp3zbIM--QPDuik5wUNLddovb8oSHPnElXmk6FV5Bj9RZrLYfjd5bTSFGjg9XEcsczMlh4BNAH2EMP4xzb1ESkj5BkSawOrgNqj-DWIq_nen3e408CR0d3iFm4xBD3LqAJKW32YZl8f-RXaqeEkblf-s3syHGUoPEwk1c6xzCf6lPApFenaWJFkjrJmi47GjG5K"/>
+<img alt="Partner Logo 3" class="h-5 opacity-30 grayscale filter invert dark:invert-0" data-alt="Sleek modern typography logo representing an innovative AI technology company in a professional monochromatic style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBuFzzuqkrN7hQKGSLhb0RhdvJ1oqIoq_Eyvi1BWa1HGXzRYbCn2XIkWQp6QJcok26keQlnqVBl4pvK8Q4P2hAat7A22snvcHPCRdSvRpDY2wlcf63vzTKf8OZZdiJfAvsxgUICm1d5aDZBLgACi5XLzX6DgBRt2WN3omXNE7l42YPsIZbyzEpdqVbswyme5bu8NSGpgwiMd1qRzBMqJWe-o0-r2HkDlz-YvS6fauPsZAxLaBGfMOWyppmq_BQ3N4luwApqU35lLndU"/>
+</div>
+</div>
+<div class="fixed bottom-8 right-8 flex gap-4 text-[0.7rem] font-bold uppercase tracking-widest text-outline-variant/60">
+<a class="hover:text-primary transition-colors" href="#">Privacy Policy</a>
+<a class="hover:text-primary transition-colors" href="#">Terms of Service</a>
+<a class="hover:text-primary transition-colors" href="#">System Status</a>
+</div>
+</body></html>

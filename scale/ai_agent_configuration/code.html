@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>AI Agent Configuration | Scale</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e7e1e3",
+                    "on-primary-container": "#8aadec",
+                    "surface-container-high": "#ede6e9",
+                    "primary-fixed-dim": "#aac7ff",
+                    "tertiary-fixed": "#97f1f6",
+                    "on-tertiary-fixed-variant": "#004f53",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#8fd0e5",
+                    "secondary-container": "#a8eaff",
+                    "tertiary": "#003032",
+                    "on-surface": "#1d1b1d",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f8f2f4",
+                    "on-secondary-fixed": "#001f27",
+                    "on-primary-fixed": "#001b3e",
+                    "on-background": "#1d1b1d",
+                    "primary-container": "#164078",
+                    "inverse-primary": "#aac7ff",
+                    "inverse-on-surface": "#f5eff2",
+                    "tertiary-fixed-dim": "#7ad5da",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#3a5e98",
+                    "surface-container": "#f3ecef",
+                    "primary": "#002a59",
+                    "on-secondary-fixed-variant": "#004e5e",
+                    "on-tertiary-container": "#5fbabf",
+                    "on-primary-fixed-variant": "#1f467f",
+                    "secondary": "#1c6779",
+                    "outline": "#737781",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fef8fa",
+                    "secondary-fixed": "#b0ecff",
+                    "surface": "#fef8fa",
+                    "primary-fixed": "#d6e3ff",
+                    "inverse-surface": "#323032",
+                    "on-tertiary-fixed": "#002021",
+                    "tertiary-container": "#00484b",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e7e1e3",
+                    "on-error": "#ffffff",
+                    "background": "#fef8fa",
+                    "surface-dim": "#ded8db",
+                    "outline-variant": "#c3c6d1",
+                    "on-secondary-container": "#236b7d",
+                    "on-surface-variant": "#434750"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-8 px-4 bg-slate-50 dark:bg-[#161416] w-64 border-r-0 z-50">
+<div class="mb-10 px-4">
+<h1 class="text-xl font-bold tracking-tighter text-[#164078] dark:text-white">Scale AI</h1>
+<p class="text-[0.75rem] uppercase tracking-wider text-slate-500">Enterprise Tier</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Dashboard -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Dashboard</span>
+</a>
+<!-- Leads -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Leads</span>
+</a>
+<!-- Pipelines -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Pipelines</span>
+</a>
+<!-- Team -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Team</span>
+</a>
+<!-- Analytics -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Analytics</span>
+</a>
+<!-- Settings - Active State (AI Agent Config is a sub-module of Settings/Dashboard) -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#164078] dark:text-[#22888D] font-bold border-r-4 border-[#164078] dark:border-[#22888D] bg-slate-100 dark:bg-slate-800/30 transition-all duration-200 scale-98" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 space-y-4">
+<button class="w-full bg-[#164078] text-white py-3 rounded-lg text-[0.75rem] uppercase tracking-widest font-bold hover:opacity-90 transition-all">
+                New Campaign
+            </button>
+<div class="pt-6 border-t border-slate-200/50 dark:border-slate-800/50">
+<a class="flex items-center gap-3 py-2 text-slate-500 hover:text-primary transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Support</span>
+</a>
+<a class="flex items-center gap-3 py-2 text-slate-500 hover:text-error transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Log Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="ml-64 flex-1 min-h-screen bg-surface flex flex-col">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 w-full flex justify-between items-center px-12 py-6 bg-white/80 dark:bg-[#161416]/80 backdrop-blur-md shadow-[0px_20px_40px_rgba(22,20,22,0.04)]">
+<div class="flex items-center gap-8">
+<h2 class="text-2xl font-extrabold tracking-tight text-primary">AI Agent Architecture</h2>
+<div class="relative group">
+<span class="absolute inset-y-0 left-3 flex items-center text-slate-400 group-focus-within:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="search">search</span>
+</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-low border-none rounded-full text-sm w-64 focus:ring-2 focus:ring-primary/20 transition-all" placeholder="Search agents..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span></button>
+<button class="hover:text-primary transition-colors"><span class="material-symbols-outlined" data-icon="help_outline">help_outline</span></button>
+</div>
+<div class="h-10 w-10 rounded-full overflow-hidden border-2 border-primary/10">
+<img alt="Manager profile" class="w-full h-full object-cover" data-alt="professional portrait of a senior system administrator in a modern office environment with soft lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDZCL0sWNhXU8SzQZXC5gW08gt_KKoLzrJV38kCHnvnsNHoCgLlsrNitScz-X48D7Jm5OzXKkihBCOzhwoMxJIasmFW2ckpKeTcIHvJeEL8HyPfzhARU0kU-_i8BPzyFpLHAOnFXqwJU48SDlFczSpSG0_jbVJdgGveQau8bj-eg9iUy35j3p7Q4M2HfqRbXx-QtehCw3I6PoWauaFESmqaiT0mmagEbJqPdch9SReOx2QhXDOyY7S_H2D0815gYDhg-gErq0u2kf_n"/>
+</div>
+</div>
+</header>
+<!-- View Content -->
+<div class="p-12 space-y-12">
+<!-- Page Header Asymmetry -->
+<div class="flex justify-between items-end">
+<div class="max-w-2xl">
+<p class="text-secondary font-bold tracking-[0.2em] text-[0.7rem] uppercase mb-2">Administrative Control</p>
+<h1 class="text-5xl font-extrabold text-on-surface tracking-tight leading-[1.1]">Configure Your Digital Workforce</h1>
+<p class="text-body-lg text-slate-500 mt-4 leading-relaxed">Orchestrate lead handling, customer support, and logistics through high-precision AI agents. Fine-tune sequences to match your brand's technical voice.</p>
+</div>
+<div class="flex gap-3">
+<button class="px-6 py-3 bg-surface-container-high text-primary font-bold text-sm rounded-lg hover:bg-surface-container-highest transition-all">Export Config</button>
+<button class="px-6 py-3 bg-primary text-white font-bold text-sm rounded-lg hover:opacity-90 shadow-lg shadow-primary/20 transition-all">Deploy Changes</button>
+</div>
+</div>
+<!-- Bento Layout for Tabs & Master Toggle -->
+<div class="grid grid-cols-12 gap-8">
+<!-- Sidebar Tabs (Vertical Glassmorphism Style) -->
+<div class="col-span-3 space-y-4">
+<div class="p-2 bg-surface-container-low rounded-xl">
+<button class="w-full flex items-center justify-between px-5 py-4 bg-white text-primary font-bold rounded-lg shadow-sm">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="person_search" style="font-variation-settings: 'FILL' 1;">person_search</span>
+<span class="text-sm">Lead Follow-Up</span>
+</div>
+<span class="w-2 h-2 rounded-full bg-tertiary"></span>
+</button>
+<button class="w-full flex items-center justify-between px-5 py-4 text-slate-500 hover:text-primary transition-all font-medium">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="text-sm">Client Chat</span>
+</div>
+</button>
+<button class="w-full flex items-center justify-between px-5 py-4 text-slate-500 hover:text-primary transition-all font-medium">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="payments">payments</span>
+<span class="text-sm">Refund Agent</span>
+</div>
+</button>
+<button class="w-full flex items-center justify-between px-5 py-4 text-slate-500 hover:text-primary transition-all font-medium">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined" data-icon="local_shipping">local_shipping</span>
+<span class="text-sm">Order Tracking</span>
+</div>
+</button>
+</div>
+<!-- Global Switch Card -->
+<div class="p-6 bg-primary-container text-white rounded-xl relative overflow-hidden group">
+<div class="absolute -right-4 -bottom-4 opacity-10 group-hover:scale-110 transition-transform duration-500">
+<span class="material-symbols-outlined text-9xl" data-icon="robot_2">robot_2</span>
+</div>
+<h4 class="text-lg font-bold mb-1">Master Toggle</h4>
+<p class="text-xs text-on-primary-container mb-6 leading-relaxed">Globally enable or disable all autonomous processing.</p>
+<div class="flex items-center gap-3">
+<div class="relative inline-block w-12 h-6 transition duration-200 ease-in-out bg-tertiary rounded-full shadow-inner">
+<div class="absolute left-1 top-1 w-4 h-4 bg-white rounded-full transition-transform translate-x-6"></div>
+</div>
+<span class="text-sm font-bold uppercase tracking-widest text-tertiary-fixed">Active</span>
+</div>
+</div>
+</div>
+<!-- Sequence Builder Content Area -->
+<div class="col-span-9 bg-white rounded-2xl shadow-[0px_20px_40px_rgba(22,20,22,0.02)] p-10">
+<div class="flex items-center justify-between mb-10 pb-6 border-b border-surface-container">
+<div>
+<h3 class="text-2xl font-bold text-on-surface">Lead Follow-Up Sequence</h3>
+<p class="text-slate-500 text-sm mt-1">Define the logical progression for new inbound signals.</p>
+</div>
+<div class="flex items-center gap-2 px-3 py-1 bg-tertiary/10 text-tertiary rounded-full text-xs font-bold uppercase tracking-wider">
+<span class="material-symbols-outlined text-sm" data-icon="bolt" style="font-variation-settings: 'FILL' 1;">bolt</span>
+                            Auto-Pilot
+                        </div>
+</div>
+<!-- Sequence Steps -->
+<div class="space-y-12 relative">
+<!-- Visual Thread Line -->
+<div class="absolute left-[23px] top-4 bottom-4 w-px bg-surface-container-highest"></div>
+<!-- Step 1 -->
+<div class="relative pl-16">
+<div class="absolute left-0 top-0 w-12 h-12 rounded-full bg-primary text-white flex items-center justify-center z-10">
+<span class="material-symbols-outlined" data-icon="mail">mail</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
+<div class="flex-1">
+<h4 class="font-bold text-lg">Initial Engagement</h4>
+<p class="text-slate-500 text-sm mt-1">Send a personalized welcome and service overview.</p>
+<div class="mt-4 p-4 bg-surface-container-low rounded-lg border-l-4 border-primary">
+<p class="text-xs text-slate-400 font-bold uppercase tracking-widest mb-2">Prompt Context</p>
+<p class="text-sm italic">"Hello {{first_name}}, I'm Scale's AI assistant. I noticed you're interested in {{industry}}..."</p>
+</div>
+</div>
+<div class="w-full md:w-48">
+<label class="block text-[0.65rem] uppercase font-bold tracking-widest text-slate-400 mb-2">Execution Delay</label>
+<div class="flex items-center gap-3 bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm text-slate-400" data-icon="schedule">schedule</span>
+<span class="text-sm font-bold">2 Minutes</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Step 2 -->
+<div class="relative pl-16">
+<div class="absolute left-0 top-0 w-12 h-12 rounded-full bg-secondary text-white flex items-center justify-center z-10">
+<span class="material-symbols-outlined" data-icon="calendar_today">calendar_today</span>
+</div>
+<div class="flex flex-col md:flex-row md:items-start justify-between gap-6">
+<div class="flex-1">
+<h4 class="font-bold text-lg">Booking Invitation</h4>
+<p class="text-slate-500 text-sm mt-1">Trigger if lead has not responded to first contact.</p>
+<div class="mt-4 grid grid-cols-2 gap-4">
+<div class="p-3 bg-surface-container-low rounded-lg">
+<span class="text-[0.6rem] block font-bold text-slate-400 uppercase">Channel</span>
+<span class="text-sm font-semibold">SMS / WhatsApp</span>
+</div>
+<div class="p-3 bg-surface-container-low rounded-lg">
+<span class="text-[0.6rem] block font-bold text-slate-400 uppercase">A/B Variation</span>
+<span class="text-sm font-semibold">Concise-v2</span>
+</div>
+</div>
+</div>
+<div class="w-full md:w-48">
+<label class="block text-[0.65rem] uppercase font-bold tracking-widest text-slate-400 mb-2">Execution Delay</label>
+<div class="flex items-center gap-3 bg-surface-container-low p-2 rounded-lg">
+<span class="material-symbols-outlined text-sm text-slate-400" data-icon="schedule">schedule</span>
+<span class="text-sm font-bold">24 Hours</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Add Step Button -->
+<div class="relative pl-16">
+<button class="flex items-center gap-3 px-6 py-3 border-2 border-dashed border-surface-container-highest rounded-xl text-slate-400 hover:text-primary hover:border-primary transition-all w-full md:w-auto">
+<span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+<span class="text-sm font-bold uppercase tracking-widest">Append Sequence Step</span>
+</button>
+</div>
+</div>
+</div>
+</div>
+<!-- Operational Insights (Architectural Accents) -->
+<div class="grid grid-cols-3 gap-8">
+<div class="bg-surface-container-low p-8 rounded-2xl">
+<span class="material-symbols-outlined text-primary mb-4" data-icon="psychology">psychology</span>
+<h5 class="font-bold text-lg">Neural Load</h5>
+<div class="mt-4 h-1 bg-surface-container-highest rounded-full overflow-hidden">
+<div class="h-full bg-primary w-[65%]"></div>
+</div>
+<p class="text-xs text-slate-500 mt-2 font-medium">65% capacity utilized across 4 active agents.</p>
+</div>
+<div class="bg-surface-container-low p-8 rounded-2xl">
+<span class="material-symbols-outlined text-secondary mb-4" data-icon="troubleshoot">troubleshoot</span>
+<h5 class="font-bold text-lg">Accuracy Rate</h5>
+<div class="mt-4 flex items-end gap-2">
+<span class="text-3xl font-extrabold text-on-surface">99.2%</span>
+<span class="text-tertiary text-xs font-bold mb-1">+0.4%</span>
+</div>
+<p class="text-xs text-slate-500 mt-2 font-medium">Confidence scoring based on last 1k interactions.</p>
+</div>
+<div class="bg-surface-container-low p-8 rounded-2xl flex flex-col justify-center">
+<p class="text-sm italic text-slate-600 leading-relaxed">"Architecture is the learned game, correct and magnificent, of forms assembled in the light."</p>
+<span class="text-[0.6rem] font-bold uppercase tracking-widest text-slate-400 mt-4">— Design Manifesto</span>
+</div>
+</div>
+</div>
+</main>
+</body></html>

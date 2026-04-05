@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          "colors": {
+            "surface-container-highest": "#e7e1e3",
+            "on-primary-container": "#8aadec",
+            "surface-container-high": "#ede6e9",
+            "primary-fixed-dim": "#aac7ff",
+            "tertiary-fixed": "#97f1f6",
+            "on-tertiary-fixed-variant": "#004f53",
+            "on-tertiary": "#ffffff",
+            "on-secondary": "#ffffff",
+            "secondary-fixed-dim": "#8fd0e5",
+            "secondary-container": "#a8eaff",
+            "tertiary": "#003032",
+            "on-surface": "#1d1b1d",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f8f2f4",
+            "on-secondary-fixed": "#001f27",
+            "on-primary-fixed": "#001b3e",
+            "on-background": "#1d1b1d",
+            "primary-container": "#164078",
+            "inverse-primary": "#aac7ff",
+            "inverse-on-surface": "#f5eff2",
+            "tertiary-fixed-dim": "#7ad5da",
+            "error": "#ba1a1a",
+            "surface-tint": "#3a5e98",
+            "surface-container": "#f3ecef",
+            "primary": "#002a59",
+            "on-secondary-fixed-variant": "#004e5e",
+            "on-tertiary-container": "#5fbabf",
+            "on-primary-fixed-variant": "#1f467f",
+            "secondary": "#1c6779",
+            "outline": "#737781",
+            "on-primary": "#ffffff",
+            "surface-bright": "#fef8fa",
+            "secondary-fixed": "#b0ecff",
+            "surface": "#fef8fa",
+            "primary-fixed": "#d6e3ff",
+            "inverse-surface": "#323032",
+            "on-tertiary-fixed": "#002021",
+            "tertiary-container": "#00484b",
+            "on-error-container": "#93000a",
+            "error-container": "#ffdad6",
+            "surface-variant": "#e7e1e3",
+            "on-error": "#ffffff",
+            "background": "#fef8fa",
+            "surface-dim": "#ded8db",
+            "outline-variant": "#c3c6d1",
+            "on-secondary-container": "#236b7d",
+            "on-surface-variant": "#434750"
+          },
+          "borderRadius": {
+            "DEFAULT": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          "fontFamily": {
+            "headline": ["Plus Jakarta Sans"],
+            "body": ["Plus Jakarta Sans"],
+            "label": ["Plus Jakarta Sans"]
+          }
+        },
+      },
+    }
+  </script>
+<style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+  </style>
+</head>
+<body class="bg-surface text-on-surface flex min-h-screen">
+<!-- SideNavBar -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-8 px-4 h-screen w-64 bg-slate-50 dark:bg-[#161416] z-50">
+<div class="mb-10 px-4">
+<span class="text-xl font-bold tracking-tighter text-[#164078] dark:text-white">Scale AI</span>
+<p class="text-[0.75rem] uppercase tracking-wider text-slate-500 mt-1">Enterprise Tier</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Pipelines</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Team</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Analytics</span>
+</a>
+<!-- Active Tab: Settings -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#164078] dark:text-[#22888D] font-bold border-r-4 border-[#164078] dark:border-[#22888D] bg-slate-100 dark:bg-slate-800/30 transition-all duration-200 scale-98" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Settings</span>
+</a>
+</nav>
+<div class="mt-auto px-4 py-6">
+<button class="w-full bg-primary text-on-primary py-3 px-4 rounded-xl font-bold flex items-center justify-center gap-2 mb-8">
+<span class="material-symbols-outlined" data-icon="add">add</span>
+        New Campaign
+      </button>
+<div class="space-y-1">
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-2 text-slate-500 dark:text-slate-400 font-medium hover:text-error transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Log Out</span>
+</a>
+</div>
+</div>
+</aside>
+<!-- Main Content Area -->
+<main class="flex-1 ml-64 min-h-screen">
+<!-- TopNavBar -->
+<header class="sticky top-0 z-40 w-full flex justify-between items-center px-12 py-6 bg-white/80 dark:bg-[#161416]/80 backdrop-blur-md shadow-[0px_20px_40px_rgba(22,20,22,0.04)]">
+<div class="flex items-center gap-8 flex-1">
+<div class="relative max-w-md w-full">
+<span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full bg-surface-container-low border-none rounded-xl py-3 pl-12 pr-4 text-on-surface focus:ring-2 focus:ring-primary-container transition-all" placeholder="Search systems..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="p-2 text-slate-500 hover:text-[#164078] transition-all">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-[#164078] transition-all">
+<span class="material-symbols-outlined" data-icon="chat_bubble">chat_bubble</span>
+</button>
+<button class="p-2 text-slate-500 hover:text-[#164078] transition-all">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+</button>
+</div>
+<div class="h-10 w-10 rounded-full overflow-hidden border-2 border-surface-container-high">
+<img alt="Manager profile" class="h-full w-full object-cover" data-alt="professional male business manager portrait with confident smile and neutral background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBEFWeOkYEr3aMlMNlacyRqA4LZRo4gSAJ9zwoOXAFRuPgIIYkv1A4502HGpcUqJeTQjbD88MvYwzBrG1jsvwDL9Xs7UlkHBSHfleCBiz7X7886LruT5MCTqZpx7kQ7bJ6OxUJh5-3yhmSc35dbAUGVL2dTeZANmtPfB8UcBLpt-oY0APkC6FFhfzRWfvYZBsOUxdApQbtYS_RIIY7MYAuUjlX0fhlKXIwZPQ2IXYpIJf5yNZd2iaBLMxisSMFxpDnxv6cOYZeeahTL"/>
+</div>
+</div>
+</header>
+<div class="px-12 py-12 space-y-16">
+<!-- Page Title Section -->
+<section>
+<div class="flex justify-between items-end">
+<div class="space-y-2">
+<span class="text-[0.75rem] uppercase tracking-[0.2em] font-bold text-secondary">Configuration</span>
+<h1 class="text-[2.5rem] font-extrabold tracking-tight text-on-surface leading-none">Channel Connections</h1>
+</div>
+<div class="text-right">
+<span class="inline-flex items-center px-3 py-1 bg-tertiary-fixed text-on-tertiary-fixed-variant rounded-full text-[0.65rem] font-bold uppercase tracking-wider">
+              Admin Only Access
+            </span>
+</div>
+</div>
+</section>
+<!-- Connected Channels Grid -->
+<section class="space-y-8">
+<div class="flex items-center justify-between">
+<h2 class="text-xl font-bold text-on-surface">Active Integrations</h2>
+<span class="text-label-md text-outline uppercase tracking-wider">3 Total Connections</span>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+<!-- WhatsApp Card -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(22,20,22,0.02)] border border-outline-variant/15 flex flex-col justify-between group hover:border-primary/20 transition-all">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-14 h-14 bg-green-50 rounded-xl flex items-center justify-center text-green-600">
+<span class="material-symbols-outlined text-3xl" data-icon="forum">forum</span>
+</div>
+<span class="flex items-center gap-2 text-xs font-bold text-green-600 uppercase tracking-tighter">
+<span class="w-2 h-2 bg-green-500 rounded-full"></span> Active
+                </span>
+</div>
+<h3 class="text-lg font-bold mb-2">WhatsApp Business</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Direct messaging for customer support and verified business notifications.</p>
+</div>
+<div class="mt-8 flex gap-4">
+<button class="flex-1 py-3 text-xs font-bold uppercase tracking-wider text-[#164078] bg-surface-container-low hover:bg-primary-container hover:text-white transition-all rounded-lg">Configure</button>
+<button class="p-3 text-outline hover:text-error transition-all">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Email Card -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(22,20,22,0.02)] border border-outline-variant/15 flex flex-col justify-between group hover:border-primary/20 transition-all">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-14 h-14 bg-blue-50 rounded-xl flex items-center justify-center text-blue-600">
+<span class="material-symbols-outlined text-3xl" data-icon="mail">mail</span>
+</div>
+<span class="flex items-center gap-2 text-xs font-bold text-green-600 uppercase tracking-tighter">
+<span class="w-2 h-2 bg-green-500 rounded-full"></span> Active
+                </span>
+</div>
+<h3 class="text-lg font-bold mb-2">SMTP Relay</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">High-volume transactional email gateway via Amazon SES.</p>
+</div>
+<div class="mt-8 flex gap-4">
+<button class="flex-1 py-3 text-xs font-bold uppercase tracking-wider text-[#164078] bg-surface-container-low hover:bg-primary-container hover:text-white transition-all rounded-lg">Configure</button>
+<button class="p-3 text-outline hover:text-error transition-all">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+<!-- Slack Card -->
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(22,20,22,0.02)] border border-outline-variant/15 flex flex-col justify-between group hover:border-primary/20 transition-all">
+<div>
+<div class="flex justify-between items-start mb-6">
+<div class="w-14 h-14 bg-purple-50 rounded-xl flex items-center justify-center text-purple-600">
+<span class="material-symbols-outlined text-3xl" data-icon="chat">chat</span>
+</div>
+<span class="flex items-center gap-2 text-xs font-bold text-error uppercase tracking-tighter">
+<span class="w-2 h-2 bg-error rounded-full"></span> Disconnected
+                </span>
+</div>
+<h3 class="text-lg font-bold mb-2">Slack Workspace</h3>
+<p class="text-sm text-on-surface-variant leading-relaxed">Internal notifications and collaborative lead management.</p>
+</div>
+<div class="mt-8 flex gap-4">
+<button class="flex-1 py-3 text-xs font-bold uppercase tracking-wider text-white bg-primary hover:bg-primary-container transition-all rounded-lg">Reconnect</button>
+<button class="p-3 text-outline hover:text-error transition-all">
+<span class="material-symbols-outlined" data-icon="delete">delete</span>
+</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Add a Channel Section -->
+<section class="space-y-8">
+<h2 class="text-xl font-bold text-on-surface">Add a Channel</h2>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- WhatsApp Connect -->
+<div class="bg-surface p-6 rounded-xl border-2 border-dashed border-outline-variant hover:border-primary/50 transition-all cursor-pointer group">
+<div class="w-10 h-10 bg-surface-container-low rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-all">
+<span class="material-symbols-outlined text-primary" data-icon="add_circle">add_circle</span>
+</div>
+<h4 class="font-bold mb-1">WhatsApp</h4>
+<p class="text-xs text-on-surface-variant">Setup Business API</p>
+</div>
+<!-- Instagram Connect -->
+<div class="bg-surface p-6 rounded-xl border-2 border-dashed border-outline-variant hover:border-primary/50 transition-all cursor-pointer group">
+<div class="w-10 h-10 bg-surface-container-low rounded-lg flex items-center justify-center mb-4 group-hover:bg-primary/10 transition-all">
+<span class="material-symbols-outlined text-primary" data-icon="photo_camera">photo_camera</span>
+</div>
+<h4 class="font-bold mb-1">Instagram</h4>
+<p class="text-xs text-on-surface-variant">Direct Messages &amp; Comments</p>
+</div>
+<!-- Coming Soon -->
+<div class="bg-surface-container-low/30 p-6 rounded-xl border-2 border-dashed border-outline-variant/30 flex flex-col justify-center items-center text-center opacity-60">
+<span class="material-symbols-outlined text-outline mb-2" data-icon="more_horiz">more_horiz</span>
+<p class="text-xs font-bold text-outline uppercase tracking-widest">More channels</p>
+<p class="text-[0.65rem] text-outline mt-1">Coming Q4 2024</p>
+</div>
+</div>
+</section>
+<!-- Webhook & API Section -->
+<section class="grid grid-cols-1 lg:grid-cols-5 gap-12">
+<div class="lg:col-span-2 space-y-6">
+<div class="space-y-2">
+<h2 class="text-xl font-bold text-on-surface">Developer Gateway</h2>
+<p class="text-sm text-on-surface-variant leading-relaxed">
+              Integrate Scale directly into your own infrastructure using our secure Webhook and API protocol.
+            </p>
+</div>
+<div class="bg-primary-container p-6 rounded-xl text-white">
+<div class="flex items-center gap-3 mb-4">
+<span class="material-symbols-outlined text-tertiary-fixed" data-icon="bolt">bolt</span>
+<span class="text-xs font-bold uppercase tracking-wider">Live API Key</span>
+</div>
+<div class="flex items-center justify-between bg-white/10 rounded-lg p-3 backdrop-blur-sm">
+<code class="text-xs font-mono text-tertiary-fixed">scale_demo_token_not_real</code>
+<button class="hover:text-tertiary-fixed transition-colors">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span>
+</button>
+</div>
+<p class="text-[0.65rem] mt-4 opacity-70">Last rotated: 12 days ago. Admin permission required for rotation.</p>
+</div>
+</div>
+<div class="lg:col-span-3">
+<div class="bg-on-surface rounded-xl p-8 shadow-xl overflow-hidden relative">
+<div class="flex items-center gap-2 mb-6 border-b border-white/10 pb-4">
+<div class="w-3 h-3 rounded-full bg-error/40"></div>
+<div class="w-3 h-3 rounded-full bg-secondary-fixed/40"></div>
+<div class="w-3 h-3 rounded-full bg-tertiary-fixed/40"></div>
+<span class="text-[0.65rem] text-white/40 ml-4 font-mono uppercase tracking-widest">Webhook Listener (Node.js)</span>
+</div>
+<pre class="text-sm font-mono leading-loose"><span class="text-secondary-fixed">const</span> express = <span class="text-tertiary-fixed">require</span>(<span class="text-on-primary-container">'express'</span>);
+<span class="text-secondary-fixed">const</span> app = <span class="text-tertiary-fixed">express</span>();
+
+app.<span class="text-tertiary-fixed">post</span>(<span class="text-on-primary-container">'/webhooks/scale'</span>, (req, res) =&gt; {
+  <span class="text-secondary-fixed">const</span> event = req.body;
+  
+  <span class="text-white/40">// Handle 'channel.connected' events</span>
+  <span class="text-secondary-fixed">if</span> (event.type === <span class="text-on-primary-container">'channel.connected'</span>) {
+    <span class="text-tertiary-fixed">console</span>.<span class="text-tertiary-fixed">log</span>(<span class="text-on-primary-container">'New channel sync initiated'</span>);
+  }
+
+  res.<span class="text-tertiary-fixed">status</span>(<span class="text-on-primary-container">200</span>).<span class="text-tertiary-fixed">send</span>();
+});</pre>
+<button class="absolute top-6 right-8 text-white/40 hover:text-white flex items-center gap-2 text-xs font-bold transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="content_copy">content_copy</span>
+              COPY SNIPPET
+            </button>
+</div>
+</div>
+</section>
+<!-- Success Confirmation Banner -->
+<div class="bg-surface-container-low p-6 rounded-xl flex items-center justify-between">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary" data-icon="shield_with_heart" style="font-variation-settings: 'FILL' 1;">shield_with_heart</span>
+</div>
+<div>
+<p class="font-bold text-sm">Security Policy Active</p>
+<p class="text-xs text-on-surface-variant">All channel data is encrypted with AES-256 at rest and TLS 1.3 in transit.</p>
+</div>
+</div>
+<button class="text-xs font-bold text-primary hover:underline uppercase tracking-wider">Audit Logs</button>
+</div>
+</div>
+</main>
+</body></html>

@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scale AI | Sales Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "surface-container-highest": "#e7e1e3",
+                    "on-primary-container": "#8aadec",
+                    "surface-container-high": "#ede6e9",
+                    "primary-fixed-dim": "#aac7ff",
+                    "tertiary-fixed": "#97f1f6",
+                    "on-tertiary-fixed-variant": "#004f53",
+                    "on-tertiary": "#ffffff",
+                    "on-secondary": "#ffffff",
+                    "secondary-fixed-dim": "#8fd0e5",
+                    "secondary-container": "#a8eaff",
+                    "tertiary": "#003032",
+                    "on-surface": "#1d1b1d",
+                    "surface-container-lowest": "#ffffff",
+                    "surface-container-low": "#f8f2f4",
+                    "on-secondary-fixed": "#001f27",
+                    "on-primary-fixed": "#001b3e",
+                    "on-background": "#1d1b1d",
+                    "primary-container": "#164078",
+                    "inverse-primary": "#aac7ff",
+                    "inverse-on-surface": "#f5eff2",
+                    "tertiary-fixed-dim": "#7ad5da",
+                    "error": "#ba1a1a",
+                    "surface-tint": "#3a5e98",
+                    "surface-container": "#f3ecef",
+                    "primary": "#002a59",
+                    "on-secondary-fixed-variant": "#004e5e",
+                    "on-tertiary-container": "#5fbabf",
+                    "on-primary-fixed-variant": "#1f467f",
+                    "secondary": "#1c6779",
+                    "outline": "#737781",
+                    "on-primary": "#ffffff",
+                    "surface-bright": "#fef8fa",
+                    "secondary-fixed": "#b0ecff",
+                    "surface": "#fef8fa",
+                    "primary-fixed": "#d6e3ff",
+                    "inverse-surface": "#323032",
+                    "on-tertiary-fixed": "#002021",
+                    "tertiary-container": "#00484b",
+                    "on-error-container": "#93000a",
+                    "error-container": "#ffdad6",
+                    "surface-variant": "#e7e1e3",
+                    "on-error": "#ffffff",
+                    "background": "#fef8fa",
+                    "surface-dim": "#ded8db",
+                    "outline-variant": "#c3c6d1",
+                    "on-secondary-container": "#236b7d",
+                    "on-surface-variant": "#434750"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.125rem",
+                    "lg": "0.25rem",
+                    "xl": "0.5rem",
+                    "full": "0.75rem"
+            },
+            "fontFamily": {
+                    "headline": ["Plus Jakarta Sans"],
+                    "body": ["Plus Jakarta Sans"],
+                    "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    </style>
+</head>
+<body class="bg-surface text-on-surface flex overflow-hidden">
+<!-- SideNavBar (Execution from JSON) -->
+<aside class="fixed left-0 top-0 h-full flex flex-col py-8 px-4 h-screen w-64 bg-slate-50 dark:bg-[#161416] z-50">
+<div class="mb-10 px-4">
+<h1 class="text-xl font-bold tracking-tighter text-[#164078] dark:text-white">Scale AI</h1>
+<p class="text-[0.75rem] uppercase tracking-wider text-slate-500 mt-1">Enterprise Tier</p>
+</div>
+<button class="mx-4 mb-8 py-3 px-4 bg-primary text-on-primary rounded-xl flex items-center justify-center gap-2 font-bold transition-all hover:opacity-90 active:scale-95">
+<span class="material-symbols-outlined text-sm">add</span>
+            New Campaign
+        </button>
+<nav class="flex-1 space-y-1">
+<!-- Active: Dashboard (Direct match) -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#164078] dark:text-[#22888D] font-bold border-r-4 border-[#164078] dark:border-[#22888D] bg-slate-100 dark:bg-slate-800/30 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+                Dashboard
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="leaderboard">leaderboard</span>
+                Leads
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="account_tree">account_tree</span>
+                Pipelines
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="group">group</span>
+                Team
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="insights">insights</span>
+                Analytics
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] dark:hover:text-white hover:bg-slate-100 dark:hover:bg-slate-800/50 transition-colors duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+                Settings
+            </a>
+</nav>
+<div class="mt-auto border-t border-slate-200 dark:border-slate-800 pt-6 space-y-1">
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+                Support
+            </a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 dark:text-slate-400 font-medium hover:text-[#164078] transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+                Log Out
+            </a>
+<div class="mt-4 px-4 flex items-center gap-3">
+<img alt="User avatar" class="w-10 h-10 rounded-full object-cover" data-alt="professional portrait of a sales manager in a modern office with soft natural lighting and a warm friendly expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAqZf_eKbJYk3NIFwZvPhQ9zrwnQFzNRzyqxcn7tXpMbvc1NCOezDzRjDJzGSVqSSdAMvz8nfpB0G04Y5fwpSkLpxs8qsMoht7QS4RHGFr01-Ntpr18XT5b9zCRjLXPTNrgoNWHMeL5QsEsTjAcH4gYiZsHMIS_q9tucLmiMXX8PJ9h_wAHrW1FbVthREaTbnDP_0TuwOfUXGgbmNp40Sgvn2TtOKntB6u-J3rJNKPHPuuSMmTOQM9_Ifz6QBlvfY5MmxTZMHz-d8nR"/>
+<div class="overflow-hidden">
+<p class="text-sm font-bold truncate">Alex Sterling</p>
+<p class="text-[0.7rem] uppercase tracking-tighter text-slate-400">Sales Agent</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 ml-64 min-h-screen overflow-y-auto bg-surface">
+<!-- TopNavBar (Execution from JSON) -->
+<header class="sticky top-0 z-40 w-full flex justify-between items-center px-12 py-4 bg-white/80 dark:bg-[#161416]/80 backdrop-blur-md shadow-[0px_20px_40px_rgba(22,20,22,0.04)]">
+<div class="flex items-center bg-surface-container-low px-4 py-2 rounded-xl w-96 group">
+<span class="material-symbols-outlined text-slate-400 mr-2" data-icon="search">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-sm w-full placeholder-slate-400" placeholder="Search leads, pipelines..." type="text"/>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-slate-500">
+<button class="material-symbols-outlined hover:text-[#164078] transition-all" data-icon="notifications">notifications</button>
+<button class="material-symbols-outlined hover:text-[#164078] transition-all" data-icon="chat_bubble">chat_bubble</button>
+<button class="material-symbols-outlined hover:text-[#164078] transition-all" data-icon="help_outline">help_outline</button>
+</div>
+<div class="h-8 w-[1px] bg-slate-200"></div>
+<div class="flex items-center gap-3">
+<span class="text-sm font-semibold text-[#164078]">Scale Manager</span>
+<img alt="Manager profile" class="w-8 h-8 rounded-full border-2 border-primary-fixed-dim" data-alt="high-end corporate headshot of a successful professional woman with clean minimalist background" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDi2m03ddKa_x4DdIW5wlT821Ha-UwELgZXUy4hYLRKHXEOJWzPJ1bfHr-l9c7ZqBDnwWgWBRfljkkXD7bvOvGTzouxOeFGOJcagu_XvBqJ2N1pyRdEzfYPGh7IOpWVvAcsMQixkpTrR58sBBMCIAEX3oZPHLiEOKynvoVDsIYouoyrRPpGm4EQQI6lE80CMq-K3Nzv-GEEqpw9hB9HgdCwlDQVGULIxXHEBgZ9DMH9KnEJDPgIQFr4T8HgcCcPnhEn0r3HWcJ-6P5V"/>
+</div>
+</div>
+</header>
+<div class="px-12 py-10 space-y-12">
+<!-- Greeting Banner: Editorial Asymmetry -->
+<section class="flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div class="space-y-2">
+<span class="text-[0.75rem] font-bold uppercase tracking-[0.2em] text-secondary">Dashboard Overview</span>
+<h2 class="text-5xl font-extrabold tracking-tight text-primary leading-tight">Good morning, Alex.</h2>
+<p class="text-body-lg text-on-surface-variant max-w-xl leading-relaxed opacity-80">Your AI-driven pipeline is performing at 114% capacity today. You have 3 critical approvals pending.</p>
+</div>
+<div class="hidden lg:block">
+<div class="flex items-baseline gap-2 text-primary font-bold">
+<span class="text-4xl tracking-tighter">84</span>
+<span class="text-sm uppercase tracking-widest opacity-60">Daily Score</span>
+</div>
+<div class="w-32 h-[2px] bg-slate-100 mt-2 overflow-hidden">
+<div class="w-[84%] h-full bg-tertiary"></div>
+</div>
+</div>
+</section>
+<!-- Stats Block: Bento Grid Layout -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(22,20,22,0.02)] border border-slate-50 transition-transform hover:translate-y-[-4px]">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-primary-fixed rounded-lg">
+<span class="material-symbols-outlined text-primary" data-icon="person_search">person_search</span>
+</div>
+<span class="text-[0.7rem] font-bold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">+12%</span>
+</div>
+<p class="text-label-md uppercase tracking-widest text-slate-400 mb-1">My Active Leads</p>
+<h3 class="text-3xl font-extrabold text-on-surface">1,422</h3>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(22,20,22,0.02)] border border-slate-50 transition-transform hover:translate-y-[-4px]">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-secondary-fixed rounded-lg">
+<span class="material-symbols-outlined text-secondary" data-icon="history">history</span>
+</div>
+<span class="text-[0.7rem] font-bold text-slate-400 bg-slate-50 px-2 py-1 rounded-md">Today</span>
+</div>
+<p class="text-label-md uppercase tracking-widest text-slate-400 mb-1">Follow-ups Today</p>
+<h3 class="text-3xl font-extrabold text-on-surface">28</h3>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-xl shadow-[0px_20px_40px_rgba(22,20,22,0.02)] border border-slate-50 transition-transform hover:translate-y-[-4px]">
+<div class="flex justify-between items-start mb-6">
+<div class="p-3 bg-tertiary-fixed rounded-lg">
+<span class="material-symbols-outlined text-tertiary" data-icon="mark_chat_unread">mark_chat_unread</span>
+</div>
+<span class="text-[0.7rem] font-bold text-error bg-error-container px-2 py-1 rounded-md">High Priority</span>
+</div>
+<p class="text-label-md uppercase tracking-widest text-slate-400 mb-1">Messages to Review</p>
+<h3 class="text-3xl font-extrabold text-on-surface">9</h3>
+</div>
+</section>
+<!-- Alerts and Approvals: Multi-column Asymmetry -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-10">
+<!-- Needs Your Attention (Alerts) -->
+<div class="lg:col-span-7 space-y-6">
+<div class="flex items-center justify-between">
+<h4 class="text-xl font-bold tracking-tight text-primary">Needs Your Attention</h4>
+<button class="text-sm font-bold text-secondary hover:underline">View All</button>
+</div>
+<div class="space-y-4">
+<div class="flex gap-4 p-6 bg-white rounded-xl border-l-4 border-error shadow-sm group hover:bg-slate-50 transition-all">
+<div class="shrink-0 pt-1">
+<span class="material-symbols-outlined text-error" data-icon="warning">warning</span>
+</div>
+<div class="space-y-1">
+<p class="font-bold text-on-surface">High-Value Lead Stalled: Tesla Inc.</p>
+<p class="text-sm text-slate-500 leading-relaxed">Account executive hasn't touched this in 48 hours. Strategic intervention required to maintain Q3 momentum.</p>
+<div class="pt-2 flex gap-4">
+<button class="text-[0.7rem] font-extrabold uppercase tracking-widest text-primary border-b-2 border-primary-fixed">Nudge Agent</button>
+<button class="text-[0.7rem] font-extrabold uppercase tracking-widest text-slate-400">Dismiss</button>
+</div>
+</div>
+</div>
+<div class="flex gap-4 p-6 bg-white rounded-xl border-l-4 border-secondary shadow-sm group hover:bg-slate-50 transition-all">
+<div class="shrink-0 pt-1">
+<span class="material-symbols-outlined text-secondary" data-icon="mail">mail</span>
+</div>
+<div class="space-y-1">
+<p class="font-bold text-on-surface">Unread Enterprise Inquiry: Goldman Sachs</p>
+<p class="text-sm text-slate-500 leading-relaxed">New request for API documentation and security audit compliance forms.</p>
+<div class="pt-2 flex gap-4">
+<button class="text-[0.7rem] font-extrabold uppercase tracking-widest text-primary border-b-2 border-primary-fixed">Open Lead</button>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Messages to Approve -->
+<div class="lg:col-span-5 bg-slate-900 text-white rounded-2xl p-8 overflow-hidden relative">
+<!-- Architectural Accent -->
+<div class="absolute -right-10 -top-10 w-40 h-40 bg-primary-container/40 blur-3xl"></div>
+<div class="relative z-10 space-y-6">
+<div class="flex items-center justify-between">
+<h4 class="text-xl font-bold tracking-tight">Messages to Approve</h4>
+<span class="px-2 py-1 bg-white/10 rounded-md text-[0.6rem] font-bold tracking-widest">3 PENDING</span>
+</div>
+<div class="space-y-5">
+<div class="p-5 bg-white/5 rounded-xl border border-white/10">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-secondary flex items-center justify-center text-[0.6rem] font-bold">AI</div>
+<p class="text-xs font-medium opacity-60">Response to: Apple Cloud</p>
+</div>
+<span class="text-[0.6rem] opacity-40">2m ago</span>
+</div>
+<p class="text-sm italic mb-4 leading-relaxed font-light">"Our scalable infrastructure supports up to 10PB of data processing..."</p>
+<div class="flex gap-3">
+<button class="flex-1 py-2 bg-secondary text-white text-[0.7rem] font-bold rounded-lg hover:brightness-110">Approve</button>
+<button class="px-4 py-2 bg-white/10 text-[0.7rem] font-bold rounded-lg hover:bg-white/20">Edit</button>
+</div>
+</div>
+<div class="p-5 bg-white/5 rounded-xl border border-white/10 opacity-60">
+<div class="flex items-center justify-between mb-3">
+<div class="flex items-center gap-2">
+<div class="w-6 h-6 rounded-full bg-secondary-container text-secondary flex items-center justify-center text-[0.6rem] font-bold">AI</div>
+<p class="text-xs font-medium">Response to: Meta Labs</p>
+</div>
+</div>
+<p class="text-sm italic font-light truncate">"I've attached our SOC2 Type II reports for your review..."</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- AI Follow-ups Schedule: Filament Progress & Horizontal Layout -->
+<section class="space-y-8 pb-10">
+<div class="flex items-center gap-4">
+<h4 class="text-2xl font-extrabold tracking-tight text-primary">Today's AI Follow-ups</h4>
+<div class="h-[1px] flex-1 bg-slate-200"></div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Schedule Item -->
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-[0.6rem] font-bold text-slate-400 uppercase tracking-widest">14:00 PM</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="schedule_send">schedule_send</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Netflix Content</p>
+<p class="text-xs text-slate-500">Security Clearance Follow-up</p>
+</div>
+<div class="w-full h-[2px] bg-slate-200">
+<div class="w-[45%] h-full bg-tertiary"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-[0.6rem] font-bold text-slate-400 uppercase tracking-widest">15:30 PM</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="schedule_send">schedule_send</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Adobe Design</p>
+<p class="text-xs text-slate-500">Tier Pricing Re-evaluation</p>
+</div>
+<div class="w-full h-[2px] bg-slate-200">
+<div class="w-[10%] h-full bg-tertiary"></div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl space-y-4">
+<div class="flex justify-between items-center">
+<span class="text-[0.6rem] font-bold text-slate-400 uppercase tracking-widest">16:15 PM</span>
+<span class="material-symbols-outlined text-tertiary" data-icon="schedule_send">schedule_send</span>
+</div>
+<div>
+<p class="font-bold text-on-surface">Spotify Music</p>
+<p class="text-xs text-slate-500">Contract Renewal Reminder</p>
+</div>
+<div class="w-full h-[2px] bg-slate-200">
+<div class="w-[0%] h-full bg-tertiary"></div>
+</div>
+</div>
+<div class="border-2 border-dashed border-slate-200 p-6 rounded-xl flex flex-col items-center justify-center text-slate-400 hover:text-primary hover:border-primary transition-all cursor-pointer">
+<span class="material-symbols-outlined mb-2" data-icon="add_alarm">add_alarm</span>
+<p class="text-xs font-bold uppercase tracking-widest">Add Schedule</p>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

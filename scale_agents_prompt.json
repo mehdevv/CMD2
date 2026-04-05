@@ -1,0 +1,1416 @@
+{
+  "prompt": {
+    "title": "Scale CRM — Automation Agents System (Addendum to MVP)",
+    "version": "2.0.0",
+    "target": "replit-agent",
+    "scope": "This file defines the full Automation Agents system for Scale CRM. It extends the base platform (scale_replit_prompt.json v1). Implement all four agent configuration modules under /admin/agents/ as dedicated full-page sections, not tabs. Each agent is a complete configuration surface with its own sub-navigation.",
+
+    "design_rules_inherited": "All design rules from v1 apply: no gradients on UI, no glows, no shadows on cards, Inter font, #1A1A3E navy text, #2B62E8 accent, 1px #E4E4E8 borders, white cards on #F7F7F8 bg, 8px border-radius max, font-weight max 600. This addendum adds no new design tokens.",
+
+    "routing_structure": {
+      "agents_index": "/admin/agents — overview page listing all 4 agents with status + quick stats",
+      "agent_routes": [
+        "/admin/agents/followup — Lead Follow-Up Agent full config",
+        "/admin/agents/chat — Client Chat Agent full config",
+        "/admin/agents/tracking — Order Tracking Agent full config",
+        "/admin/agents/refund — Refund Agent full config"
+      ],
+      "notifications_route": "/admin/notifications — Notification rules and escalation settings",
+      "shared_sidebar_sub_nav": "Under 'AI Agents' in the main sidebar, show sub-items: Overview, Follow-Up, Chat, Order Tracking, Refund. Indent 8px with a connecting line on left."
+    },
+
+    "agents_overview_page": {
+      "route": "/admin/agents",
+      "file": "app/(app)/admin/agents/page.tsx",
+      "description": "Four agent cards in a 2x2 grid. Each card shows: agent name, enable/disable toggle, 3 key live stats (last 7 days), last edited timestamp, 'Configure' primary link. A global 'Human Intervention Alerts' button top-right opens the notifications settings panel.",
+      "agent_cards": [
+        { "name": "Lead Follow-Up Agent", "stats": ["Sequences active", "Reply rate", "Avg steps to reply"] },
+        { "name": "Client Chat Agent", "stats": ["Messages handled", "Escalation rate", "Avg response time"] },
+        { "name": "Order Tracking Agent", "stats": ["Updates sent", "Delivery API status", "Unsatisfied customers flagged"] },
+        { "name": "Refund Agent", "stats": ["Requests handled", "Auto-approved", "Pending owner review"] }
+      ]
+    },
+
+    "agent_pages": [
+
+      {
+        "id": "agent_followup",
+        "name": "Lead Follow-Up Agent",
+        "route": "/admin/agents/followup",
+        "file": "app/(app)/admin/agents/followup/page.tsx",
+        "description": "The follow-up agent contacts new leads automatically across WhatsApp, Instagram, and Facebook. This page is its full control center: LLM personality, follow-up sequences, timing rules, channel config, triggers, and escalation settings.",
+
+        "page_layout": "Three-column on desktop: left nav (sticky, 200px, section anchors), center content (max 720px, scrollable), right summary panel (240px, live status + enable toggle).",
+
+        "right_panel": {
+          "description": "Sticky summary card. Shows: Agent status toggle (on/off), 'Last triggered: X mins ago', Active sequences count, a 'Test agent' button that opens a simulate modal where admin types a fake lead message and sees what the agent would send back step by step.",
+          "test_modal": "Admin inputs: contact name, channel (select), opening message. On submit: show the full sequence the agent would run — each step on a timeline with the actual rendered message text, delays shown between steps, and a note if the sequence would stop at any point."
+        },
+
+        "sections": [
+
+          {
+            "id": "llm_config",
+            "anchor": "#llm",
+            "title": "LLM Configuration",
+            "description": "Configure the underlying language model that generates follow-up messages.",
+            "fields": [
+              {
+                "id": "api_provider",
+                "label": "AI provider",
+                "type": "select",
+                "options": ["OpenAI", "Anthropic", "Google Gemini", "Custom (OpenAI-compatible)"],
+                "help": "The LLM provider that generates message content."
+              },
+              {
+                "id": "api_key",
+                "label": "API key",
+                "type": "password-input",
+                "placeholder": "sk-...",
+                "help": "Stored encrypted. Never displayed after save.",
+                "actions": ["Test connection button — sends a test ping and shows 'Connected' or error inline"]
+              },
+              {
+                "id": "model",
+                "label": "Model",
+                "type": "select-or-text",
+                "options": ["gpt-4o", "gpt-4o-mini", "claude-3-5-haiku", "claude-3-5-sonnet", "gemini-1.5-flash", "custom"],
+                "help": "Faster/cheaper models for follow-up sequences are usually fine."
+              },
+              {
+                "id": "temperature",
+                "label": "Creativity",
+                "type": "slider",
+                "min": 0,
+                "max": 1,
+                "step": 0.1,
+                "default": 0.4,
+                "labels": { "0": "Consistent", "0.5": "Balanced", "1": "Creative" },
+                "help": "Lower = more predictable messages. For follow-ups, keep below 0.5."
+              },
+              {
+                "id": "max_tokens",
+                "label": "Max message length",
+                "type": "number",
+                "default": 180,
+                "help": "Maximum tokens per generated message. WhatsApp messages should stay short — recommended 120–200."
+              }
+            ]
+          },
+
+          {
+            "id": "personality",
+            "anchor": "#personality",
+            "title": "Agent personality",
+            "description": "Define how the agent sounds. This becomes part of the system prompt.",
+            "fields": [
+              {
+                "id": "agent_name",
+                "label": "Agent name",
+                "type": "text",
+                "placeholder": "e.g. Sara",
+                "help": "The name the agent introduces itself as. Used in {{agent_name}} variable."
+              },
+              {
+                "id": "tone",
+                "label": "Tone",
+                "type": "radio-cards",
+                "options": [
+                  { "value": "professional", "label": "Professional", "desc": "Formal, respectful, clear" },
+                  { "value": "friendly", "label": "Friendly", "desc": "Warm, conversational, approachable" },
+                  { "value": "direct", "label": "Direct", "desc": "Short, no fluff, gets to the point" },
+                  { "value": "custom", "label": "Custom", "desc": "Define your own tone below" }
+                ]
+              },
+              {
+                "id": "language",
+                "label": "Primary language",
+                "type": "select",
+                "options": ["Arabic", "French", "English", "Arabic + French (Darija mix)", "French + English"],
+                "help": "The agent will generate messages in this language by default."
+              },
+              {
+                "id": "system_prompt",
+                "label": "System prompt",
+                "type": "textarea",
+                "rows": 8,
+                "placeholder": "You are Sara, a friendly sales assistant for [Company]. You follow up with leads who expressed interest in our products. Keep messages short, natural, and focused on understanding what the customer needs. Never be pushy. Always end with a question to keep the conversation going.",
+                "help": "This is sent to the LLM before every message. Be specific about what the business sells, who the customer is, and what the agent should and should not say.",
+                "char_counter": true
+              },
+              {
+                "id": "forbidden_topics",
+                "label": "Never discuss",
+                "type": "tag-input",
+                "placeholder": "Add topic and press Enter",
+                "examples": ["competitor pricing", "delivery guarantees", "refund terms"],
+                "help": "Topics the agent must never bring up or respond to. If mentioned by customer, agent escalates to human."
+              },
+              {
+                "id": "business_context",
+                "label": "Business context",
+                "type": "textarea",
+                "rows": 4,
+                "placeholder": "We sell handmade leather bags. Our customers are mostly 25–45 year old women. Average order value is 3,500 DZD. We operate in Algiers and ship nationwide.",
+                "help": "Background information the LLM uses to make messages relevant. The more specific, the better the output."
+              }
+            ]
+          },
+
+          {
+            "id": "sequence_builder",
+            "anchor": "#sequence",
+            "title": "Follow-up sequence",
+            "description": "Define the exact steps the agent runs after a new lead comes in. Each step is a message sent at a specific delay. The sequence stops the moment the lead replies.",
+            "ui": "Vertical timeline of step cards. Each card draggable to reorder (drag handle on left). 'Add step' button at bottom.",
+            "step_card_fields": [
+              {
+                "id": "step_delay",
+                "label": "Send after",
+                "type": "inline-duration",
+                "description": "Two inputs: number + unit select (minutes / hours / days). First step can be 0 (immediate).",
+                "examples": ["0 minutes (immediately)", "2 hours", "1 day", "3 days"]
+              },
+              {
+                "id": "message_mode",
+                "label": "Message type",
+                "type": "radio",
+                "options": [
+                  { "value": "template", "label": "Fixed template", "desc": "Use an approved message template. Required for WhatsApp first contact." },
+                  { "value": "ai_generated", "label": "AI generated", "desc": "LLM writes the message using the system prompt and conversation context." },
+                  { "value": "hybrid", "label": "Template + AI personalization", "desc": "Start with a template, let AI personalize the last sentence." }
+                ]
+              },
+              {
+                "id": "template_picker",
+                "label": "Template",
+                "type": "select",
+                "condition": "message_mode = template or hybrid",
+                "description": "Pick from approved templates. Shows channel compatibility icons."
+              },
+              {
+                "id": "ai_instruction",
+                "label": "Message instruction",
+                "type": "textarea",
+                "rows": 3,
+                "condition": "message_mode = ai_generated or hybrid",
+                "placeholder": "Remind the lead about the product they asked about. Mention that stock is limited. End with: 'Can I answer any questions for you?'",
+                "help": "Step-specific instruction for the LLM. Combined with the system prompt."
+              },
+              {
+                "id": "channels",
+                "label": "Send on",
+                "type": "checkbox-group",
+                "options": ["WhatsApp", "Instagram", "Facebook"],
+                "help": "If the lead came in via Instagram, only Instagram will be used regardless of selection."
+              },
+              {
+                "id": "send_window",
+                "label": "Only send between",
+                "type": "time-range",
+                "default": "08:00 – 21:00",
+                "help": "If delay puts the send time outside this window, it shifts to the next valid time."
+              },
+              {
+                "id": "stop_conditions",
+                "label": "Stop this step if",
+                "type": "checkbox-group",
+                "options": [
+                  "Lead replied to any previous step",
+                  "Lead was manually marked as Contacted",
+                  "Agent has taken over the conversation",
+                  "Lead was marked as Lost"
+                ]
+              }
+            ],
+            "sequence_settings": {
+              "title": "Sequence settings",
+              "fields": [
+                { "id": "max_steps", "label": "Max steps before stopping", "type": "number", "default": 4, "help": "Even if lead never replies, stop after this many messages." },
+                { "id": "restart_on_reopen", "label": "Restart if lead re-engages after 30 days", "type": "toggle", "default": false },
+                { "id": "global_send_window", "label": "Global send window", "type": "time-range", "help": "Overrides per-step windows if set." },
+                { "id": "timezone", "label": "Timezone", "type": "select", "default": "Africa/Algiers" },
+                { "id": "weekend_sending", "label": "Send on weekends", "type": "toggle", "default": true }
+              ]
+            }
+          },
+
+          {
+            "id": "triggers",
+            "anchor": "#triggers",
+            "title": "Triggers",
+            "description": "Define exactly when the follow-up sequence starts.",
+            "fields": [
+              {
+                "id": "trigger_events",
+                "label": "Start sequence when",
+                "type": "checkbox-group",
+                "options": [
+                  { "value": "new_lead_any", "label": "New lead added from any channel" },
+                  { "value": "new_lead_whatsapp", "label": "New lead added via WhatsApp only" },
+                  { "value": "new_lead_instagram", "label": "New lead added via Instagram only" },
+                  { "value": "new_lead_facebook", "label": "New lead added via Facebook only" },
+                  { "value": "stage_change", "label": "Lead moves to a specific stage" },
+                  { "value": "manual_trigger", "label": "Agent manually triggers from lead record" },
+                  { "value": "tag_added", "label": "A specific tag is added to the lead" }
+                ]
+              },
+              {
+                "id": "stage_trigger_value",
+                "label": "Stage to trigger on",
+                "type": "select",
+                "condition": "trigger_events includes stage_change",
+                "options": ["New", "Contacted", "Qualified", "Proposal"]
+              },
+              {
+                "id": "tag_trigger_value",
+                "label": "Tag to trigger on",
+                "type": "text",
+                "condition": "trigger_events includes tag_added",
+                "placeholder": "e.g. hot-lead, re-engage"
+              },
+              {
+                "id": "exclude_conditions",
+                "label": "Do not trigger if",
+                "type": "checkbox-group",
+                "options": [
+                  "Lead already has an active sequence",
+                  "Lead was contacted in the last 24 hours",
+                  "Lead is assigned to an agent who has paused automation",
+                  "Lead is marked as Unsubscribed or Blocked"
+                ]
+              }
+            ]
+          },
+
+          {
+            "id": "human_handoff",
+            "anchor": "#handoff",
+            "title": "Human intervention",
+            "description": "Define when the agent stops and a human agent is notified.",
+            "fields": [
+              {
+                "id": "escalation_triggers",
+                "label": "Escalate to human when",
+                "type": "checkbox-group",
+                "options": [
+                  { "value": "negative_sentiment", "label": "Customer message has negative sentiment" },
+                  { "value": "complaint_keyword", "label": "Customer uses a complaint keyword (define below)" },
+                  { "value": "out_of_scope", "label": "LLM confidence is low — question outside scope" },
+                  { "value": "asks_for_human", "label": "Customer explicitly asks for a human or agent" },
+                  { "value": "price_negotiation", "label": "Customer asks to negotiate price" },
+                  { "value": "high_value", "label": "Lead deal value exceeds threshold (define below)" },
+                  { "value": "no_reply_after_sequence", "label": "Full sequence completed with no reply" }
+                ]
+              },
+              {
+                "id": "complaint_keywords",
+                "label": "Complaint keywords",
+                "type": "tag-input",
+                "placeholder": "Add keyword",
+                "examples": ["scam", "fraud", "problem", "angry", "never again", "report"],
+                "help": "Any of these in a customer message will immediately pause the agent and alert a human."
+              },
+              {
+                "id": "high_value_threshold",
+                "label": "High-value deal threshold",
+                "type": "number",
+                "suffix": "DZD",
+                "default": 10000,
+                "condition": "escalation_triggers includes high_value"
+              },
+              {
+                "id": "notification_targets",
+                "label": "Notify",
+                "type": "multi-select-users",
+                "help": "Which team members receive the urgent notification when escalation triggers."
+              },
+              {
+                "id": "notification_channel",
+                "label": "Notify via",
+                "type": "checkbox-group",
+                "options": ["In-app notification (bell icon)", "Email", "WhatsApp message to agent"]
+              },
+              {
+                "id": "notification_message",
+                "label": "Notification message template",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "URGENT: {{contact_name}} needs human help. Reason: {{escalation_reason}}. Open: {{conversation_link}}",
+                "help": "Variables: {{contact_name}}, {{escalation_reason}}, {{conversation_link}}, {{agent_name}}, {{channel}}"
+              },
+              {
+                "id": "pause_after_escalation",
+                "label": "Pause agent after escalation",
+                "type": "toggle",
+                "default": true,
+                "help": "If off, the agent continues sending the next scheduled step even during escalation."
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "id": "agent_chat",
+        "name": "Client Chat Agent",
+        "route": "/admin/agents/chat",
+        "file": "app/(app)/admin/agents/chat/page.tsx",
+        "description": "The chat agent handles all inbound customer messages 24/7 — answering questions, qualifying leads, and handing off to humans when needed. This page configures its full behavior: LLM model, personality, knowledge base (FAQ), response rules, mood settings, and escalation logic.",
+
+        "page_layout": "Same three-column layout as follow-up agent. Right panel shows: live status, messages handled today, current active conversations count, 'Test chat' button.",
+
+        "test_modal": "Chat simulator. Admin types messages as if they were a customer, agent replies in real time using the actual configured LLM + system prompt. Shows confidence score per reply (internal, not sent to customer). Useful for testing edge cases before going live.",
+
+        "sections": [
+
+          {
+            "id": "llm_config",
+            "anchor": "#llm",
+            "title": "LLM configuration",
+            "description": "Same structure as follow-up agent LLM config — provider, API key, model, temperature, max tokens. Separate keys per agent so different models can be used.",
+            "additional_fields": [
+              {
+                "id": "response_timeout",
+                "label": "Max response time",
+                "type": "number",
+                "suffix": "seconds",
+                "default": 8,
+                "help": "If LLM takes longer than this, send a 'Give me a moment' holding message automatically."
+              },
+              {
+                "id": "holding_message",
+                "label": "Holding message",
+                "type": "text",
+                "placeholder": "Just a moment, let me check that for you! 🙏",
+                "help": "Sent immediately if LLM response takes longer than timeout."
+              }
+            ]
+          },
+
+          {
+            "id": "personality",
+            "anchor": "#personality",
+            "title": "Personality & mood",
+            "description": "Define the agent's voice, tone, and emotional style. This is more detailed for the chat agent since it handles real-time conversations.",
+            "fields": [
+              {
+                "id": "agent_name",
+                "label": "Agent name",
+                "type": "text",
+                "placeholder": "Sara",
+                "help": "Name shown in conversation and used in responses."
+              },
+              {
+                "id": "avatar_initial",
+                "label": "Avatar initial",
+                "type": "text",
+                "maxLength": 1,
+                "help": "Single letter shown in the chat interface for the agent."
+              },
+              {
+                "id": "tone",
+                "label": "Tone",
+                "type": "radio-cards",
+                "options": [
+                  { "value": "professional", "label": "Professional", "desc": "Clear, respectful, no slang" },
+                  { "value": "friendly", "label": "Friendly", "desc": "Warm, uses light emojis, casual phrasing" },
+                  { "value": "direct", "label": "Direct", "desc": "Short answers, no filler, efficient" },
+                  { "value": "empathetic", "label": "Empathetic", "desc": "Validates customer feelings before answering" }
+                ]
+              },
+              {
+                "id": "emoji_usage",
+                "label": "Emoji usage",
+                "type": "select",
+                "options": ["None — never use emojis", "Minimal — 1 per message max", "Natural — when appropriate"],
+                "default": "Minimal — 1 per message max"
+              },
+              {
+                "id": "language",
+                "label": "Primary language",
+                "type": "select",
+                "options": ["Arabic", "French", "English", "Arabic + French (Darija mix)", "French + English", "Detect from customer and match"]
+              },
+              {
+                "id": "mood_adaptation",
+                "label": "Adapt mood to customer",
+                "type": "toggle",
+                "default": true,
+                "help": "If on, the agent mirrors the customer's energy level — more formal if they're formal, warmer if they're casual."
+              },
+              {
+                "id": "system_prompt",
+                "label": "System prompt",
+                "type": "textarea",
+                "rows": 10,
+                "placeholder": "You are Sara, a customer support assistant for [Company Name]. You help customers with questions about our products, pricing, availability, and delivery. You are friendly but professional. Always answer accurately — if you don't know something, say so and offer to connect the customer with a team member. Never make promises about delivery times or prices unless they are in your knowledge base. Keep answers concise — 1–3 sentences unless more detail is needed.",
+                "help": "Core instructions for the LLM. This runs before every single message. Be specific."
+              },
+              {
+                "id": "opening_message",
+                "label": "Greeting message",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "Hi! 👋 I'm Sara, your assistant. How can I help you today?",
+                "help": "Sent automatically when a customer opens a conversation for the first time."
+              },
+              {
+                "id": "business_context",
+                "label": "Business context",
+                "type": "textarea",
+                "rows": 4,
+                "placeholder": "We are [Company]. We sell [products]. Operating hours: Mon–Sat 9am–6pm. Delivery: 2–5 days nationwide. Payment: CCP, Baridimob, cash on delivery.",
+                "help": "Facts the agent should always have access to. Injected into every conversation context."
+              },
+              {
+                "id": "forbidden_topics",
+                "label": "Never discuss",
+                "type": "tag-input",
+                "placeholder": "Add topic"
+              }
+            ]
+          },
+
+          {
+            "id": "knowledge_base",
+            "anchor": "#knowledge",
+            "title": "Knowledge base (FAQ)",
+            "description": "The agent's primary source of answers. When a customer asks something, the agent first checks the knowledge base before using the LLM to generate a free-form answer.",
+            "ui": "Table with add/edit inline. Two columns: Question and Answer. Each row: question text, answer text (truncated to 60 chars + expand), channel tags, edit icon, delete icon. 'Add entry' button opens inline row editor.",
+            "fields_per_entry": [
+              { "id": "question", "label": "Question", "type": "text", "placeholder": "What are your delivery times?" },
+              { "id": "answer", "label": "Answer", "type": "textarea", "rows": 3, "placeholder": "We deliver within 2–5 business days across Algeria. Algiers and Oran: 1–2 days." },
+              { "id": "keywords", "label": "Match keywords", "type": "tag-input", "help": "If any of these appear in a customer message, this entry is considered a match. Leave empty to rely on semantic similarity." },
+              { "id": "channels", "label": "Active on", "type": "checkbox-group", "options": ["WhatsApp", "Instagram", "Facebook"], "default": "all" }
+            ],
+            "kb_settings": {
+              "title": "Knowledge base settings",
+              "fields": [
+                { "id": "match_threshold", "label": "Similarity threshold", "type": "slider", "min": 0.5, "max": 0.95, "default": 0.75, "help": "How closely a customer message must match a FAQ entry to use it. Lower = more lenient matching." },
+                { "id": "fallback_to_llm", "label": "Use LLM if no match found", "type": "toggle", "default": true, "help": "If off, agent sends a fallback message and escalates when nothing matches." },
+                { "id": "fallback_message", "label": "No-match fallback message", "type": "text", "placeholder": "I don't have that information on hand. Let me connect you with a team member.", "condition": "fallback_to_llm = false" }
+              ]
+            }
+          },
+
+          {
+            "id": "response_rules",
+            "anchor": "#rules",
+            "title": "Response rules",
+            "description": "Define specific guardrails and behaviors for how the agent responds.",
+            "fields": [
+              {
+                "id": "max_consecutive_ai_messages",
+                "label": "Max consecutive AI messages",
+                "type": "number",
+                "default": 5,
+                "help": "If agent sends this many messages without a customer reply, escalate to human."
+              },
+              {
+                "id": "reply_to_media",
+                "label": "When customer sends an image or file",
+                "type": "select",
+                "options": [
+                  "Acknowledge and escalate to human",
+                  "Acknowledge only: 'Thanks, a team member will review this'",
+                  "Ignore silently"
+                ],
+                "default": "Acknowledge and escalate to human"
+              },
+              {
+                "id": "after_hours_behavior",
+                "label": "After hours",
+                "type": "select",
+                "options": [
+                  "Keep agent running 24/7",
+                  "Send an after-hours message + queue for morning",
+                  "Disable agent outside business hours"
+                ]
+              },
+              {
+                "id": "after_hours_message",
+                "label": "After-hours message",
+                "type": "text",
+                "placeholder": "We're currently closed. We'll get back to you first thing tomorrow morning! 🌙",
+                "condition": "after_hours_behavior != Keep agent running 24/7"
+              },
+              {
+                "id": "business_hours",
+                "label": "Business hours",
+                "type": "time-range-per-day",
+                "help": "Set operating hours. Agent respects these for after-hours behavior."
+              },
+              {
+                "id": "auto_qualify",
+                "label": "Auto-qualify leads",
+                "type": "toggle",
+                "default": true,
+                "help": "If on, the agent asks qualifying questions (defined below) and moves the lead stage based on answers."
+              },
+              {
+                "id": "qualifying_questions",
+                "label": "Qualifying questions",
+                "type": "ordered-list-textarea",
+                "condition": "auto_qualify = true",
+                "placeholder": "What product are you interested in?\nWhat's your approximate budget?\nIs this for personal use or business?",
+                "help": "Agent weaves these into the conversation naturally — not as a form. Order matters."
+              }
+            ]
+          },
+
+          {
+            "id": "triggers",
+            "anchor": "#triggers",
+            "title": "Triggers",
+            "description": "When the chat agent activates and how it handles different incoming message types.",
+            "fields": [
+              {
+                "id": "activation",
+                "label": "Agent responds to",
+                "type": "checkbox-group",
+                "options": [
+                  "All inbound messages from new contacts",
+                  "All inbound messages from existing leads",
+                  "Only messages on conversations not owned by a human agent",
+                  "Only during business hours"
+                ]
+              },
+              {
+                "id": "keyword_triggers",
+                "label": "Instant-response keywords",
+                "type": "tag-input",
+                "placeholder": "Add keyword",
+                "examples": ["price", "order", "delivery", "available", "كم", "سعر"],
+                "help": "When these appear in a message, skip FAQ matching and respond immediately with LLM."
+              },
+              {
+                "id": "lead_stage_on_reply",
+                "label": "Move lead to stage when customer replies",
+                "type": "select",
+                "options": ["No change", "Contacted", "Qualified"],
+                "default": "Contacted"
+              }
+            ]
+          },
+
+          {
+            "id": "human_handoff",
+            "anchor": "#handoff",
+            "title": "Human intervention",
+            "description": "When the chat agent stops and escalates to a human agent. Same structure as follow-up agent but with chat-specific triggers.",
+            "fields": [
+              {
+                "id": "escalation_triggers",
+                "label": "Escalate when",
+                "type": "checkbox-group",
+                "options": [
+                  "Customer explicitly asks for a human",
+                  "Negative sentiment detected",
+                  "Complaint keyword detected",
+                  "Customer sends an image or document",
+                  "LLM confidence below threshold",
+                  "Max consecutive AI messages reached",
+                  "Customer asks about refund or return",
+                  "Customer mentions a specific order number",
+                  "Conversation idle for more than X minutes after agent message"
+                ]
+              },
+              { "id": "confidence_threshold", "label": "LLM confidence threshold", "type": "slider", "min": 0, "max": 1, "default": 0.6, "help": "Below this score, the reply is flagged as uncertain and escalated." },
+              { "id": "complaint_keywords", "label": "Complaint keywords", "type": "tag-input" },
+              { "id": "idle_timeout", "label": "Escalate if customer doesn't reply after", "type": "number", "suffix": "minutes", "default": 30 },
+              { "id": "notification_targets", "label": "Notify agent(s)", "type": "multi-select-users" },
+              { "id": "notification_channel", "label": "Notify via", "type": "checkbox-group", "options": ["In-app notification", "Email", "WhatsApp to agent"] },
+              { "id": "urgent_notification_message", "label": "Notification text", "type": "textarea", "rows": 2, "placeholder": "⚡ Human needed: {{contact_name}} on {{channel}} — {{escalation_reason}}" }
+            ]
+          }
+        ]
+      },
+
+      {
+        "id": "agent_tracking",
+        "name": "Order Tracking Agent",
+        "route": "/admin/agents/tracking",
+        "file": "app/(app)/admin/agents/tracking/page.tsx",
+        "description": "The tracking agent connects to a delivery API, monitors order statuses, and sends customers proactive updates. When a customer is unsatisfied or a delivery fails, it triggers the Refund Agent and notifies the business owner. This page configures the delivery API connection, update message templates, trigger conditions, and the handoff to the refund flow.",
+
+        "page_layout": "Three-column. Right panel: delivery API connection status dot (green/red), orders being tracked today, failed deliveries today, 'Test API connection' button.",
+
+        "sections": [
+
+          {
+            "id": "delivery_api",
+            "anchor": "#api",
+            "title": "Delivery API connection",
+            "description": "Connect to your delivery partner's API. The agent polls this API to get live status updates and triggers customer messages when status changes.",
+            "fields": [
+              {
+                "id": "api_provider_preset",
+                "label": "Delivery partner",
+                "type": "select",
+                "options": [
+                  "Yalidine (Algeria)",
+                  "Maystro Delivery (Algeria)",
+                  "Procolis (Algeria)",
+                  "Ecotrack (Algeria)",
+                  "DHL",
+                  "Aramex",
+                  "Custom API"
+                ],
+                "help": "Selecting a preset auto-fills the API base URL and authentication method."
+              },
+              {
+                "id": "api_base_url",
+                "label": "API base URL",
+                "type": "text",
+                "placeholder": "https://api.yalidine.app/v1/",
+                "help": "Auto-filled for presets. Edit only for custom integrations."
+              },
+              {
+                "id": "api_key",
+                "label": "API key / Token",
+                "type": "password-input",
+                "placeholder": "Your delivery API key",
+                "actions": ["Test connection — shows 'Connected' with last sync time or error message with code"]
+              },
+              {
+                "id": "api_id",
+                "label": "API ID / Client ID",
+                "type": "text",
+                "placeholder": "Required by some providers (e.g. Yalidine)",
+                "help": "Some APIs require both an ID and a key. Check your delivery partner's documentation."
+              },
+              {
+                "id": "webhook_or_polling",
+                "label": "Update method",
+                "type": "radio",
+                "options": [
+                  { "value": "webhook", "label": "Webhook (real-time)", "desc": "Delivery API pushes updates to Scale. Fastest. Requires delivery partner to support webhooks." },
+                  { "value": "polling", "label": "Polling (scheduled)", "desc": "Scale checks the API every X minutes. More compatible, slight delay." }
+                ]
+              },
+              {
+                "id": "polling_interval",
+                "label": "Poll every",
+                "type": "select",
+                "options": ["5 minutes", "10 minutes", "15 minutes", "30 minutes", "1 hour"],
+                "condition": "webhook_or_polling = polling",
+                "default": "15 minutes"
+              },
+              {
+                "id": "webhook_url",
+                "label": "Your webhook endpoint",
+                "type": "readonly-code",
+                "value": "https://api.scale.dz/webhooks/tracking/{workspace_id}",
+                "actions": ["Copy to clipboard"],
+                "condition": "webhook_or_polling = webhook",
+                "help": "Paste this into your delivery partner's webhook settings."
+              },
+              {
+                "id": "order_id_field",
+                "label": "Order ID field name in API",
+                "type": "text",
+                "placeholder": "tracking_code",
+                "help": "The field name in the API response that contains the order/tracking ID. Used to match delivery API records to Scale leads."
+              },
+              {
+                "id": "order_id_source",
+                "label": "Order ID stored in Scale as",
+                "type": "select",
+                "options": ["Lead tag", "Lead custom field", "Contact note"],
+                "help": "Where in Scale the order ID is stored so the agent can match orders to contacts."
+              }
+            ]
+          },
+
+          {
+            "id": "status_mapping",
+            "anchor": "#status",
+            "title": "Status mapping & customer messages",
+            "description": "Map each delivery status from the API to a customer-facing message. The agent sends the message to the customer when that status is detected.",
+            "ui": "Table with rows per status. Each row: API status code/name (left, readonly label) + customer message textarea (right, editable) + send toggle (enable/disable per status) + channel selector. 'Add custom status' link at bottom.",
+            "default_statuses": [
+              {
+                "api_status": "order_confirmed",
+                "default_message": "Hi {{name}}! ✅ Your order has been confirmed. We're preparing it now. Your tracking code is: {{tracking_code}}",
+                "send_by_default": true
+              },
+              {
+                "api_status": "in_preparation",
+                "default_message": "Good news {{name}}! Your order is being packed and will be handed to our delivery partner soon.",
+                "send_by_default": false
+              },
+              {
+                "api_status": "picked_up",
+                "default_message": "{{name}}, your order is on the move! 🚚 Our delivery partner has picked it up. Expected: {{estimated_delivery}}",
+                "send_by_default": true
+              },
+              {
+                "api_status": "out_for_delivery",
+                "default_message": "Your order is out for delivery today {{name}}! Please make sure someone is available to receive it. 📦",
+                "send_by_default": true
+              },
+              {
+                "api_status": "delivered",
+                "default_message": "Your order has been delivered {{name}}! 🎉 We hope you love it. If you have any questions, just reply here.",
+                "send_by_default": true
+              },
+              {
+                "api_status": "delivery_attempted",
+                "default_message": "Hi {{name}}, our delivery team tried to reach you today but couldn't. They'll try again tomorrow — please make sure you're available.",
+                "send_by_default": true
+              },
+              {
+                "api_status": "returned",
+                "default_message": "Hi {{name}}, your order was returned to us. This sometimes happens if delivery was attempted multiple times. A team member will contact you to reschedule.",
+                "send_by_default": true,
+                "triggers_escalation": true
+              },
+              {
+                "api_status": "lost",
+                "default_message": "We're very sorry {{name}} — there seems to be an issue with your delivery. A team member will contact you within 1 hour to resolve this.",
+                "send_by_default": true,
+                "triggers_escalation": true,
+                "escalation_priority": "urgent"
+              }
+            ],
+            "message_variables": "{{name}}, {{tracking_code}}, {{estimated_delivery}}, {{order_value}}, {{product_name}}, {{delivery_partner}}",
+            "settings": {
+              "fields": [
+                { "id": "send_channels", "label": "Default send channel", "type": "checkbox-group", "options": ["WhatsApp", "Instagram", "Facebook"], "help": "Use the same channel the lead originally came from." },
+                { "id": "send_time_restriction", "label": "Only send between", "type": "time-range", "default": "08:00 – 21:00" },
+                { "id": "deduplication", "label": "Don't send same status update twice", "type": "toggle", "default": true }
+              ]
+            }
+          },
+
+          {
+            "id": "satisfaction_detection",
+            "anchor": "#satisfaction",
+            "title": "Satisfaction detection",
+            "description": "After a delivery update is sent, the agent monitors the customer's reply for satisfaction signals. If the customer is unhappy, the Refund Agent is triggered and the owner is notified.",
+            "fields": [
+              {
+                "id": "monitor_replies",
+                "label": "Monitor customer replies after delivery",
+                "type": "toggle",
+                "default": true,
+                "help": "If on, the chat agent reads the customer's reply to the delivery update and classifies it as satisfied, neutral, or unsatisfied."
+              },
+              {
+                "id": "followup_message_after_delivery",
+                "label": "Satisfaction check message",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "Hi {{name}}, we hope everything arrived perfectly! 😊 Are you happy with your order?",
+                "help": "Sent 1–2 hours after the 'delivered' status is confirmed. Optional — leave blank to skip."
+              },
+              {
+                "id": "satisfaction_check_delay",
+                "label": "Send satisfaction check after delivery",
+                "type": "inline-duration",
+                "default": "2 hours",
+                "condition": "followup_message_after_delivery is not empty"
+              },
+              {
+                "id": "unsatisfied_keywords",
+                "label": "Unsatisfied signal keywords",
+                "type": "tag-input",
+                "examples": ["not received", "broken", "wrong", "damaged", "missing", "refund", "return", "خايب", "مكملتش"],
+                "help": "Any of these in a reply after delivery = unsatisfied customer. Triggers refund agent."
+              },
+              {
+                "id": "unsatisfied_action",
+                "label": "When customer is unsatisfied",
+                "type": "checkbox-group",
+                "options": [
+                  "Trigger Refund Agent immediately",
+                  "Send empathy message first, then trigger Refund Agent",
+                  "Notify business owner immediately",
+                  "Notify assigned sales agent",
+                  "Move lead to 'At Risk' stage"
+                ],
+                "default": ["Send empathy message first, then trigger Refund Agent", "Notify business owner immediately"]
+              },
+              {
+                "id": "empathy_message",
+                "label": "Empathy message",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "We're really sorry to hear that {{name}}. This is not the experience we want for you. Our team is already looking into this and will get back to you shortly.",
+                "condition": "unsatisfied_action includes Send empathy message first"
+              }
+            ]
+          },
+
+          {
+            "id": "triggers",
+            "anchor": "#triggers",
+            "title": "Triggers & automation rules",
+            "fields": [
+              {
+                "id": "auto_link_orders",
+                "label": "Auto-link orders to leads",
+                "type": "toggle",
+                "default": true,
+                "help": "When a new order is created, automatically match it to a lead by phone number or order ID."
+              },
+              {
+                "id": "unmatched_order_action",
+                "label": "If order can't be matched to a lead",
+                "type": "select",
+                "options": ["Create a new contact automatically", "Notify admin and skip", "Skip silently"]
+              },
+              {
+                "id": "status_change_delay",
+                "label": "Wait before sending update",
+                "type": "number",
+                "suffix": "minutes",
+                "default": 0,
+                "help": "Delay between API status change detection and customer message. Use 0 for immediate."
+              }
+            ]
+          },
+
+          {
+            "id": "human_handoff",
+            "anchor": "#handoff",
+            "title": "Human intervention & owner notifications",
+            "description": "The order tracking agent notifies humans in two cases: failed deliveries and unsatisfied customers.",
+            "fields": [
+              {
+                "id": "owner_notification_events",
+                "label": "Notify business owner when",
+                "type": "checkbox-group",
+                "options": [
+                  "Order marked as 'returned' by delivery partner",
+                  "Order marked as 'lost' by delivery partner",
+                  "Customer expresses dissatisfaction after delivery",
+                  "3 or more delivery attempts failed",
+                  "Delivery is delayed beyond estimated date by 2+ days"
+                ]
+              },
+              {
+                "id": "owner_notification_targets",
+                "label": "Owner notification recipients",
+                "type": "multi-select-users",
+                "help": "These users receive the owner-level notification. Typically: Business Owner + Admin."
+              },
+              {
+                "id": "owner_notification_channel",
+                "label": "Notify owner via",
+                "type": "checkbox-group",
+                "options": ["In-app notification (urgent badge)", "Email", "WhatsApp message"]
+              },
+              {
+                "id": "owner_notification_template",
+                "label": "Owner notification message",
+                "type": "textarea",
+                "rows": 3,
+                "placeholder": "⚠️ Issue with order {{tracking_code}} for {{contact_name}}.\nStatus: {{delivery_status}}\nIssue: {{issue_description}}\nRefund Agent has been triggered. Review: {{conversation_link}}",
+                "help": "Variables: {{tracking_code}}, {{contact_name}}, {{delivery_status}}, {{issue_description}}, {{conversation_link}}, {{order_value}}"
+              },
+              {
+                "id": "agent_notification_events",
+                "label": "Notify assigned sales agent when",
+                "type": "checkbox-group",
+                "options": [
+                  "Customer is unsatisfied and needs follow-up",
+                  "Delivery failed and refund flow started",
+                  "Customer replies outside of tracking context"
+                ]
+              },
+              {
+                "id": "auto_trigger_refund",
+                "label": "Auto-trigger Refund Agent on dissatisfaction",
+                "type": "toggle",
+                "default": true,
+                "help": "Immediately hands the conversation to the Refund Agent when dissatisfaction is detected."
+              }
+            ]
+          }
+        ]
+      },
+
+      {
+        "id": "agent_refund",
+        "name": "Refund Agent",
+        "route": "/admin/agents/refund",
+        "file": "app/(app)/admin/agents/refund/page.tsx",
+        "description": "The refund agent takes over when a customer is unsatisfied — after being triggered by the Order Tracking Agent or by a direct customer request. It handles the full refund conversation: acknowledging the issue, collecting the reason, checking policy, deciding auto-approve or escalate, and notifying the owner for any case that needs discussion. This page configures the full refund logic, LLM personality, policy rules, escalation flow, and owner notification templates.",
+
+        "page_layout": "Three-column. Right panel: refund requests today, auto-approved today, pending owner review, 'View all active refunds' link.",
+
+        "sections": [
+
+          {
+            "id": "llm_config",
+            "anchor": "#llm",
+            "title": "LLM configuration",
+            "description": "Same structure as other agents. Refund conversations are sensitive — recommend a higher-quality model (GPT-4o or Claude Sonnet) and lower temperature.",
+            "additional_fields": [
+              {
+                "id": "temperature_note",
+                "type": "info-block",
+                "content": "For refund conversations, set creativity to 0.2 or lower. The agent must be predictable and policy-compliant. Use a strong model."
+              }
+            ]
+          },
+
+          {
+            "id": "personality",
+            "anchor": "#personality",
+            "title": "Personality & tone",
+            "description": "The refund agent must be empathetic and clear. It is handling an unhappy customer.",
+            "fields": [
+              { "id": "agent_name", "label": "Agent name", "type": "text", "placeholder": "Sara" },
+              {
+                "id": "tone",
+                "label": "Tone",
+                "type": "radio-cards",
+                "options": [
+                  { "value": "empathetic", "label": "Empathetic", "desc": "Apologizes, validates feelings, takes ownership" },
+                  { "value": "professional", "label": "Professional", "desc": "Calm, factual, clear steps" },
+                  { "value": "empathetic_professional", "label": "Empathetic + Professional", "desc": "Starts warm, shifts to clear process" }
+                ],
+                "default": "empathetic_professional"
+              },
+              {
+                "id": "system_prompt",
+                "label": "System prompt",
+                "type": "textarea",
+                "rows": 10,
+                "placeholder": "You are Sara, handling refund and return requests for [Company]. A customer has reached out because they are unhappy with their order. Your job is to: (1) Sincerely apologize for the inconvenience, (2) Understand exactly what the issue is by asking one clear question, (3) Check if the request qualifies for a refund based on our policy, (4) If it qualifies, confirm the refund and explain next steps clearly, (5) If it doesn't qualify or you're unsure, tell the customer a manager will review and get back to them within [timeframe]. Never argue with the customer. Never promise things you cannot guarantee. Be honest about the process.",
+                "help": "This prompt is critical. Be specific about what the agent can and cannot promise."
+              },
+              {
+                "id": "opening_message",
+                "label": "Opening message when triggered",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "Hi {{name}}, I'm really sorry you had this experience. I'm Sara, and I'm here to make this right. Can you tell me a bit more about what happened with your order?",
+                "help": "Sent as the first message when the Refund Agent takes over from Order Tracking."
+              },
+              {
+                "id": "business_context",
+                "label": "Refund context",
+                "type": "textarea",
+                "rows": 4,
+                "placeholder": "Our standard refund policy: customers have 7 days from delivery to request a refund. Items must be unused and in original packaging. Damaged items are refunded without return. Wrong items sent are refunded or replaced at no cost.",
+                "help": "The agent uses this as ground truth for policy decisions."
+              }
+            ]
+          },
+
+          {
+            "id": "policy",
+            "anchor": "#policy",
+            "title": "Refund policy",
+            "description": "Define the rules the agent uses to automatically approve or escalate a refund request.",
+            "fields": [
+              {
+                "id": "refund_window",
+                "label": "Refund window",
+                "type": "number",
+                "suffix": "days from delivery",
+                "default": 7,
+                "help": "Requests made after this window are automatically escalated, not auto-approved."
+              },
+              {
+                "id": "auto_approve_limit",
+                "label": "Auto-approve limit",
+                "type": "number",
+                "suffix": "DZD",
+                "default": 3000,
+                "help": "Refund requests below this amount are auto-approved if policy conditions are met."
+              },
+              {
+                "id": "require_proof",
+                "label": "Require proof for damaged/wrong items",
+                "type": "toggle",
+                "default": false,
+                "help": "If on, agent asks customer for a photo before approving."
+              },
+              {
+                "id": "proof_request_message",
+                "label": "Proof request message",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "To process your refund quickly, could you send me a photo of the item? That really helps us resolve this faster. 🙏",
+                "condition": "require_proof = true"
+              },
+              {
+                "id": "auto_approve_conditions",
+                "label": "Auto-approve when ALL of these are true",
+                "type": "checkbox-group",
+                "options": [
+                  "Request is within refund window",
+                  "Order value is below auto-approve limit",
+                  "Reason is: damaged, wrong item, not received, or defective",
+                  "Customer account has no previous refund in last 90 days"
+                ],
+                "help": "All selected conditions must be true for auto-approval."
+              },
+              {
+                "id": "auto_approve_confirmation",
+                "label": "Auto-approval confirmation message",
+                "type": "textarea",
+                "rows": 3,
+                "placeholder": "Great news {{name}} — your refund of {{refund_amount}} DZD has been approved! ✅ You'll receive it within {{refund_processing_days}} business days via {{refund_method}}. Is there anything else I can help you with?",
+                "help": "Variables: {{name}}, {{refund_amount}}, {{refund_processing_days}}, {{refund_method}}, {{order_value}}"
+              },
+              {
+                "id": "refund_method",
+                "label": "Default refund method",
+                "type": "select",
+                "options": ["Baridimob", "CCP transfer", "Cash on next delivery", "Store credit", "Bank transfer"],
+                "help": "How refunds are issued. Mentioned in the confirmation message."
+              },
+              {
+                "id": "refund_processing_days",
+                "label": "Processing time",
+                "type": "number",
+                "suffix": "business days",
+                "default": 3
+              }
+            ]
+          },
+
+          {
+            "id": "rules_builder",
+            "anchor": "#rules",
+            "title": "Custom refund rules",
+            "description": "Define IF/THEN rules that override the default policy for specific cases.",
+            "ui": "Rule rows. Each rule: IF [condition select] [operator] [value input] THEN [action select]. Add/remove rows. Preview panel shows plain-language summary of all rules.",
+            "condition_options": [
+              "Order value", "Days since delivery", "Customer's previous refund count",
+              "Delivery status", "Refund reason (selected by customer)", "Product category",
+              "Customer tag"
+            ],
+            "action_options": [
+              "Auto-approve refund",
+              "Escalate to owner for manual review",
+              "Escalate to assigned agent",
+              "Ask for photo proof before deciding",
+              "Deny and explain policy",
+              "Offer store credit instead"
+            ],
+            "example_rules": [
+              "IF order_value > 10000 DZD THEN escalate to owner",
+              "IF customer_refund_count > 2 in last 90 days THEN escalate to owner",
+              "IF delivery_status = lost THEN auto-approve refund",
+              "IF reason = not_received AND days_since_delivery < 14 THEN auto-approve",
+              "IF product_category = electronics THEN ask for photo proof"
+            ]
+          },
+
+          {
+            "id": "conversation_flow",
+            "anchor": "#flow",
+            "title": "Refund conversation flow",
+            "description": "Define the structured steps the agent follows when handling a refund. This is not a rigid script — the LLM handles the actual wording — but these steps guide what the agent asks and in what order.",
+            "steps": [
+              { "step": 1, "label": "Acknowledge & apologize", "description": "Agent opens with empathy. Uses opening_message defined above." },
+              { "step": 2, "label": "Identify the issue", "description": "Agent asks one question to understand the problem. Customer selects or describes a reason.", "reason_options_field": { "id": "reason_options", "label": "Reason options to present", "type": "tag-input", "examples": ["Item not received", "Wrong item sent", "Damaged on arrival", "Product defective", "Changed my mind", "Other"] } },
+              { "step": 3, "label": "Collect proof (if required)", "description": "If require_proof is on and reason matches, agent asks for photo." },
+              { "step": 4, "label": "Policy check", "description": "Internal: agent checks rules. Customer sees nothing during this step." },
+              { "step": 5, "label": "Decision", "description": "Auto-approve → send confirmation. Escalate → send hold message, notify owner/agent." },
+              { "step": 6, "label": "Close", "description": "If approved: confirm and ask if anything else needed. If escalated: reassure timeline.", "hold_message_field": { "id": "escalation_hold_message", "label": "Escalation hold message", "type": "textarea", "rows": 2, "placeholder": "Thank you {{name}}, I've passed this to our manager who will personally review your case and get back to you within {{owner_response_sla}}. We take this seriously. 🙏" } }
+            ],
+            "additional_fields": [
+              {
+                "id": "owner_response_sla",
+                "label": "Owner response time commitment",
+                "type": "select",
+                "options": ["30 minutes", "1 hour", "2 hours", "by end of day"],
+                "default": "1 hour",
+                "help": "Mentioned in the hold message sent to the customer."
+              }
+            ]
+          },
+
+          {
+            "id": "triggers",
+            "anchor": "#triggers",
+            "title": "Triggers",
+            "description": "When the Refund Agent activates.",
+            "fields": [
+              {
+                "id": "activation_sources",
+                "label": "Agent activates when",
+                "type": "checkbox-group",
+                "options": [
+                  "Order Tracking Agent detects customer dissatisfaction",
+                  "Customer sends a refund/return keyword in any conversation",
+                  "Assigned agent manually triggers from contact record",
+                  "Customer replies with dissatisfaction to a delivery update message"
+                ]
+              },
+              {
+                "id": "refund_keywords",
+                "label": "Refund trigger keywords",
+                "type": "tag-input",
+                "examples": ["refund", "return", "broken", "not received", "wrong", "استرجاع", "ما وصلش"],
+                "help": "Any of these in a customer message will trigger the Refund Agent, regardless of current conversation state."
+              },
+              {
+                "id": "pause_other_agents",
+                "label": "When Refund Agent activates",
+                "type": "checkbox-group",
+                "options": [
+                  "Pause Follow-Up Agent for this contact",
+                  "Pause Chat Agent for this contact",
+                  "Pause Order Tracking Agent for this contact"
+                ],
+                "default": ["Pause Follow-Up Agent for this contact", "Pause Chat Agent for this contact"]
+              }
+            ]
+          },
+
+          {
+            "id": "owner_notifications",
+            "anchor": "#notifications",
+            "title": "Owner notifications",
+            "description": "Every refund case that is escalated (not auto-approved) triggers a notification to the business owner for manual review and discussion. This is a core feature — the owner is always in the loop on non-trivial refunds.",
+            "fields": [
+              {
+                "id": "always_notify_owner",
+                "label": "Notify owner on every refund request",
+                "type": "toggle",
+                "default": false,
+                "help": "If off, owner is only notified on escalations (not auto-approved cases)."
+              },
+              {
+                "id": "owner_targets",
+                "label": "Owner notification recipients",
+                "type": "multi-select-users",
+                "help": "These users receive the owner-level notification. Typically the Business Owner and Admin."
+              },
+              {
+                "id": "owner_notification_channel",
+                "label": "Notify owner via",
+                "type": "checkbox-group",
+                "options": ["In-app notification (urgent badge, red)", "Email", "WhatsApp message to owner's number"]
+              },
+              {
+                "id": "owner_notification_template",
+                "label": "Owner notification message",
+                "type": "textarea",
+                "rows": 4,
+                "placeholder": "🔴 Refund case needs your review.\n\nCustomer: {{contact_name}}\nOrder: {{tracking_code}} ({{order_value}} DZD)\nIssue: {{refund_reason}}\nDays since delivery: {{days_since_delivery}}\n\nConversation: {{conversation_link}}\nDecision needed by: {{owner_response_sla}}",
+                "help": "Variables: {{contact_name}}, {{tracking_code}}, {{order_value}}, {{refund_reason}}, {{days_since_delivery}}, {{conversation_link}}, {{owner_response_sla}}, {{agent_recommendation}}"
+              },
+              {
+                "id": "owner_actions_from_notification",
+                "label": "Actions owner can take from notification",
+                "type": "info-block",
+                "content": "In-app notification includes: 'Approve refund' button, 'Deny' button, 'Open conversation' link. Clicking Approve/Deny sends the decision back to the Refund Agent, which then messages the customer automatically."
+              },
+              {
+                "id": "owner_approve_message",
+                "label": "Message sent to customer after owner approves",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "Great news {{name}}! Our manager has reviewed your case and approved your refund of {{refund_amount}} DZD. You'll receive it within {{refund_processing_days}} business days. Thank you for your patience! 🙏"
+              },
+              {
+                "id": "owner_deny_message",
+                "label": "Message sent to customer after owner denies",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "Hi {{name}}, after reviewing your case, we're unable to process a refund at this time because {{denial_reason}}. We're sorry for the inconvenience. If you'd like to discuss this further, reply here and we'll be happy to help."
+              },
+              {
+                "id": "agent_notification_on_escalation",
+                "label": "Also notify assigned sales agent",
+                "type": "toggle",
+                "default": true,
+                "help": "Agent gets a softer notification to stay aware of the case, without requiring their action."
+              }
+            ]
+          },
+
+          {
+            "id": "human_handoff",
+            "anchor": "#handoff",
+            "title": "Human takeover",
+            "description": "Full human takeover — agent or owner takes direct control of the refund conversation.",
+            "fields": [
+              {
+                "id": "auto_handoff_triggers",
+                "label": "Auto-trigger human takeover when",
+                "type": "checkbox-group",
+                "options": [
+                  "Customer uses aggressive or threatening language",
+                  "Customer mentions legal action or authority",
+                  "Refund amount exceeds auto-approve limit and owner hasn't responded in X minutes",
+                  "Customer asks for human 3+ times"
+                ]
+              },
+              {
+                "id": "owner_timeout",
+                "label": "Escalate to direct agent if owner doesn't respond in",
+                "type": "number",
+                "suffix": "minutes",
+                "default": 60,
+                "help": "If the owner doesn't approve/deny within this time, the assigned sales agent is notified to handle it directly."
+              },
+              {
+                "id": "handoff_message",
+                "label": "Message when handing to human",
+                "type": "textarea",
+                "rows": 2,
+                "placeholder": "I've flagged your case as urgent {{name}}. A team member will personally reach out to you within the next 30 minutes. We sincerely apologize for this situation."
+              },
+              {
+                "id": "urgent_notification_sound",
+                "label": "Play sound for urgent notifications",
+                "type": "toggle",
+                "default": true,
+                "help": "In-app urgent notifications play an alert sound for agents online."
+              }
+            ]
+          }
+        ]
+      }
+    ],
+
+    "notifications_system": {
+      "route": "/admin/notifications",
+      "file": "app/(app)/admin/notifications/page.tsx",
+      "description": "Central notification rules page. All escalation alerts, owner notifications, and human intervention triggers are configured and reviewed here. Also shows a live log of all notifications sent.",
+
+      "sections": [
+        {
+          "id": "rules",
+          "title": "Notification rules",
+          "description": "Summary table of all notification rules across all agents. Each row: agent name, trigger event, recipients, channels, edit link. Read-only summary — editing redirects to the agent's own configuration page.",
+          "columns": ["Agent", "Trigger", "Recipients", "Via", "Status", "Edit"]
+        },
+        {
+          "id": "log",
+          "title": "Notification log",
+          "description": "Searchable, filterable log of all notifications sent. Columns: timestamp, agent, trigger, recipient, channel, status (Sent / Read / Acted on). Filter by agent, date range, status.",
+          "retention": "Last 90 days"
+        },
+        {
+          "id": "test",
+          "title": "Test a notification",
+          "description": "Select an agent, select a trigger event, pick a recipient, send a test notification. Used to verify delivery before going live."
+        }
+      ]
+    },
+
+    "shared_components_to_build": [
+      {
+        "name": "AgentConfigShell",
+        "file": "components/agents/AgentConfigShell.tsx",
+        "description": "Wrapper for all agent config pages. Renders: breadcrumb (AI Agents / [Agent Name]), left anchor nav, center scrollable content, right sticky panel. Props: agentName, anchorSections[], rightPanelContent."
+      },
+      {
+        "name": "LLMConfigSection",
+        "file": "components/agents/LLMConfigSection.tsx",
+        "description": "Reusable LLM config section used by all 4 agents. Props: agentId (used to namespace stored keys). Includes: provider select, API key input with test button, model select, temperature slider, max tokens input."
+      },
+      {
+        "name": "SequenceStepCard",
+        "file": "components/agents/SequenceStepCard.tsx",
+        "description": "Draggable step card for the follow-up sequence builder. Props: stepNumber, onRemove, fields (delay, message mode, template picker, channel selector, send window, stop conditions)."
+      },
+      {
+        "name": "TriggerCheckboxGroup",
+        "file": "components/agents/TriggerCheckboxGroup.tsx",
+        "description": "Reusable labeled checkbox group with optional condition fields that appear when certain options are selected."
+      },
+      {
+        "name": "EscalationConfig",
+        "file": "components/agents/EscalationConfig.tsx",
+        "description": "Reusable human handoff configuration block. Props: escalationOptions[], userList[], notificationChannels[]. Renders: escalation trigger checkboxes, user multi-select, channel checkboxes, notification message textarea."
+      },
+      {
+        "name": "RuleBuilder",
+        "file": "components/agents/RuleBuilder.tsx",
+        "description": "IF/THEN rule builder. Each row: condition dropdown + operator select + value input + action dropdown + remove button. 'Add rule' button. Below: plain-language rule summary list."
+      },
+      {
+        "name": "StatusMappingTable",
+        "file": "components/agents/StatusMappingTable.tsx",
+        "description": "Two-column table: API status (readonly) + customer message (editable textarea) + enabled toggle. Used by Order Tracking Agent."
+      },
+      {
+        "name": "RadioCards",
+        "file": "components/ui/RadioCards.tsx",
+        "description": "Card-style radio buttons. Each option is a bordered card with label + desc. Selected state: border-color #2B62E8, bg #EEF3FD. Unselected: border #E4E4E8, bg white."
+      },
+      {
+        "name": "PasswordInput",
+        "file": "components/ui/PasswordInput.tsx",
+        "description": "Input with show/hide toggle and optional 'Test connection' button that runs a mock async check and shows inline success/error."
+      },
+      {
+        "name": "TagInput",
+        "file": "components/ui/TagInput.tsx",
+        "description": "Type text + Enter to add tags. Each tag shown as a small pill with remove X. Props: placeholder, examples (shown as ghost suggestions below)."
+      },
+      {
+        "name": "InlineDuration",
+        "file": "components/ui/InlineDuration.tsx",
+        "description": "Two inputs inline: number input + unit select (minutes/hours/days). Returns { value, unit }."
+      },
+      {
+        "name": "TimeRange",
+        "file": "components/ui/TimeRange.tsx",
+        "description": "Two time inputs inline with a dash between: from HH:MM – to HH:MM."
+      },
+      {
+        "name": "Slider",
+        "file": "components/ui/Slider.tsx",
+        "description": "HTML range input styled cleanly: 4px track, accent fill left of thumb, 16px thumb circle. Shows current value label. Props: min, max, step, labels (for custom left/right/center labels)."
+      },
+      {
+        "name": "InfoBlock",
+        "file": "components/ui/InfoBlock.tsx",
+        "description": "Soft informational callout. bg #EEF3FD, border-left 3px #2B62E8, border-radius 4px, padding 12px 16px. Text 13px #1E3A8A. No icon — just text."
+      },
+      {
+        "name": "NotificationBadge",
+        "file": "components/ui/NotificationBadge.tsx",
+        "description": "Urgent: red background (#DC2626), white text. Normal: bg #EEF3FD, text #1E3A8A. Small pill shown on sidebar nav items and bell icon. No animation — just a number."
+      },
+      {
+        "name": "AgentStatusPanel",
+        "file": "components/agents/AgentStatusPanel.tsx",
+        "description": "Right sticky panel for all agent config pages. Shows: enable/disable toggle with status label, 3 live stat rows (label + value), last edited timestamp, 'Test agent' button (outlined secondary)."
+      }
+    ],
+
+    "mock_data_additions": {
+      "file": "lib/mock-data.ts (add to existing)",
+      "additions": [
+        "agentConfigs: object with default configuration for all 4 agents — pre-filled with realistic values so the UI is never empty",
+        "refundCases: 8 cases (4 auto-approved, 2 pending owner, 1 denied, 1 in progress)",
+        "deliveryStatuses: realistic Yalidine-style status codes with 15 sample orders in various states",
+        "notificationLog: 20 notification events across all agents, last 7 days",
+        "faqEntries: 12 realistic FAQ pairs for an Algerian e-commerce business",
+        "sequenceSteps: default 4-step follow-up sequence with realistic messages in French"
+      ]
+    },
+
+    "implementation_notes": [
+      "Each agent config page saves state to localStorage keyed by agentId — no backend needed for MVP. Show a save confirmation inline ('Changes saved') without a toast that disappears.",
+      "The 'Test connection' button for API keys should show a spinner for 1.5 seconds then resolve to a mocked success state. No actual API call needed for MVP.",
+      "The 'Test agent' / 'Test chat' modals should use the actual LLM via the API key saved in config. If no key is set, show 'Add an API key to test this agent'.",
+      "Anchor navigation on left: clicking a section label smoothly scrolls to that section. Active section highlighted based on scroll position.",
+      "The Refund Agent's owner notification actions ('Approve' / 'Deny' buttons in the in-app notification) should update the refund case status and trigger the appropriate message send. Mock this with state.",
+      "Rule Builder preview: below the rule rows, show a plain-English summary: 'If order value exceeds 10,000 DZD → escalate to owner for review.' Update live as rules change.",
+      "Status mapping table in Order Tracking: rows for all 8 default statuses pre-populated. Rows with triggers_escalation = true should have a small warning badge on the row.",
+      "Notification log should be searchable by contact name and filterable by agent and date.",
+      "All text areas with char_counter = true show a live character count bottom-right in 11px #9999AA.",
+      "Multi-select users field: shows initials avatar chips for selected users. Clicking removes them. Search input to add more.",
+      "Forbidden topics tag input: when a tag is added, show it as a small pill with a red left border to signal its restrictive purpose.",
+      "The sequence step drag handle: show as 6 dots icon (⠿) on the left of each step card. Hover: cursor grab. Keep drag-and-drop simple using HTML5 drag events, no library needed.",
+      "For the satisfaction check in Order Tracking: show a mini preview of what the delivery-to-satisfaction flow looks like — a static visual (3 boxes connected by arrows: Delivery confirmed → Satisfaction check sent → Customer replies → unsatisfied branch → Refund Agent triggered). Pure HTML/CSS, no library.",
+      "Never use the word 'AI' in user-facing UI labels. Use 'agent', 'automation', or the specific agent name. The tech is invisible."
+    ]
+  }
+}

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>User Management | Scale AI</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#e7e1e3",
+                "on-primary-container": "#8aadec",
+                "surface-container-high": "#ede6e9",
+                "primary-fixed-dim": "#aac7ff",
+                "tertiary-fixed": "#97f1f6",
+                "on-tertiary-fixed-variant": "#004f53",
+                "on-tertiary": "#ffffff",
+                "on-secondary": "#ffffff",
+                "secondary-fixed-dim": "#8fd0e5",
+                "secondary-container": "#a8eaff",
+                "tertiary": "#003032",
+                "on-surface": "#1d1b1d",
+                "surface-container-lowest": "#ffffff",
+                "surface-container-low": "#f8f2f4",
+                "on-secondary-fixed": "#001f27",
+                "on-primary-fixed": "#001b3e",
+                "on-background": "#1d1b1d",
+                "primary-container": "#164078",
+                "inverse-primary": "#aac7ff",
+                "inverse-on-surface": "#f5eff2",
+                "tertiary-fixed-dim": "#7ad5da",
+                "error": "#ba1a1a",
+                "surface-tint": "#3a5e98",
+                "surface-container": "#f3ecef",
+                "primary": "#002a59",
+                "on-secondary-fixed-variant": "#004e5e",
+                "on-tertiary-container": "#5fbabf",
+                "on-primary-fixed-variant": "#1f467f",
+                "secondary": "#1c6779",
+                "outline": "#737781",
+                "on-primary": "#ffffff",
+                "surface-bright": "#fef8fa",
+                "secondary-fixed": "#b0ecff",
+                "surface": "#fef8fa",
+                "primary-fixed": "#d6e3ff",
+                "inverse-surface": "#323032",
+                "on-tertiary-fixed": "#002021",
+                "tertiary-container": "#00484b",
+                "on-error-container": "#93000a",
+                "error-container": "#ffdad6",
+                "surface-variant": "#e7e1e3",
+                "on-error": "#ffffff",
+                "background": "#fef8fa",
+                "surface-dim": "#ded8db",
+                "outline-variant": "#c3c6d1",
+                "on-secondary-container": "#236b7d",
+                "on-surface-variant": "#434750"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.125rem",
+                "lg": "0.25rem",
+                "xl": "0.5rem",
+                "full": "0.75rem"
+            },
+            "fontFamily": {
+                "headline": ["Plus Jakarta Sans"],
+                "body": ["Plus Jakarta Sans"],
+                "label": ["Plus Jakarta Sans"]
+            }
+          },
+        },
+      }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .glass-panel { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+    </style>
+</head>
+<body class="bg-surface text-on-surface selection:bg-primary-container selection:text-white">
+<!-- Sidebar Navigation -->
+<aside class="fixed left-0 top-0 h-full w-64 flex flex-col py-8 px-4 bg-slate-50 dark:bg-[#161416] transition-all duration-300 z-50">
+<div class="mb-12 px-2">
+<h1 class="text-xl font-bold tracking-tighter text-[#164078] dark:text-white">Scale AI</h1>
+<p class="text-[0.7rem] uppercase tracking-wider text-slate-400 mt-1">Enterprise Tier</p>
+</div>
+<nav class="flex-1 space-y-1">
+<!-- Navigation Items Mapping -->
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-medium hover:text-[#164078] transition-colors duration-200 hover:bg-slate-100 rounded-lg group" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-medium hover:text-[#164078] transition-colors duration-200 hover:bg-slate-100 rounded-lg group" href="#">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-medium hover:text-[#164078] transition-colors duration-200 hover:bg-slate-100 rounded-lg group" href="#">
+<span class="material-symbols-outlined">account_tree</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Pipelines</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-medium hover:text-[#164078] transition-colors duration-200 hover:bg-slate-100 rounded-lg group" href="#">
+<span class="material-symbols-outlined">group</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Team</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-medium hover:text-[#164078] transition-colors duration-200 hover:bg-slate-100 rounded-lg group" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Analytics</span>
+</a>
+<!-- Active Navigation: Settings -->
+<a class="flex items-center gap-3 px-4 py-3 text-[#164078] dark:text-[#22888D] font-bold border-r-4 border-[#164078] dark:border-[#22888D] bg-slate-100 dark:bg-slate-800/30 rounded-l-lg scale-98 transition-all duration-200" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-1">
+<button class="w-full flex items-center justify-center gap-2 bg-primary text-white py-3 rounded-xl font-semibold text-sm mb-6 hover:bg-primary-container transition-all">
+<span class="material-symbols-outlined text-sm">add</span>
+                New Campaign
+            </button>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-medium hover:text-[#164078] hover:bg-slate-100 rounded-lg" href="#">
+<span class="material-symbols-outlined">help</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Support</span>
+</a>
+<a class="flex items-center gap-3 px-4 py-3 text-slate-500 font-medium hover:text-[#164078] hover:bg-slate-100 rounded-lg" href="#">
+<span class="material-symbols-outlined">logout</span>
+<span class="text-[0.75rem] uppercase tracking-wider">Log Out</span>
+</a>
+</div>
+</aside>
+<!-- Top Navigation Bar -->
+<header class="sticky top-0 z-40 w-full flex justify-between items-center px-12 py-4 ml-64 max-w-[calc(100%-16rem)] bg-white/80 dark:bg-[#161416]/80 backdrop-blur-md shadow-[0px_20px_40px_rgba(22,20,22,0.04)]">
+<div class="flex items-center gap-6 flex-1">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-slate-400 text-lg">search</span>
+<input class="w-full pl-10 pr-4 py-2 bg-surface-container-low border-b border-transparent focus:border-primary focus:ring-0 transition-all text-sm rounded-lg" placeholder="Search systems or users..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4">
+<button class="material-symbols-outlined text-slate-500 hover:text-primary transition-all">notifications</button>
+<button class="material-symbols-outlined text-slate-500 hover:text-primary transition-all">chat_bubble</button>
+<button class="material-symbols-outlined text-slate-500 hover:text-primary transition-all">help_outline</button>
+</div>
+<div class="h-8 w-px bg-slate-200"></div>
+<div class="flex items-center gap-3">
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface">Alex Rivera</p>
+<p class="text-[10px] uppercase tracking-tighter text-slate-500">System Admin</p>
+</div>
+<img alt="Manager profile" class="w-10 h-10 rounded-full object-cover border-2 border-primary/10" data-alt="professional portrait of a man in a modern office environment with warm natural light" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBfFiW57u3sLTVKOhbmxtZBY4UbQ9e1CV_QpjXeq6xALdkezj77IUCytaikypU4aFbjpaeXV93sO6_MvW_2DJZ-_vJBJzoRg7arT8W24coC_pz3lKJSniD6quVe7VPT-AacbIBwE48ZrszO4Tp6RDhSHFujH5nOIupFcY-2E_X48XVnZ8mJUT5-n_xe-hntWdCUBPuYaFKVfUIRxOYA-OVoMhV1tV5ApNX7MdQHpQparVZIyYjkdVy6S7KDI8X4xFtf3WkB92VmNiMr"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="ml-64 p-12 min-h-screen">
+<!-- Header Section -->
+<section class="mb-12 flex flex-col md:flex-row md:items-end justify-between gap-6">
+<div>
+<span class="label-md uppercase tracking-[0.2em] text-primary font-bold text-[0.7rem] block mb-2">Workspace Control</span>
+<h2 class="text-[3.5rem] font-extrabold tracking-tighter leading-tight text-on-surface">User Management</h2>
+<p class="body-lg text-on-surface-variant max-w-xl mt-4 opacity-80">Orchestrate your team's access and administrative privileges with architectural precision.</p>
+</div>
+<div class="flex gap-4">
+<button class="bg-surface-container-high text-primary px-6 py-3 rounded-xl font-bold text-sm hover:bg-surface-container-highest transition-all flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">filter_list</span>
+                    Advanced Filters
+                </button>
+<button class="bg-primary text-white px-8 py-3 rounded-xl font-bold text-sm hover:bg-primary-container transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+<span class="material-symbols-outlined text-sm">person_add</span>
+                    Invite User
+                </button>
+</div>
+</section>
+<!-- Main User Table Surface -->
+<div class="bg-surface-container-lowest rounded-2xl overflow-hidden shadow-[0px_20px_40px_rgba(22,20,22,0.02)]">
+<!-- Table Controls -->
+<div class="px-8 py-6 flex items-center justify-between bg-surface-container-low/50">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-2">
+<span class="text-[0.7rem] font-bold uppercase text-slate-400">Showing</span>
+<select class="bg-transparent border-none text-xs font-bold text-primary p-0 focus:ring-0">
+<option>All Users</option>
+<option>Admins</option>
+<option>Editors</option>
+</select>
+</div>
+<div class="h-4 w-px bg-slate-300"></div>
+<div class="flex items-center gap-2">
+<span class="text-[0.7rem] font-bold uppercase text-slate-400">Sort by</span>
+<button class="text-xs font-bold text-on-surface flex items-center gap-1">
+                            Last Active <span class="material-symbols-outlined text-xs">expand_more</span>
+</button>
+</div>
+</div>
+<div class="text-[0.7rem] font-bold uppercase text-slate-400">
+                    42 Active Members
+                </div>
+</div>
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="text-[0.7rem] uppercase tracking-widest text-slate-400 border-b border-surface-container-low">
+<th class="px-8 py-5 font-bold">Member</th>
+<th class="px-8 py-5 font-bold">Email Address</th>
+<th class="px-8 py-5 font-bold">Role</th>
+<th class="px-8 py-5 font-bold">Last Activity</th>
+<th class="px-8 py-5 font-bold">Status</th>
+<th class="px-8 py-5 font-bold text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container-low">
+<!-- User Row 1 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors group">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img alt="Sarah Jenkins" class="w-10 h-10 rounded-full object-cover" data-alt="close up headshot of a smiling woman with glasses in a professional studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDYVS0GXZ_gU30ZYjJn4TrNuN068sL49Vgm6QAr21wj9FU7LltjUam-7qxla8gZy2RG014omvA2ZnLpIWHKHpbIl1cbtKi4NplmZ3uV0SulC8e5whgqMFVKCoBHHijavyn93X0DzNF6PD75h3ZEQokG3GsTf2oRdCjENQB8VzvFJ5lra43RIV4nWh0XBpqXlWGwp5gIali4qKcQB6nUAZ818fmAarDC51fEd98UZUE9CZh-uSldCckpzNEAXVsyGiumVcgmbFvyBOtz"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Sarah Jenkins</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tight">Design Lead</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6">
+<span class="text-sm text-on-surface-variant">s.jenkins@scale.ai</span>
+</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-secondary-container/20 text-on-secondary-container text-[10px] font-bold uppercase rounded-full tracking-wider">Administrator</span>
+</td>
+<td class="px-8 py-6">
+<span class="text-sm text-on-surface-variant">2 mins ago</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#22888D]"></span>
+<span class="text-xs font-medium text-on-surface">Active</span>
+</div>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-all">more_vert</button>
+</td>
+</tr>
+<!-- User Row 2 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img alt="Marcus Chen" class="w-10 h-10 rounded-full object-cover" data-alt="portrait of a man with a beard looking confident in a bright modern office" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDP3c0i5b1vkOQM0b4qguo0vVinuPnZtU2BHZmuc3qa9ZtTP4sVItCXGKfRJXx5otLNziU8Qk9pS20q0lJvJwVHCdkTb_Z0P1v52fFppFuwuRm-DHjlOynpZKDm-kFZhipueMM_JiAvOdk0ofzrK-72nOLKMu7KjhMpUcGZEpP1NOr9uungARi8bDfPUwjBBx6jfXi6TehiIMFym_UHwNQEHmUCmBb6aum0JWEF93zIdqr1U2xwNyA4kjN-uchuhudQsQLTzDGQb-97"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Marcus Chen</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tight">Senior Dev</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6">
+<span class="text-sm text-on-surface-variant">m.chen@scale.ai</span>
+</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-surface-container-high text-slate-500 text-[10px] font-bold uppercase rounded-full tracking-wider">Editor</span>
+</td>
+<td class="px-8 py-6">
+<span class="text-sm text-on-surface-variant">14 hours ago</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-slate-300"></span>
+<span class="text-xs font-medium text-on-surface">Away</span>
+</div>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-all">more_vert</button>
+</td>
+</tr>
+<!-- User Row 3 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<img alt="Elena Rodriguez" class="w-10 h-10 rounded-full object-cover" data-alt="professional portrait of a woman smiling outdoors in a city setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCfe9WR5cIDOsQPeoVYdu7gQDZ6y6wv0O6MncQxiJJChtwtgWauZmOm9_PTunCq-Nj0Hh_sM-_Us_X2ADKabXg1ZiOiexiwVO5PUEDhGkb5dyFToWlkzqw0hxmDjk_Iq8cc9PrB-xjzYEVuJ07xS0YSDwByHp8mXqgLKaCkscnfnDg1IkhmfJnug_XlYcPX8jMky9gNhUa2yPTj9Y9zq_l1A0nwXpQQ2fNwWi87Y0f_SQCzJ_uqOfB0e8twGBjwxVjcfrT50jEhILG3"/>
+<div>
+<p class="text-sm font-bold text-on-surface">Elena Rodriguez</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tight">Product Manager</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6">
+<span class="text-sm text-on-surface-variant">e.rod@scale.ai</span>
+</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-surface-container-high text-slate-500 text-[10px] font-bold uppercase rounded-full tracking-wider">Editor</span>
+</td>
+<td class="px-8 py-6">
+<span class="text-sm text-on-surface-variant">Just now</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-[#22888D]"></span>
+<span class="text-xs font-medium text-on-surface">Active</span>
+</div>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-all">more_vert</button>
+</td>
+</tr>
+<!-- User Row 4 -->
+<tr class="hover:bg-surface-container-low/30 transition-colors">
+<td class="px-8 py-6">
+<div class="flex items-center gap-4">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-white font-bold text-xs">JS</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Julian Smith</p>
+<p class="text-[10px] text-slate-500 uppercase tracking-tight">Marketing</p>
+</div>
+</div>
+</td>
+<td class="px-8 py-6">
+<span class="text-sm text-on-surface-variant">j.smith@scale.ai</span>
+</td>
+<td class="px-8 py-6">
+<span class="px-3 py-1 bg-surface-container-high text-slate-500 text-[10px] font-bold uppercase rounded-full tracking-wider">Viewer</span>
+</td>
+<td class="px-8 py-6">
+<span class="text-sm text-on-surface-variant">2 days ago</span>
+</td>
+<td class="px-8 py-6">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-error"></span>
+<span class="text-xs font-medium text-on-surface">Offline</span>
+</div>
+</td>
+<td class="px-8 py-6 text-right">
+<button class="material-symbols-outlined text-slate-400 hover:text-primary transition-all">more_vert</button>
+</td>
+</tr>
+</tbody>
+</table>
+<div class="px-8 py-6 flex items-center justify-between bg-surface-container-low/20">
+<p class="text-xs text-slate-400">Page 1 of 5</p>
+<div class="flex gap-2">
+<button class="w-10 h-10 rounded-lg flex items-center justify-center border border-slate-200 text-slate-400 hover:border-primary hover:text-primary transition-all">
+<span class="material-symbols-outlined">chevron_left</span>
+</button>
+<button class="w-10 h-10 rounded-lg flex items-center justify-center bg-primary text-white font-bold text-xs">1</button>
+<button class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-600 font-bold text-xs hover:bg-surface-container-high transition-all">2</button>
+<button class="w-10 h-10 rounded-lg flex items-center justify-center text-slate-600 font-bold text-xs hover:bg-surface-container-high transition-all">3</button>
+<button class="w-10 h-10 rounded-lg flex items-center justify-center border border-slate-200 text-slate-600 hover:border-primary hover:text-primary transition-all">
+<span class="material-symbols-outlined">chevron_right</span>
+</button>
+</div>
+</div>
+</div>
+</main>
+<!-- Invite User Modal Preview (Overlay State) -->
+<div class="fixed inset-0 z-[100] flex items-center justify-center p-6 bg-on-surface/20 backdrop-blur-sm">
+<div class="w-full max-w-xl bg-surface-container-lowest rounded-[1.5rem] overflow-hidden shadow-[0px_40px_80px_rgba(22,20,22,0.1)] relative">
+<button class="absolute top-6 right-6 material-symbols-outlined text-slate-400 hover:text-on-surface transition-all">close</button>
+<div class="p-10">
+<span class="label-md uppercase tracking-[0.2em] text-primary font-bold text-[0.65rem] block mb-2">Architect Access</span>
+<h3 class="text-2xl font-extrabold tracking-tight text-on-surface mb-2">Invite new member</h3>
+<p class="text-sm text-on-surface-variant mb-10 opacity-70">Add a new professional to the Scale AI workspace environment.</p>
+<div class="space-y-8">
+<!-- Input Group -->
+<div class="relative group">
+<label class="block text-[0.65rem] font-bold uppercase tracking-widest text-slate-400 mb-2 transition-colors group-focus-within:text-primary">Email Address</label>
+<input class="w-full px-0 py-3 bg-transparent border-b border-outline-variant/30 focus:border-primary focus:ring-0 transition-all text-sm placeholder:text-slate-300" placeholder="colleague@scale.ai" type="email"/>
+</div>
+<!-- Role Selection -->
+<div>
+<label class="block text-[0.65rem] font-bold uppercase tracking-widest text-slate-400 mb-4">Workspace Role</label>
+<div class="grid grid-cols-2 gap-4">
+<label class="relative cursor-pointer group">
+<input checked="" class="peer sr-only" name="role" type="radio"/>
+<div class="p-4 border-2 border-surface-container-high rounded-xl peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-all">Administrator</p>
+<p class="text-[10px] text-slate-400 mt-1">Full control over systems and users</p>
+</div>
+</label>
+<label class="relative cursor-pointer group">
+<input class="peer sr-only" name="role" type="radio"/>
+<div class="p-4 border-2 border-surface-container-high rounded-xl peer-checked:border-primary peer-checked:bg-primary/5 transition-all">
+<p class="text-xs font-bold text-on-surface group-hover:text-primary transition-all">Editor</p>
+<p class="text-[10px] text-slate-400 mt-1">Can create and manage all assets</p>
+</div>
+</label>
+</div>
+</div>
+<!-- Advanced Toggle -->
+<div class="flex items-center justify-between p-4 bg-surface-container-low rounded-xl">
+<div class="flex items-center gap-3">
+<span class="material-symbols-outlined text-primary">security</span>
+<div>
+<p class="text-xs font-bold text-on-surface">Require MFA</p>
+<p class="text-[10px] text-slate-500">Enable multi-factor authentication</p>
+</div>
+</div>
+<div class="w-10 h-6 bg-primary/20 rounded-full relative flex items-center px-1">
+<div class="w-4 h-4 bg-primary rounded-full translate-x-4"></div>
+</div>
+</div>
+</div>
+<div class="mt-12 flex gap-4">
+<button class="flex-1 py-4 text-xs font-bold uppercase tracking-widest text-slate-500 hover:text-on-surface transition-all">Cancel</button>
+<button class="flex-[2] bg-primary text-white py-4 rounded-xl font-bold text-xs uppercase tracking-widest hover:bg-primary-container transition-all shadow-lg shadow-primary/20">Send Invitation</button>
+</div>
+</div>
+</div>
+</div>
+</body></html>

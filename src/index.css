@@ -1,0 +1,221 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+
+  --color-sidebar: hsl(var(--sidebar));
+  --color-sidebar-foreground: hsl(var(--sidebar-foreground));
+  --color-sidebar-border: hsl(var(--sidebar-border));
+  --color-sidebar-accent: hsl(var(--sidebar-accent));
+  --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
+
+  --font-sans: var(--app-font-sans);
+  --font-mono: var(--app-font-mono);
+
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+}
+
+:root {
+  --background: 0 0% 97%;
+  --foreground: 240 35% 18%;
+
+  --border: 240 10% 90%;
+  --input: 240 10% 90%;
+  --ring: 224 80% 47%;
+
+  --card: 0 0% 100%;
+  --card-foreground: 240 35% 18%;
+
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 35% 18%;
+
+  --primary: 224 80% 47%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 0 0% 97%;
+  --secondary-foreground: 240 35% 18%;
+
+  --muted: 240 5% 94%;
+  --muted-foreground: 240 5% 50%;
+
+  --accent: 224 80% 47%;
+  --accent-foreground: 0 0% 100%;
+
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+
+  --sidebar: 0 0% 100%;
+  --sidebar-foreground: 240 35% 18%;
+  --sidebar-border: 240 10% 90%;
+  --sidebar-accent: 240 5% 94%;
+  --sidebar-accent-foreground: 240 35% 18%;
+
+  --app-font-sans: 'Inter', system-ui, sans-serif;
+  --app-font-mono: 'Menlo', monospace;
+  --radius: 0.5rem;
+
+  --shadow-dropdown: 0 4px 12px rgba(0, 0, 0, 0.06);
+}
+
+@layer base {
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: var(--app-font-sans);
+    color: #1A1A3E;
+    background: #F7F7F8;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  ::selection {
+    background: #EEF3FD;
+    color: #1A1A3E;
+  }
+}
+
+/* Scale Design System Custom Classes */
+.scale-card {
+  background: #FFFFFF;
+  border: 1px solid #E4E4E8;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.scale-input {
+  background: white;
+  border: 1px solid #E4E4E8;
+  border-radius: 6px;
+  height: 36px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: #1A1A3E;
+  outline: none;
+  width: 100%;
+  transition: border-color 150ms;
+}
+
+.scale-input:focus {
+  border-color: #2B62E8;
+}
+
+.scale-input::placeholder {
+  color: #9999AA;
+}
+
+.scale-btn-primary {
+  background: #2B62E8;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 100ms;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.scale-btn-primary:hover {
+  background: #1E52D4;
+}
+
+.scale-btn-secondary {
+  background: transparent;
+  color: #1A1A3E;
+  border: 1px solid #E4E4E8;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 100ms;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.scale-btn-secondary:hover {
+  background: #F7F7F8;
+}
+
+.scale-btn-ghost {
+  background: transparent;
+  color: #6B6B80;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 12px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 100ms, color 100ms;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.scale-btn-ghost:hover {
+  background: #F7F7F8;
+  color: #1A1A3E;
+}
+
+.scale-btn-danger {
+  background: transparent;
+  color: #DC2626;
+  border: 1px solid #FCA5A5;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 100ms;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.scale-btn-danger:hover {
+  background: #FEF2F2;
+}
+
+.ai-active { color: #16A34A; }
+.ai-paused { color: #D97706; }
+.ai-completed { color: #9999AA; }
+.ai-escalated { color: #DC2626; }

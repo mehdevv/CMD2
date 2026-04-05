@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Scale Platform | Meeting Briefs</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "surface-container": "#eeeef0",
+                        "outline": "#78767d",
+                        "tertiary-fixed-dim": "#9ecaff",
+                        "on-tertiary-container": "#0088e2",
+                        "surface-container-lowest": "#ffffff",
+                        "secondary-container": "#e2e0fc",
+                        "primary-container": "#002116",
+                        "on-primary": "#ffffff",
+                        "tertiary": "#000103",
+                        "on-secondary-fixed": "#1a1a2e",
+                        "on-error": "#ffffff",
+                        "background": "#f9f9fb",
+                        "tertiary-fixed": "#d1e4ff",
+                        "surface-container-low": "#f3f3f5",
+                        "surface-variant": "#e2e2e4",
+                        "on-primary-fixed": "#002116",
+                        "on-surface-variant": "#47464c",
+                        "surface": "#f9f9fb",
+                        "error-container": "#ffdad6",
+                        "primary": "#000101",
+                        "on-primary-container": "#009670",
+                        "secondary-fixed": "#e2e0fc",
+                        "on-secondary": "#ffffff",
+                        "inverse-primary": "#3adfab",
+                        "surface-container-high": "#e8e8ea",
+                        "on-tertiary-fixed": "#001d36",
+                        "surface-dim": "#d9dadc",
+                        "primary-fixed-dim": "#3adfab",
+                        "on-primary-fixed-variant": "#00513b",
+                        "inverse-surface": "#2f3132",
+                        "on-tertiary-fixed-variant": "#00497d",
+                        "secondary-fixed-dim": "#c6c4df",
+                        "on-secondary-container": "#63627a",
+                        "error": "#ba1a1a",
+                        "surface-bright": "#f9f9fb",
+                        "primary-fixed": "#60fcc6",
+                        "secondary": "#5d5c74",
+                        "outline-variant": "#c8c5cd",
+                        "surface-container-highest": "#e2e2e4",
+                        "on-surface": "#1a1c1d",
+                        "on-background": "#1a1c1d",
+                        "inverse-on-surface": "#f0f0f2",
+                        "on-secondary-fixed-variant": "#45455b",
+                        "surface-tint": "#006c4f",
+                        "tertiary-container": "#001d37",
+                        "on-error-container": "#93000a"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.5rem",
+                        "lg": "1rem",
+                        "xl": "1.25rem",
+                        "full": "9999px"
+                    },
+                    "fontFamily": {
+                        "headline": ["Plus Jakarta Sans"],
+                        "body": ["Inter"],
+                        "label": ["Inter"],
+                        "mono": ["DM Mono"]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .mono-text { font-family: 'DM Mono', monospace; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e2e4; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-surface min-h-screen flex overflow-hidden">
+<!-- SideNavBar -->
+<aside class="flex flex-col h-full py-6 px-4 h-screen w-64 border-r-0 bg-[#e2e0fc] dark:bg-slate-900 shrink-0">
+<div class="mb-8 px-2">
+<h1 class="text-xl font-bold text-[#1A1A2E] dark:text-white">Scale Platform</h1>
+<p class="text-xs text-on-secondary-fixed-variant font-medium mt-1">The Digital Architect</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#009670] dark:text-[#60fcc6] font-bold bg-[#f9f9fb]/50 dark:bg-slate-800 translate-x-1 transition-transform duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Conversations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="reorder">reorder</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Sequences</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 rounded-lg text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto pt-6 space-y-1">
+<button class="w-full mb-4 bg-gradient-to-r from-[#009670] to-[#60fcc6] text-white py-3 rounded-lg font-bold shadow-sm flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Initiative
+            </button>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="help_outline">help_outline</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Support</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2 rounded-lg text-error font-medium hover:bg-error-container transition-colors" href="#">
+<span class="material-symbols-outlined" data-icon="logout">logout</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Sign Out</span>
+</a>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="flex-1 flex flex-col h-screen overflow-hidden">
+<!-- TopNavBar -->
+<header class="flex justify-between items-center w-full px-8 h-16 bg-[#f9f9fb]/80 backdrop-blur-xl sticky top-0 z-40">
+<div class="flex items-center gap-8">
+<div class="relative w-64">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm" data-icon="search">search</span>
+<input class="w-full bg-surface-container-high border-none rounded-full py-1.5 pl-10 pr-4 text-xs focus:ring-1 focus:ring-on-primary-container transition-all" placeholder="Search conversations..." type="text"/>
+</div>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#45455b] font-['Plus_Jakarta_Sans'] font-medium text-sm hover:text-[#009670] transition-opacity" href="#">Overview</a>
+<a class="text-[#009670] font-['Plus_Jakarta_Sans'] font-bold text-sm border-b-2 border-[#009670]" href="#">Reports</a>
+<a class="text-[#45455b] font-['Plus_Jakarta_Sans'] font-medium text-sm hover:text-[#009670] transition-opacity" href="#">Team</a>
+</nav>
+</div>
+<div class="flex items-center gap-4">
+<button class="p-2 text-on-secondary-fixed-variant hover:bg-surface-container rounded-full transition-all">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+</button>
+<button class="p-2 text-on-secondary-fixed-variant hover:bg-surface-container rounded-full transition-all relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full border-2 border-surface"></span>
+</button>
+<div class="h-8 w-px bg-outline-variant/30 mx-2"></div>
+<div class="flex items-center gap-3">
+<span class="text-xs font-mono text-on-primary-container bg-primary-fixed/20 px-2 py-1 rounded">Role: Owner</span>
+<img class="w-8 h-8 rounded-full object-cover ring-2 ring-primary-fixed" data-alt="Professional headshot of a senior executive male in a navy suit with soft office lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuARy0kIOsjgYsqdORbrDeXWR52hrnWjUdQZ_n2_m5SjCIzA_bQTNWmlu12tZh5rYN7wfqKZgz5H7Z1UekZLSUDQ5_Bj3HDsg_tTDvED8OpJvjVEZwDxmJlSjabAn6M7jBIFXH0xBJqY0MaxI9CAuPkFXQ7dVpRBH3oOXo4d5OddDHxXxL7UFMiwoGWc-mqO34UtM2Lg0Zs5FY9-GRkDuWRae2jYeS3XA5kGTPpIGG4dPd7vpQohxXlGhjkRo0FrtjxpW33HnFsT6ofr"/>
+</div>
+</div>
+</header>
+<!-- Two-Pane Layout Section -->
+<div class="flex-1 flex overflow-hidden">
+<!-- Left Pane: Meeting List -->
+<section class="w-80 flex flex-col border-r-0 bg-surface-container-low shrink-0">
+<div class="p-6">
+<h2 class="text-lg font-bold tracking-tight text-on-surface mb-1">Meetings</h2>
+<p class="text-xs text-on-surface-variant">Active Deal Cycle</p>
+</div>
+<div class="flex-1 overflow-y-auto px-4 space-y-2 pb-6">
+<!-- Meeting Item Active -->
+<div class="p-4 rounded-xl bg-surface-container-lowest shadow-sm border-l-4 border-on-primary-container cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-semibold text-sm">Quantum Leap Bio</h3>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-primary-fixed/30 text-on-primary-fixed-variant">ACTIVE</span>
+</div>
+<div class="flex items-center gap-2 text-xs text-on-secondary-fixed-variant mb-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span class="mono-text">14:00 - 14:45</span>
+</div>
+<div class="text-[11px] text-on-surface-variant font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="video_call">video_call</span>
+                            Technical Review
+                        </div>
+</div>
+<!-- Meeting Item -->
+<div class="p-4 rounded-xl hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-semibold text-sm">Starlight Dynamics</h3>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-outline-variant/20 text-outline">UPCOMING</span>
+</div>
+<div class="flex items-center gap-2 text-xs text-on-secondary-fixed-variant mb-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span class="mono-text">16:30 - 17:00</span>
+</div>
+<div class="text-[11px] text-on-surface-variant font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="person">person</span>
+                            Sales Discovery
+                        </div>
+</div>
+<!-- Meeting Item -->
+<div class="p-4 rounded-xl hover:bg-surface-container transition-colors cursor-pointer">
+<div class="flex justify-between items-start mb-2">
+<h3 class="font-semibold text-sm">Veridian Systems</h3>
+<span class="text-[10px] font-bold px-2 py-0.5 rounded bg-tertiary-fixed text-on-tertiary-fixed-variant">PAST</span>
+</div>
+<div class="flex items-center gap-2 text-xs text-on-secondary-fixed-variant mb-1">
+<span class="material-symbols-outlined text-sm" data-icon="schedule">schedule</span>
+<span class="mono-text">09:00 - 10:00</span>
+</div>
+<div class="text-[11px] text-on-surface-variant font-medium flex items-center gap-1">
+<span class="material-symbols-outlined text-sm" data-icon="groups">groups</span>
+                            Follow-up Pitch
+                        </div>
+</div>
+</div>
+</section>
+<!-- Right Pane: Content -->
+<section class="flex-1 overflow-y-auto bg-surface p-8">
+<div class="max-w-4xl mx-auto">
+<!-- Header -->
+<div class="mb-10 flex justify-between items-end">
+<div>
+<nav class="flex gap-2 text-xs text-on-surface-variant mb-3 font-medium">
+<span>Meetings</span>
+<span>/</span>
+<span class="text-on-primary-container">Quantum Leap Bio</span>
+</nav>
+<h1 class="text-4xl font-extrabold tracking-tighter text-on-surface">Technical Briefing: Q4 Scale</h1>
+</div>
+<div class="flex gap-2">
+<button class="bg-surface-container-high px-4 py-2 rounded-lg text-sm font-semibold flex items-center gap-2 hover:bg-surface-container-highest transition-all">
+<span class="material-symbols-outlined text-sm" data-icon="share">share</span>
+                                Share
+                            </button>
+<button class="bg-gradient-to-r from-on-primary-container to-primary-fixed text-white px-4 py-2 rounded-lg text-sm font-bold flex items-center gap-2 shadow-lg shadow-[#009670]/10">
+<span class="material-symbols-outlined text-sm" data-icon="play_arrow">play_arrow</span>
+                                Start Meeting
+                            </button>
+</div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+<!-- Pre-Meeting Brief Card (Asymmetric Focal Point) -->
+<div class="lg:col-span-7 bg-[#1A1A2E] rounded-2xl overflow-hidden shadow-2xl relative group">
+<!-- Background Accent -->
+<div class="absolute -top-12 -right-12 w-48 h-48 bg-primary-fixed opacity-10 rounded-full blur-3xl transition-opacity group-hover:opacity-20"></div>
+<div class="p-8 relative">
+<div class="flex items-center gap-3 mb-8">
+<div class="w-10 h-10 rounded-lg bg-primary-fixed/20 flex items-center justify-center">
+<span class="material-symbols-outlined text-[#60fcc6]" data-icon="auto_awesome">auto_awesome</span>
+</div>
+<h2 class="text-xl font-bold text-white tracking-tight">Pre-Meeting Brief</h2>
+</div>
+<div class="grid grid-cols-2 gap-6 mb-10">
+<div class="space-y-1">
+<label class="text-[10px] text-[#60fcc6] font-bold tracking-widest uppercase opacity-70">LAST CONTACT</label>
+<p class="text-white font-medium mono-text">3 days ago (Email)</p>
+</div>
+<div class="space-y-1">
+<label class="text-[10px] text-[#60fcc6] font-bold tracking-widest uppercase opacity-70">DEAL STAGE</label>
+<p class="text-white font-medium">Technical Validation</p>
+</div>
+</div>
+<div class="mb-10 bg-[#252541] rounded-xl p-5 border-l-2 border-[#60fcc6]">
+<label class="text-[10px] text-[#60fcc6] font-bold tracking-widest uppercase mb-2 block">OPEN OBJECTION</label>
+<p class="text-white/90 text-sm leading-relaxed">Client is concerned about the multi-tenant architecture speed vs dedicated instances.</p>
+</div>
+<div class="space-y-4">
+<label class="text-[10px] text-white/50 font-bold tracking-widest uppercase">SUGGESTED TALKING POINTS</label>
+<ul class="space-y-3">
+<li class="flex items-start gap-3 group/item cursor-pointer">
+<span class="material-symbols-outlined text-[#60fcc6] text-lg transition-transform group-hover/item:translate-x-1" data-icon="chevron_right">chevron_right</span>
+<span class="text-white/80 text-sm">Present the latest latency benchmarks for the Q4 API release.</span>
+</li>
+<li class="flex items-start gap-3 group/item cursor-pointer">
+<span class="material-symbols-outlined text-[#60fcc6] text-lg transition-transform group-hover/item:translate-x-1" data-icon="chevron_right">chevron_right</span>
+<span class="text-white/80 text-sm">Highlight the data residency compliance for EU regions.</span>
+</li>
+<li class="flex items-start gap-3 group/item cursor-pointer">
+<span class="material-symbols-outlined text-[#60fcc6] text-lg transition-transform group-hover/item:translate-x-1" data-icon="chevron_right">chevron_right</span>
+<span class="text-white/80 text-sm">Invite Sarah to the specialized VPC workshop next Tuesday.</span>
+</li>
+</ul>
+</div>
+</div>
+</div>
+<!-- Post-Meeting Notes Card -->
+<div class="lg:col-span-5 flex flex-col gap-8">
+<!-- Recording Module -->
+<div class="bg-surface-container-lowest rounded-2xl p-8 shadow-sm ring-1 ring-outline-variant/10">
+<div class="flex items-center justify-between mb-6">
+<h2 class="text-lg font-bold text-on-surface">Post-Meeting Notes</h2>
+<div class="flex gap-1">
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container/30"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container/30"></span>
+<span class="w-1.5 h-1.5 rounded-full bg-on-tertiary-container/30"></span>
+</div>
+</div>
+<button class="w-full bg-error text-white py-4 rounded-xl flex items-center justify-center gap-3 font-bold hover:bg-error/90 transition-all shadow-lg shadow-error/20 mb-6">
+<span class="material-symbols-outlined animate-pulse" data-icon="mic" style="font-variation-settings: 'FILL' 1;">mic</span>
+                                    Record Voice Note
+                                </button>
+<div class="space-y-4">
+<div class="relative">
+<textarea class="w-full min-h-[220px] bg-surface-container-low border-none rounded-xl p-4 text-sm text-on-surface placeholder:text-outline-variant focus:ring-1 focus:ring-on-primary-container transition-all resize-none" placeholder="AI is listening... Start speaking or type your summary here."></textarea>
+<div class="absolute bottom-4 right-4 flex gap-2">
+<span class="material-symbols-outlined text-outline-variant text-lg" data-icon="edit_note">edit_note</span>
+</div>
+</div>
+<button class="w-full bg-surface-container-highest text-on-surface font-semibold py-3 rounded-xl hover:bg-surface-dim transition-all flex items-center justify-center gap-2">
+<span class="material-symbols-outlined text-sm" data-icon="auto_fix_high">auto_fix_high</span>
+                                        Generate AI Summary
+                                    </button>
+</div>
+</div>
+<!-- Insight Chip / Quick Stats -->
+<div class="bg-primary-container rounded-2xl p-6 flex flex-col justify-between h-40 relative overflow-hidden">
+<div class="absolute right-[-20px] bottom-[-20px] opacity-10">
+<span class="material-symbols-outlined text-[100px] text-primary-fixed-dim" data-icon="insights">insights</span>
+</div>
+<div class="relative">
+<span class="bg-primary-fixed-dim text-on-primary-fixed px-2 py-0.5 rounded text-[10px] font-bold">AI INSIGHT</span>
+<p class="text-primary-fixed-dim text-sm mt-3 font-medium leading-tight">Sentiment trend is shifting positive after the VPC mention.</p>
+</div>
+<div class="relative flex items-center gap-2">
+<div class="h-1 w-full bg-on-primary-fixed-variant rounded-full overflow-hidden">
+<div class="w-4/5 h-full bg-primary-fixed-dim"></div>
+</div>
+<span class="text-[10px] mono-text text-primary-fixed-dim">80%</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Additional Details Footer Section -->
+<div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-secondary">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase mb-2">Primary Contact</h4>
+<div class="flex items-center gap-3">
+<img class="w-10 h-10 rounded-full object-cover" data-alt="Portrait of a young woman with a warm friendly expression in a modern creative studio setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA9lJ3irvjOVsclGfQmiOnG8fOXZHNSQfMiFW0d5qaHilI0raVQnPY4yo04oK4l8EhUX_qD4Zklv0sgadro0AYB3MH8rVr-OaZq5thRvMHTZdovuAYMlcKS9QDmle3HeMOtNSZtXXJzdS-Jaf-HgpaV2ilRzD43qbI3GUesK6pMz2DD1ALvnCz5KktgxJTyXGSRGLYi555tLf-3b5cDbWDMKw5fnZOVtrE5uQ745oDEFiln5dYN6-fgjZOJ0XMloCXc7CVgmdvSEEBr"/>
+<div>
+<p class="text-sm font-bold">Sarah Jenkins</p>
+<p class="text-[11px] text-on-surface-variant">CTO, Quantum Leap</p>
+</div>
+</div>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-on-tertiary-container">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase mb-2">Previous Notes</h4>
+<p class="text-xs text-on-surface leading-snug">"Client looking for a 36-month commitment if price scaling is capped at 5% yearly."</p>
+</div>
+<div class="bg-surface-container-low p-6 rounded-xl border-l-4 border-on-primary-container">
+<h4 class="text-xs font-bold text-on-surface-variant uppercase mb-2">Technical Debt</h4>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-error text-lg" data-icon="warning">warning</span>
+<p class="text-xs font-medium">AWS US-East Migration Pending</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

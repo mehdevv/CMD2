@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600&amp;family=DM+Mono:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "on-tertiary": "#ffffff",
+                "surface-container": "#eeeef0",
+                "outline": "#78767d",
+                "tertiary-fixed-dim": "#9ecaff",
+                "on-tertiary-container": "#0088e2",
+                "surface-container-lowest": "#ffffff",
+                "secondary-container": "#e2e0fc",
+                "primary-container": "#002116",
+                "on-primary": "#ffffff",
+                "tertiary": "#000103",
+                "on-secondary-fixed": "#1a1a2e",
+                "on-error": "#ffffff",
+                "background": "#f9f9fb",
+                "tertiary-fixed": "#d1e4ff",
+                "surface-container-low": "#f3f3f5",
+                "surface-variant": "#e2e2e4",
+                "on-primary-fixed": "#002116",
+                "on-surface-variant": "#47464c",
+                "surface": "#f9f9fb",
+                "error-container": "#ffdad6",
+                "primary": "#000101",
+                "on-primary-container": "#009670",
+                "secondary-fixed": "#e2e0fc",
+                "on-secondary": "#ffffff",
+                "inverse-primary": "#3adfab",
+                "surface-container-high": "#e8e8ea",
+                "on-tertiary-fixed": "#001d36",
+                "surface-dim": "#d9dadc",
+                "primary-fixed-dim": "#3adfab",
+                "on-primary-fixed-variant": "#00513b",
+                "inverse-surface": "#2f3132",
+                "on-tertiary-fixed-variant": "#00497d",
+                "secondary-fixed-dim": "#c6c4df",
+                "on-secondary-container": "#63627a",
+                "error": "#ba1a1a",
+                "surface-bright": "#f9f9fb",
+                "primary-fixed": "#60fcc6",
+                "secondary": "#5d5c74",
+                "outline-variant": "#c8c5cd",
+                "surface-container-highest": "#e2e2e4",
+                "on-surface": "#1a1c1d",
+                "on-background": "#1a1c1d",
+                "inverse-on-surface": "#f0f0f2",
+                "on-secondary-fixed-variant": "#45455b",
+                "surface-tint": "#006c4f",
+                "tertiary-container": "#001d37",
+                "on-error-container": "#93000a"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "fontFamily": {
+                "headline": ["Plus Jakarta Sans"],
+                "body": ["Inter"],
+                "label": ["Inter"],
+                "mono": ["DM Mono"]
+            }
+          }
+        }
+      }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        body { font-family: 'Inter', sans-serif; }
+        h1, h2, h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .data-mono { font-family: 'DM Mono', monospace; }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #e2e2e4; border-radius: 10px; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen flex">
+<!-- SideNavBar Component -->
+<aside class="flex flex-col h-screen w-64 border-r-0 bg-[#e2e0fc] dark:bg-slate-900 py-6 px-4 sticky top-0 shrink-0">
+<div class="mb-8 px-2">
+<h1 class="text-xl font-bold text-[#1A1A2E] dark:text-white font-['Plus_Jakarta_Sans'] tracking-wide">Scale Platform</h1>
+<p class="text-xs text-[#45455b] dark:text-slate-400 font-medium">The Digital Architect</p>
+</div>
+<nav class="flex-1 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Dashboard</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="bar_chart">bar_chart</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Analytics</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#009670] dark:text-[#60fcc6] font-bold bg-[#f9f9fb]/50 dark:bg-slate-800 translate-x-1 transition-transform duration-200 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="groups">groups</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Leads</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="forum">forum</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Conversations</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="reorder">reorder</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Sequences</span>
+</a>
+<a class="flex items-center gap-3 px-3 py-2.5 text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 dark:hover:bg-slate-800 transition-colors rounded-lg group" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-['Plus_Jakarta_Sans'] font-semibold tracking-wide text-sm">Settings</span>
+</a>
+</nav>
+<div class="mt-auto space-y-4">
+<button class="w-full py-3 px-4 rounded-lg bg-gradient-to-r from-[#009670] to-[#60fcc6] text-white font-bold text-sm flex items-center justify-center gap-2 shadow-sm hover:opacity-90 transition-opacity">
+<span class="material-symbols-outlined text-sm" data-icon="add">add</span>
+                New Initiative
+            </button>
+<div class="pt-4 space-y-1">
+<a class="flex items-center gap-3 px-3 py-2 text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 rounded-lg text-sm" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="help_outline">help_outline</span>
+                    Support
+                </a>
+<a class="flex items-center gap-3 px-3 py-2 text-[#45455b] dark:text-slate-400 font-medium hover:bg-[#f9f9fb]/50 rounded-lg text-sm" href="#">
+<span class="material-symbols-outlined text-lg" data-icon="logout">logout</span>
+                    Sign Out
+                </a>
+</div>
+</div>
+</aside>
+<main class="flex-1 flex flex-col overflow-hidden">
+<!-- TopNavBar Component -->
+<header class="flex justify-between items-center w-full px-8 h-16 sticky top-0 z-40 bg-[#f9f9fb]/80 dark:bg-slate-950/80 backdrop-blur-xl">
+<div class="flex items-center gap-8">
+<span class="text-lg font-black text-[#1A1A2E] dark:text-white font-['Plus_Jakarta_Sans']">Scale Platform</span>
+<nav class="hidden md:flex gap-6">
+<a class="text-[#45455b] dark:text-slate-400 font-['Plus_Jakarta_Sans'] font-medium text-sm hover:text-[#009670] transition-opacity" href="#">Overview</a>
+<a class="text-[#009670] dark:text-[#60fcc6] border-b-2 border-[#009670] font-['Plus_Jakarta_Sans'] font-medium text-sm" href="#">Reports</a>
+<a class="text-[#45455b] dark:text-slate-400 font-['Plus_Jakarta_Sans'] font-medium text-sm hover:text-[#009670] transition-opacity" href="#">Team</a>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-4 text-[#45455b] dark:text-slate-400">
+<button class="hover:text-[#009670] transition-all active:scale-95"><span class="material-symbols-outlined" data-icon="notifications">notifications</span></button>
+<button class="hover:text-[#009670] transition-all active:scale-95"><span class="material-symbols-outlined" data-icon="history">history</span></button>
+</div>
+<div class="flex items-center gap-3 pl-6 border-l border-outline-variant/30">
+<div class="text-right">
+<p class="text-xs font-bold text-on-surface">Role: Owner</p>
+<p class="text-[10px] text-on-surface-variant">Active Now</p>
+</div>
+<img alt="Current user avatar" class="w-8 h-8 rounded-full bg-secondary-container" data-alt="professional headshot of a business executive in a modern office environment with soft natural lighting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9yFYNR5ho-MBfoC7Tu5eB62qG9giLzy8FzcPsnn1GOt9SQfmSMcMjKSvPazIVl8A1AfI2yV-rkcz8ssQfWSJEjVpVIWrVYH93nkUpkfj0SBdQG2T7Ova9-8Q_NdSGxWmZViVBbdlbKfOBrbmSfz6gdig9EZwn7bd-3BXlcbqz92UDLBDz8ytzwRqqnRizP7g1--EKT-tR4Kbs9oeLSaxdR_oUYDdkyrC9uO8688fSUPd_5zsfEuEqZ8yXKn7Mq1ShqKf-uM_qfear"/>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<div class="flex-1 overflow-y-auto p-8 space-y-8">
+<!-- Header Section -->
+<div class="flex justify-between items-end">
+<div>
+<h2 class="text-3xl font-extrabold tracking-tight text-on-surface font-headline">Leads &amp; Contacts</h2>
+<p class="text-on-surface-variant mt-1">Manage and track your business opportunities.</p>
+</div>
+<button class="bg-gradient-to-r from-on-primary-container to-primary-fixed text-white px-6 py-3 rounded-lg font-bold flex items-center gap-2 shadow-lg hover:shadow-primary-fixed/20 transition-all active:scale-95">
+<span class="material-symbols-outlined" data-icon="person_add">person_add</span>
+                    Add Lead
+                </button>
+</div>
+<!-- Search & Filters -->
+<div class="bg-surface-container-lowest rounded-xl p-4 flex flex-col md:flex-row gap-4 items-center shadow-sm">
+<div class="relative flex-1 w-full">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+<input class="w-full bg-surface-container-high border-none rounded-lg py-2.5 pl-10 pr-4 text-sm focus:ring-2 focus:ring-on-primary-container/20 focus:bg-white transition-all" placeholder="Search contacts, companies, or tags..." type="text"/>
+</div>
+<div class="flex flex-wrap gap-2">
+<button class="px-4 py-2 rounded-full text-xs font-bold bg-primary-container text-primary-fixed-dim">All</button>
+<button class="px-4 py-2 rounded-full text-xs font-bold bg-surface-container text-on-secondary-fixed-variant hover:bg-surface-container-high transition-colors">New</button>
+<button class="px-4 py-2 rounded-full text-xs font-bold bg-surface-container text-on-secondary-fixed-variant hover:bg-surface-container-high transition-colors">Contacted</button>
+<button class="px-4 py-2 rounded-full text-xs font-bold bg-surface-container text-on-secondary-fixed-variant hover:bg-surface-container-high transition-colors">Meeting Booked</button>
+<button class="px-4 py-2 rounded-full text-xs font-bold bg-surface-container text-on-secondary-fixed-variant hover:bg-surface-container-high transition-colors">Negotiation</button>
+</div>
+<button class="p-2.5 rounded-lg bg-surface-container text-on-surface-variant hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined" data-icon="filter_list">filter_list</span>
+</button>
+</div>
+<!-- Leads Table -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low/50">
+<th class="px-6 py-4 text-xs font-black uppercase tracking-widest text-outline">Name</th>
+<th class="px-6 py-4 text-xs font-black uppercase tracking-widest text-outline">Company</th>
+<th class="px-6 py-4 text-xs font-black uppercase tracking-widest text-outline">Phone</th>
+<th class="px-6 py-4 text-xs font-black uppercase tracking-widest text-outline text-center">Channel</th>
+<th class="px-6 py-4 text-xs font-black uppercase tracking-widest text-outline">Stage</th>
+<th class="px-6 py-4 text-xs font-black uppercase tracking-widest text-outline">Agent</th>
+<th class="px-6 py-4 text-xs font-black uppercase tracking-widest text-outline text-right">Actions</th>
+</tr>
+</thead>
+<tbody class="divide-y divide-surface-container">
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-secondary-fixed-dim flex items-center justify-center text-on-secondary-fixed font-bold text-sm">AM</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Alex Morgan</p>
+<p class="text-xs text-on-surface-variant">alex@fintech.io</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Fintech Global</td>
+<td class="px-6 py-4 text-sm data-mono text-on-surface tracking-tighter">+1 (555) 012-3456</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#DCF8C6] text-[#075E54] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">chat</span> WhatsApp
+                                        </span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-primary-container text-primary-fixed-dim ring-1 ring-primary-fixed-dim/20 uppercase tracking-wider">New</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img class="w-5 h-5 rounded-full" data-alt="close-up profile photo of a professional agent smiling, modern corporate style" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBPD7YGE4YyaFnQNYDUN8PaNQNDlOLLKjyBEWdnCCFCjvUa-WuUn-7eSJ5d4mzZdW1-DDX3x9XE2DNR28E1yYcV4GQ5wpI_uyPYsEMs0uDbtA38lJu5jXFVzsqFUt0Bd6jm8aDcj66Z0S50CAGUtpKegFVC3_lrHfA17474nkcAIuD9uRrLkE1-EOHMJZp6YisDdwDecVOBAnblEmQDfryI7t53x718Dip_KeULu8-hlguBF-xoR34eEQaoKwCWNm0doZTcg2BGkWQo"/>
+<span class="text-sm text-on-surface-variant">Sarah J.</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 rounded-lg text-on-tertiary-container hover:bg-tertiary-fixed transition-colors"><span class="material-symbols-outlined" data-icon="forum">forum</span></button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-tertiary-fixed-dim flex items-center justify-center text-on-tertiary-fixed-variant font-bold text-sm">KC</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Kristin Chen</p>
+<p class="text-xs text-on-surface-variant">kristin@design.co</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Design Collective</td>
+<td class="px-6 py-4 text-sm data-mono text-on-surface tracking-tighter">+1 (555) 987-6543</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FFD1DC] text-[#C13584] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">photo_camera</span> Instagram
+                                        </span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-secondary-container text-on-secondary-fixed ring-1 ring-outline-variant/30 uppercase tracking-wider">Contacted</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img class="w-5 h-5 rounded-full" data-alt="professional business man profile picture, clean background, friendly expression" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCmAW7Rl3jpxaxwC6n89_BlWj7S56W6WML2iOBCyXCBpBamftOeLlwTY_n04WeWUVqHX9IzcDJs6P93j7xAPRDWesRIY_W1Fq8qPlj_DR0g7qpovF3QubZn8BccfnLN016l_r5OP3wNFfFIjTSRpYoAvrp0ypvZ_mOrZlgf9hzv5UY-woWnX8JvSWQVtaXTupJi4omuiYSEdImkeGxrIs4BRHXIbusrejw0wfFQXNqj7IOGtCAtCQ7xOxIEqeKtuJdsLrURfFNtBVAb"/>
+<span class="text-sm text-on-surface-variant">Mark T.</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 rounded-lg text-on-tertiary-container hover:bg-tertiary-fixed transition-colors"><span class="material-symbols-outlined" data-icon="forum">forum</span></button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span></button>
+</div>
+</td>
+</tr>
+<tr class="hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-primary-fixed-dim flex items-center justify-center text-on-primary-fixed font-bold text-sm">DW</div>
+<div>
+<p class="text-sm font-bold text-on-surface">David Wright</p>
+<p class="text-xs text-on-surface-variant">david.w@techcorp.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">TechCorp Systems</td>
+<td class="px-6 py-4 text-sm data-mono text-on-surface tracking-tighter">+1 (555) 234-5678</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#DCF8C6] text-[#075E54] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">chat</span> WhatsApp
+                                        </span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-on-tertiary-container/10 text-on-tertiary-container ring-1 ring-on-tertiary-container/20 uppercase tracking-wider">Meeting Booked</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img class="w-5 h-5 rounded-full" data-alt="professional female office worker profile picture, soft lighting, creative agency vibes" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD_OvhoGsqcE5K_GhDZbzG86sHc948aGcf0o8Crk6ya0W9Lnw0xLDByE23AC1GP7-tLOI4D_O7arw-HUtB83gP1gB3iCsJMeLcjwKMOInXIJ7pddaIBKaeyRa8SNaJvnmZ3TUpuu2goeKryhRxgCzHlq1ENqrwTpHPyxe_ziYhXV8OLmfp55LgyhaI1vfEQBCKksW_f6mAbIbvE1s1oASO4E3J765zsz2wxe45lRGscNlashGMZcyOkcx6kYbll1PnvEVo_CsZ3uRYZ"/>
+<span class="text-sm text-on-surface-variant">Sarah J.</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 rounded-lg text-on-tertiary-container hover:bg-tertiary-fixed transition-colors"><span class="material-symbols-outlined" data-icon="forum">forum</span></button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span></button>
+</div>
+</td>
+</tr>
+<tr class="bg-surface-container-low/20 hover:bg-surface-container-low transition-colors group">
+<td class="px-6 py-4">
+<div class="flex items-center gap-3">
+<div class="w-9 h-9 rounded-full bg-on-secondary-fixed-variant flex items-center justify-center text-white font-bold text-sm">EL</div>
+<div>
+<p class="text-sm font-bold text-on-surface">Elena Lopez</p>
+<p class="text-xs text-on-surface-variant">elena@retailhub.com</p>
+</div>
+</div>
+</td>
+<td class="px-6 py-4 text-sm text-on-surface-variant">Retail Hub</td>
+<td class="px-6 py-4 text-sm data-mono text-on-surface tracking-tighter">+1 (555) 765-4321</td>
+<td class="px-6 py-4">
+<div class="flex justify-center">
+<span class="px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#FFD1DC] text-[#C13584] flex items-center gap-1">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">photo_camera</span> Instagram
+                                        </span>
+</div>
+</td>
+<td class="px-6 py-4">
+<span class="px-3 py-1 rounded-full text-[10px] font-bold bg-primary-container text-primary-fixed-dim ring-1 ring-primary-fixed-dim/20 uppercase tracking-wider">New</span>
+</td>
+<td class="px-6 py-4">
+<div class="flex items-center gap-2">
+<img class="w-5 h-5 rounded-full" data-alt="professional male profile avatar, corporate headshot, dark suit" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCiOxqc89RO6Ps443qSF4cm5tlepjTaeQv4OZbYRaOkIj_m7dzsdyoMl-oP7V2v-ZMrLA0RFiPLl_4dBFYlKwNJLKNuOqaYSfr8pNgiBEV1fCF-AWvAKgJLvH52m4_2-LAyIDCRwc9GLIHafCt0ZhnLbvZZI1mVkrp3sQYfBNDUyB45PQIbwhy3xC05zpDIXG7uDxn4aa3Uz4Wdx3FJ1LR-nYR2ZMTceB-hnF0ZYizqhb7LSoK5jo9GNtMaLnDYqOLzMTeS4C3IhENA"/>
+<span class="text-sm text-on-surface-variant">Mark T.</span>
+</div>
+</td>
+<td class="px-6 py-4 text-right">
+<div class="flex justify-end gap-2">
+<button class="p-2 rounded-lg text-on-tertiary-container hover:bg-tertiary-fixed transition-colors"><span class="material-symbols-outlined" data-icon="forum">forum</span></button>
+<button class="p-2 rounded-lg text-on-surface-variant hover:bg-surface-container-high transition-colors"><span class="material-symbols-outlined" data-icon="calendar_month">calendar_month</span></button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="px-6 py-4 flex items-center justify-between bg-surface-container-low/30 border-t border-outline-variant/10">
+<p class="text-xs text-on-surface-variant">Showing <span class="font-bold text-on-surface">1-4</span> of 128 leads</p>
+<div class="flex gap-2">
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant/30 text-xs font-bold hover:bg-surface-container-high transition-colors">Previous</button>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-highest text-xs font-bold text-on-surface border border-transparent">1</button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant/30 text-xs font-bold hover:bg-surface-container-high transition-colors">2</button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant/30 text-xs font-bold hover:bg-surface-container-high transition-colors">3</button>
+<button class="px-3 py-1.5 rounded-lg border border-outline-variant/30 text-xs font-bold hover:bg-surface-container-high transition-colors">Next</button>
+</div>
+</div>
+</div>
+<!-- Dashboard Grid (Additional Context) -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-primary-container p-2 bg-on-primary-container/10 rounded-lg" data-icon="trending_up">trending_up</span>
+<span class="text-[10px] font-bold text-[#009670] bg-[#009670]/10 px-2 py-0.5 rounded">+12% vs last month</span>
+</div>
+<h3 class="text-xs font-bold text-outline uppercase tracking-widest mb-1">Total Leads</h3>
+<p class="text-2xl font-black text-on-surface data-mono">1,248</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-on-tertiary-container p-2 bg-on-tertiary-container/10 rounded-lg" data-icon="event_available">event_available</span>
+<span class="text-[10px] font-bold text-on-tertiary-container bg-on-tertiary-container/10 px-2 py-0.5 rounded">4 today</span>
+</div>
+<h3 class="text-xs font-bold text-outline uppercase tracking-widest mb-1">Meetings Booked</h3>
+<p class="text-2xl font-black text-on-surface data-mono">42</p>
+</div>
+<div class="bg-surface-container-lowest p-6 rounded-xl shadow-sm border border-outline-variant/5">
+<div class="flex justify-between items-start mb-4">
+<span class="material-symbols-outlined text-error p-2 bg-error/10 rounded-lg" data-icon="timer">timer</span>
+<span class="text-[10px] font-bold text-error bg-error/10 px-2 py-0.5 rounded">-5min avg</span>
+</div>
+<h3 class="text-xs font-bold text-outline uppercase tracking-widest mb-1">Avg Response Time</h3>
+<p class="text-2xl font-black text-on-surface data-mono">18m</p>
+</div>
+</div>
+</div>
+</main>
+</body></html>
