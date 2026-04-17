@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
-import { ChevronRight, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDashboardRoute } from '@/lib/auth';
+import { BRAND_WORDMARK_PNG } from '@/lib/brand-assets';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -31,11 +32,14 @@ export default function LoginPage() {
       <div className="bg-white border border-[#E4E4E8] rounded-lg p-10 w-full max-w-[400px]">
         {/* Logo */}
         <div className="flex flex-col items-center mb-8">
-          <div className="w-10 h-10 bg-[#1A1A3E] rounded-lg flex items-center justify-center mb-3">
-            <ChevronRight size={20} className="text-white" strokeWidth={2.5} />
-          </div>
-          <span className="text-[22px] font-semibold text-[#1A1A3E] tracking-tight">Scale</span>
-          <p className="text-[14px] text-[#6B6B80] mt-1">Sign in to your workspace</p>
+          <img
+            src={BRAND_WORDMARK_PNG}
+            alt="Scale"
+            className="h-11 w-auto max-w-[220px] object-contain object-center mb-3"
+            width={220}
+            height={44}
+          />
+          <p className="text-[14px] text-[#6B6B80]">Sign in to your workspace</p>
         </div>
 
         {/* Demo hint */}

@@ -70,6 +70,7 @@ export default function OwnerAgentChat() {
     <AgentConfigShell
       agentName="Client Chat"
       agentPath="/automation/chat"
+      agentId="chat"
       overviewHref="/automation"
       overviewLabel="Your automation"
       sections={SECTIONS}

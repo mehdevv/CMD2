@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Search, Plus, X } from 'lucide-react';
+import { Plus, X } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
+import { SearchField } from '@/components/ui/SearchField';
 import { ChannelDot } from '@/components/ui/ChannelDot';
 import { TemplateBadge } from '@/components/ui/ScaleBadge';
 import { MOCK_TEMPLATES } from '@/lib/mock-data';
@@ -27,9 +28,13 @@ export default function AdminTemplatesPage() {
     <AppShell title="Templates">
       {/* Toolbar */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="relative flex-1 max-w-xs">
-          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9999AA]" />
-          <input type="search" value={search} onChange={e => setSearch(e.target.value)} placeholder="Search templates..." className="scale-input pl-8" data-testid="input-search-templates" />
+        <div className="max-w-xs flex-1">
+          <SearchField
+            value={search}
+            onChange={setSearch}
+            placeholder="Search templates…"
+            inputTestId="input-search-templates"
+          />
         </div>
         <select value={channelFilter} onChange={e => setChannelFilter(e.target.value)} className="scale-input w-36" data-testid="select-filter-channel">
           <option value="">All channels</option>

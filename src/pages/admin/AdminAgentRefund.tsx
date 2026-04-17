@@ -138,7 +138,13 @@ export default function AdminAgentRefund() {
 
   return (
     <>
-      <AgentConfigShell agentName="Refund Agent" agentPath="/admin/agents/refund" sections={SECTIONS} rightPanel={rightPanel}>
+      <AgentConfigShell
+        agentName="Refund Agent"
+        agentPath="/admin/agents/refund"
+        agentId="refund"
+        sections={SECTIONS}
+        rightPanel={rightPanel}
+      >
         <div className="mb-6">
           <InfoBlock>
             Refund conversations are sensitive — use a capable model and low creativity. Large or policy-violating cases always go to a human; the owner is notified for escalations.

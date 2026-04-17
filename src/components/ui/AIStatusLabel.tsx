@@ -1,7 +1,7 @@
 import { AIStatus } from '@/lib/types';
 
 const statusConfig: Record<AIStatus, { label: string; color: string }> = {
-  active: { label: 'AI active', color: '#16A34A' },
+  active: { label: 'Assistant active', color: '#16A34A' },
   paused: { label: 'Paused', color: '#D97706' },
   completed: { label: 'Completed', color: '#9999AA' },
   escalated: { label: 'Escalated', color: '#DC2626' },

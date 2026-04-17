@@ -1,6 +1,7 @@
 import type { ComponentType } from 'react';
 import { Switch, Route, Router as WouterRouter, Redirect } from 'wouter';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
+import { CrmDataProvider } from '@/contexts/CrmDataContext';
 import LoginPage from '@/pages/Login';
 import OnboardingPage from '@/pages/Onboarding';
 import AdminDashboard from '@/pages/AdminDashboard';
@@ -33,6 +34,17 @@ import OwnerAgentFollowUp from '@/pages/owner/automation/OwnerAgentFollowUp';
 import OwnerAgentChat from '@/pages/owner/automation/OwnerAgentChat';
 import OwnerAgentTracking from '@/pages/owner/automation/OwnerAgentTracking';
 import OwnerAgentRefund from '@/pages/owner/automation/OwnerAgentRefund';
+import OpportunitiesPage from '@/pages/opportunities/Opportunities';
+import OpportunitiesBoardPage from '@/pages/opportunities/OpportunitiesBoard';
+import OpportunityDetailPage from '@/pages/opportunities/OpportunityDetail';
+import OpportunityQualificationPage from '@/pages/opportunities/OpportunityQualification';
+import OpportunityNeedAnalysisPage from '@/pages/opportunities/OpportunityNeedAnalysis';
+import OpportunityProposalPage from '@/pages/opportunities/OpportunityProposal';
+import OpportunityNegotiationPage from '@/pages/opportunities/OpportunityNegotiation';
+import OpportunityClosingPage from '@/pages/opportunities/OpportunityClosing';
+import AnalyticsPage from '@/pages/analytics/Analytics';
+import AnalyticsReportsPage from '@/pages/analytics/AnalyticsReports';
+import AnalyticsReportDetailPage from '@/pages/analytics/AnalyticsReportDetail';
 
 function ProtectedRoute({
   component: Component,
@@ -163,6 +175,43 @@ function Router() {
         <ProtectedRoute component={MeetingNotesPage} />
       </Route>
 
+      {/* Pipeline (shared) — specific paths before :id */}
+      <Route path="/opportunities/board">
+        <ProtectedRoute component={OpportunitiesBoardPage} />
+      </Route>
+      <Route path="/opportunities/:id/qualification">
+        <ProtectedRoute component={OpportunityQualificationPage} />
+      </Route>
+      <Route path="/opportunities/:id/need-analysis">
+        <ProtectedRoute component={OpportunityNeedAnalysisPage} />
+      </Route>
+      <Route path="/opportunities/:id/proposal">
+        <ProtectedRoute component={OpportunityProposalPage} />
+      </Route>
+      <Route path="/opportunities/:id/negotiation">
+        <ProtectedRoute component={OpportunityNegotiationPage} />
+      </Route>
+      <Route path="/opportunities/:id/closing">
+        <ProtectedRoute component={OpportunityClosingPage} />
+      </Route>
+      <Route path="/opportunities/:id">
+        <ProtectedRoute component={OpportunityDetailPage} />
+      </Route>
+      <Route path="/opportunities">
+        <ProtectedRoute component={OpportunitiesPage} />
+      </Route>
+
+      {/* Analytics & reports (admin/owner) */}
+      <Route path="/analytics/reports/:id">
+        <ProtectedRoute component={AnalyticsReportDetailPage} roles={['admin', 'owner']} />
+      </Route>
+      <Route path="/analytics/reports">
+        <ProtectedRoute component={AnalyticsReportsPage} roles={['admin', 'owner']} />
+      </Route>
+      <Route path="/analytics">
+        <ProtectedRoute component={AnalyticsPage} roles={['admin', 'owner']} />
+      </Route>
+
       {/* Intelligence & Performance (admin/owner) */}
       <Route path="/intelligence">
         <ProtectedRoute component={IntelligencePage} roles={['admin', 'owner']} />
@@ -182,9 +231,11 @@ function Router() {
 export default function App() {
   return (
     <AuthProvider>
-      <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-        <Router />
-      </WouterRouter>
+      <CrmDataProvider>
+        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+          <Router />
+        </WouterRouter>
+      </CrmDataProvider>
     </AuthProvider>
   );
 }

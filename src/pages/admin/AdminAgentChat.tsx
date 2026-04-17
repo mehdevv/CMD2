@@ -152,7 +152,13 @@ export default function AdminAgentChat() {
 
   return (
     <>
-      <AgentConfigShell agentName="Client Chat Agent" agentPath="/admin/agents/chat" sections={SECTIONS} rightPanel={rightPanel}>
+      <AgentConfigShell
+        agentName="Client Chat Agent"
+        agentPath="/admin/agents/chat"
+        agentId="chat"
+        sections={SECTIONS}
+        rightPanel={rightPanel}
+      >
         <LLMConfigSection config={llmConfig} onChange={setLlmConfig} showChatExtras />
 
         <SectionBlock id="personality" title="Personality & mood" description="Define the agent's voice, tone, and emotional style.">

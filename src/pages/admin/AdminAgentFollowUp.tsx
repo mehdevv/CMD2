@@ -262,7 +262,13 @@ export default function AdminAgentFollowUp() {
 
   return (
     <>
-      <AgentConfigShell agentName="Lead Follow-Up Agent" agentPath="/admin/agents/followup" sections={SECTIONS} rightPanel={rightPanel}>
+      <AgentConfigShell
+        agentName="Lead Follow-Up Agent"
+        agentPath="/admin/agents/followup"
+        agentId="followup"
+        sections={SECTIONS}
+        rightPanel={rightPanel}
+      >
         <LLMConfigSection config={llmConfig} onChange={setLlmConfig} />
 
         {/* Personality */}

@@ -1,6 +1,7 @@
 import { useState } from 'react';
-import { Search, X, Plus } from 'lucide-react';
+import { X, Plus } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
+import { SearchField } from '@/components/ui/SearchField';
 import { RoleBadge, UserStatusBadge } from '@/components/ui/ScaleBadge';
 import { MOCK_USERS } from '@/lib/mock-data';
 import { User } from '@/lib/types';
@@ -38,15 +39,12 @@ export default function AdminUsersPage() {
     <AppShell title="Users">
       {/* Toolbar */}
       <div className="flex items-center gap-3 mb-6">
-        <div className="relative flex-1 max-w-xs">
-          <Search size={13} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[#9999AA]" />
-          <input
-            type="search"
+        <div className="max-w-xs flex-1">
+          <SearchField
             value={search}
-            onChange={e => setSearch(e.target.value)}
-            placeholder="Search users..."
-            className="scale-input pl-8"
-            data-testid="input-search-users"
+            onChange={setSearch}
+            placeholder="Search users…"
+            inputTestId="input-search-users"
           />
         </div>
         <select value={roleFilter} onChange={e => setRoleFilter(e.target.value)} className="scale-input w-36" data-testid="select-filter-role">

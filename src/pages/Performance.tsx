@@ -9,8 +9,7 @@ export default function PerformancePage() {
 
   return (
     <AppShell title="Performance">
-      {/* AI Agent Metrics */}
-      <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">AI agent performance</h2>
+      <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Automation performance</h2>
       <div className="grid grid-cols-2 gap-4 mb-8">
         {rawMetrics.map((agent) => (
           <div key={agent.name} className="scale-card">

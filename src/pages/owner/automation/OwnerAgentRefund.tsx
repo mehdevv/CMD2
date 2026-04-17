@@ -51,6 +51,7 @@ export default function OwnerAgentRefund() {
     <AgentConfigShell
       agentName="Refund"
       agentPath="/automation/refund"
+      agentId="refund"
       overviewHref="/automation"
       overviewLabel="Your automation"
       sections={SECTIONS}

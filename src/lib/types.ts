@@ -5,6 +5,9 @@ export type AIStatus = 'active' | 'paused' | 'completed' | 'escalated';
 export type TemplateStatus = 'approved' | 'pending' | 'rejected';
 export type UserStatus = 'active' | 'inactive' | 'invited';
 
+export type LeadQualificationScore = 'cold' | 'warm' | 'hot';
+export type CompanySize = 'solo' | '2-10' | '11-50' | '51-200' | '200+';
+
 export interface User {
   id: string;
   name: string;
@@ -29,6 +32,24 @@ export interface Lead {
   notes?: string;
   closeDate?: string;
   tags?: string[];
+  email?: string;
+  whatsapp?: string;
+  instagramHandle?: string;
+  facebookHandle?: string;
+  website?: string;
+  linkedin?: string;
+  company?: string;
+  companyRole?: string;
+  companySize?: CompanySize;
+  industry?: string;
+  location?: { country?: string; city?: string };
+  budgetRange?: string;
+  timeline?: string;
+  painPoints?: string[];
+  qualificationScore?: LeadQualificationScore;
+  createdAt?: string;
+  enrichedAt?: string;
+  convertedOpportunityId?: string;
 }
 
 export interface Message {
@@ -72,6 +93,8 @@ export interface MeetingBrief {
   openDeals: string;
   riskFlags: string[];
   talkingPoints: string[];
+  opportunityId?: string;
+  opportunityName?: string;
 }
 
 export interface MeetingNote {
@@ -83,6 +106,7 @@ export interface MeetingNote {
   opportunities: string[];
   nextSteps: string[];
   createdAt: string;
+  opportunityId?: string;
 }
 
 export interface IntelligenceItem {
@@ -128,4 +152,182 @@ export interface AgentMetrics {
   metric2Value: string;
   metric3Label: string;
   metric3Value: string;
+}
+
+/** Post-qualification pipeline (separate from Lead.stage). */
+export type OpportunityStage =
+  | 'qualification'
+  | 'need_analysis'
+  | 'proposal'
+  | 'negotiation'
+  | 'closing'
+  | 'won'
+  | 'lost';
+
+export type OpportunityOutcome = 'won' | 'lost' | 'open';
+
+export type LossReason =
+  | 'price'
+  | 'competitor'
+  | 'no_budget'
+  | 'no_decision'
+  | 'timing'
+  | 'not_a_fit'
+  | 'other';
+
+export type PaymentStatus = 'pending' | 'partially_paid' | 'paid' | 'refunded';
+
+export interface StageTransition {
+  from: OpportunityStage;
+  to: OpportunityStage;
+  at: string;
+  by: string;
+  note?: string;
+}
+
+export interface ProposalLineItem {
+  name: string;
+  qty: number;
+  unitPrice: number;
+  discountPct?: number;
+}
+
+export interface Proposal {
+  id: string;
+  version: number;
+  title: string;
+  value: number;
+  currency: 'DZD';
+  validUntil?: string;
+  fileUrl?: string;
+  linkUrl?: string;
+  lineItems?: ProposalLineItem[];
+  notes?: string;
+  status: 'draft' | 'sent' | 'accepted' | 'rejected' | 'superseded';
+  sentAt?: string;
+  createdAt: string;
+}
+
+export interface Payment {
+  id: string;
+  amount: number;
+  method: 'cash' | 'bank_transfer' | 'cheque' | 'card' | 'other';
+  reference?: string;
+  receivedAt?: string;
+  status: PaymentStatus;
+  note?: string;
+  dueDate?: string;
+}
+
+export interface QualificationAnswers {
+  budget?: string;
+  authority?: string;
+  need?: string;
+  timeline?: string;
+  competingSolutions?: string[];
+  riskFlags?: string[];
+}
+
+export interface NeedAnalysis {
+  summary: string;
+  goals: string[];
+  metricsToMove: string[];
+  decisionCriteria: string[];
+  stakeholders: Array<{ name: string; role: string }>;
+  proposedSolution?: string;
+}
+
+export interface Opportunity {
+  id: string;
+  leadId: string;
+  name: string;
+  company?: string;
+  contactName: string;
+  channel: Channel;
+  ownerId: string;
+  ownerName?: string;
+  stage: OpportunityStage;
+  outcome: OpportunityOutcome;
+  value: number;
+  currency: 'DZD';
+  expectedCloseDate?: string;
+  probability?: number;
+  qualification?: QualificationAnswers;
+  needAnalysis?: NeedAnalysis;
+  proposals: Proposal[];
+  payments: Payment[];
+  paymentStatus: PaymentStatus;
+  lossReason?: LossReason;
+  lossDetail?: string;
+  wonDetail?: string;
+  createdAt: string;
+  updatedAt: string;
+  stageEnteredAt: string;
+  stageHistory: StageTransition[];
+  nextStepAt?: string;
+  nextStepText?: string;
+  tags?: string[];
+  objectionLog?: Array<{ at: string; note: string; valueDelta?: number }>;
+  contractUrl?: string;
+  onboardingOwnerId?: string;
+  onboardingDate?: string;
+  onboardingNotes?: string;
+}
+
+export interface AnalyticsFilters {
+  from?: string;
+  to?: string;
+  channel?: Channel | 'all';
+  ownerId?: string | 'all';
+  source?: string | 'all';
+}
+
+export type ReportSectionKind =
+  | 'kpi-row'
+  | 'bar-chart'
+  | 'line-chart'
+  | 'pie-chart'
+  | 'funnel-chart'
+  | 'table'
+  | 'text'
+  | 'bullet-list';
+
+export interface ReportSection {
+  id: string;
+  kind: ReportSectionKind;
+  title: string;
+  description?: string;
+  payload: unknown;
+}
+
+export interface AnalyticsReport {
+  id: string;
+  question: string;
+  createdAt: string;
+  createdBy: string;
+  filters: AnalyticsFilters;
+  summary: string;
+  sections: ReportSection[];
+  recommendations: string[];
+  status: 'draft' | 'ready' | 'error';
+  source: 'mock' | 'llm';
+  shareUrl?: string;
+}
+
+export interface FunnelStep {
+  key: string;
+  label: string;
+  count: number;
+}
+
+export interface TimeSeriesPoint {
+  date: string;
+  value: number;
+}
+
+export interface BreakdownRow {
+  key: string;
+  label: string;
+  count: number;
+  value?: number;
 }

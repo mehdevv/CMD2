@@ -3,6 +3,7 @@ import { Link } from 'wouter';
 import { ChevronRight } from 'lucide-react';
 import { AppShell } from '@/components/layout/AppShell';
 import { cn } from '@/lib/utils';
+import { AGENT_BRAND, type AgentId } from '@/lib/agent-brand';
 
 export interface AnchorSection {
   id: string;
@@ -12,6 +13,8 @@ export interface AnchorSection {
 interface AgentConfigShellProps {
   agentName: string;
   agentPath: string;
+  /** When set, applies this bot’s brand to the top bar, left rail, and active section. */
+  agentId?: AgentId;
   sections: AnchorSection[];
   rightPanel: ReactNode;
   children: ReactNode;
@@ -24,6 +27,7 @@ interface AgentConfigShellProps {
 export function AgentConfigShell({
   agentName,
   agentPath: _agentPath,
+  agentId,
   sections,
   rightPanel,
   children,
@@ -31,6 +35,7 @@ export function AgentConfigShell({
   overviewLabel = 'Automation',
 }: AgentConfigShellProps) {
   const [activeSection, setActiveSection] = useState(sections[0]?.id ?? '');
+  const brand = agentId ? AGENT_BRAND[agentId] : null;
 
   const scrollTo = (id: string) => {
     const el = document.getElementById(`section-${id}`);
@@ -59,42 +64,65 @@ export function AgentConfigShell({
   return (
     <AppShell title={agentName} noPadding>
       <div className="flex" style={{ minHeight: 'calc(100vh - 56px)' }}>
-        {/* Left anchor nav */}
-        <aside className="flex-shrink-0 bg-white border-r border-[#E4E4E8] pt-8 px-4 sticky top-14 self-start" style={{ width: 200, maxHeight: 'calc(100vh - 56px)', overflowY: 'auto' }}>
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-1 text-[12px] text-[#9999AA] mb-6">
-            <Link href={overviewHref}><a className="hover:text-[#1A1A3E]">{overviewLabel}</a></Link>
+        <aside
+          className={cn(
+            'scale-scroll sticky top-14 flex-shrink-0 self-start overflow-y-auto overscroll-contain border-r border-[#E4E4E8] px-4 pt-8',
+            brand && 'border-l-[4px]'
+          )}
+          style={{
+            width: 200,
+            maxHeight: 'calc(100vh - 56px)',
+            backgroundColor: brand ? brand.tint : '#ffffff',
+            ...(brand ? { borderLeftColor: brand.solid } : {}),
+          }}
+        >
+          <div className="mb-6 flex items-center gap-1 text-[12px] text-[#9999AA]">
+            <Link href={overviewHref}>
+              <a className="hover:text-[#1A1A3E]">{overviewLabel}</a>
+            </Link>
             <ChevronRight size={11} />
-            <span className="text-[#1A1A3E] truncate">{agentName.replace(' Agent', '')}</span>
+            <span className="truncate text-[#1A1A3E]">{agentName.replace(' Agent', '')}</span>
           </div>
 
           <nav className="space-y-0.5">
-            {sections.map(s => (
-              <button
-                key={s.id}
-                onClick={() => scrollTo(s.id)}
-                className={cn(
-                  'w-full text-left px-3 py-2 rounded text-[13px] transition-colors',
-                  activeSection === s.id
-                    ? 'bg-[#EEF3FD] text-[#1E3A8A] font-medium'
-                    : 'text-[#6B6B80] hover:bg-[#F7F7F8] hover:text-[#1A1A3E]'
-                )}
-              >
-                {s.label}
-              </button>
-            ))}
+            {sections.map(s => {
+              const active = activeSection === s.id;
+              return (
+                <button
+                  key={s.id}
+                  type="button"
+                  onClick={() => scrollTo(s.id)}
+                  className={cn(
+                    'w-full rounded px-3 py-2 text-left text-[13px] transition-colors',
+                    active && brand && 'border-l-[3px] font-medium',
+                    active && !brand && 'bg-[#EEF3FD] font-medium text-[#1E3A8A]',
+                    !active && 'text-[#6B6B80] hover:bg-white hover:text-[#1A1A3E]'
+                  )}
+                  style={
+                    active && brand
+                      ? {
+                          borderLeftColor: brand.solid,
+                          backgroundColor: '#ffffff',
+                          color: brand.text,
+                        }
+                      : undefined
+                  }
+                >
+                  {s.label}
+                </button>
+              );
+            })}
           </nav>
         </aside>
 
-        {/* Center scrollable content */}
-        <div className="flex-1 overflow-y-auto px-10 py-8 min-w-0">
-          <div style={{ maxWidth: 720 }}>
-            {children}
-          </div>
+        <div className="scale-scroll min-w-0 flex-1 overflow-y-auto overscroll-contain px-10 py-8">
+          <div style={{ maxWidth: 720 }}>{children}</div>
         </div>
 
-        {/* Right sticky panel */}
-        <aside className="flex-shrink-0 pt-8 px-4 sticky top-14 self-start" style={{ width: 256, maxHeight: 'calc(100vh - 56px)', overflowY: 'auto' }}>
+        <aside
+          className="scale-scroll sticky top-14 flex-shrink-0 self-start overflow-y-auto overscroll-contain bg-[#F7F7F8] px-4 pt-8"
+          style={{ width: 256, maxHeight: 'calc(100vh - 56px)' }}
+        >
           {rightPanel}
         </aside>
       </div>
@@ -105,8 +133,8 @@ export function AgentConfigShell({
 export function SectionBlock({ id, title, description, children }: { id: string; title: string; description?: string; children: ReactNode }) {
   return (
     <section id={`section-${id}`} className="mb-10">
-      <h2 className="text-[16px] font-semibold text-[#1A1A3E] mb-1">{title}</h2>
-      {description && <p className="text-[13px] text-[#6B6B80] mb-5">{description}</p>}
+      <h2 className="mb-1 text-[16px] font-semibold text-[#1A1A3E]">{title}</h2>
+      {description && <p className="mb-5 text-[13px] text-[#6B6B80]">{description}</p>}
       {children}
     </section>
   );
@@ -115,11 +143,12 @@ export function SectionBlock({ id, title, description, children }: { id: string;
 export function FieldGroup({ label, help, children, required }: { label: string; help?: string; children: ReactNode; required?: boolean }) {
   return (
     <div className="mb-4">
-      <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">
-        {label}{required && <span className="text-[#DC2626] ml-0.5">*</span>}
+      <label className="mb-1.5 block text-[13px] font-medium text-[#1A1A3E]">
+        {label}
+        {required && <span className="ml-0.5 text-[#DC2626]">*</span>}
       </label>
       {children}
-      {help && <p className="text-[12px] text-[#9999AA] mt-1">{help}</p>}
+      {help && <p className="mt-1 text-[12px] text-[#9999AA]">{help}</p>}
     </div>
   );
 }

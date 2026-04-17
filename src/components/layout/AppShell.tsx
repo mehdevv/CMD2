@@ -11,7 +11,7 @@ interface AppShellProps {
 
 export function AppShell({ title, children, fullHeight, noPadding }: AppShellProps) {
   return (
-    <div className="min-h-screen bg-[#F7F7F8]">
+    <div className="scale-app-shell min-h-screen bg-[#F7F7F8]">
       <Sidebar />
       <Topbar title={title} />
       <main

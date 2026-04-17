@@ -44,6 +44,7 @@ export default function OwnerAgentTracking() {
     <AgentConfigShell
       agentName="Order Tracking"
       agentPath="/automation/tracking"
+      agentId="tracking"
       overviewHref="/automation"
       overviewLabel="Your automation"
       sections={SECTIONS}

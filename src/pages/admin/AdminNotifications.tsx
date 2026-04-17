@@ -10,7 +10,7 @@ export default function AdminNotifications() {
         </div>
         <h2 className="text-[16px] font-medium text-[#1A1A3E] mb-1">No pending alerts</h2>
         <p className="text-[13px] text-[#6B6B80] max-w-md">
-          When an AI agent escalates to a human, notifications will appear here. Connect channels and enable agents to start monitoring.
+          When automation escalates to a human, notifications will appear here. Connect channels and enable agents to start monitoring.
         </p>
       </div>
     </AppShell>

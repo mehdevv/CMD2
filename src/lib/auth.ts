@@ -23,7 +23,7 @@ const MOCK_USERS: Record<string, AuthUser & { password: string }> = {
     password: 'demo',
   },
   'agent@scale.dz': {
-    id: 'user-3',
+    id: 'agent-1',
     name: 'Mehdi Kaci',
     email: 'agent@scale.dz',
     role: 'agent',

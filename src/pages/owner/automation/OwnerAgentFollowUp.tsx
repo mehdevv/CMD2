@@ -153,6 +153,7 @@ export default function OwnerAgentFollowUp() {
       <AgentConfigShell
         agentName="Lead Follow-Up"
         agentPath="/automation/followup"
+        agentId="followup"
         overviewHref="/automation"
         overviewLabel="Your automation"
         sections={SECTIONS}

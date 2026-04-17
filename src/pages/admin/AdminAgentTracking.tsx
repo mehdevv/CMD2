@@ -104,7 +104,13 @@ export default function AdminAgentTracking() {
 
   return (
     <>
-      <AgentConfigShell agentName="Order Tracking Agent" agentPath="/admin/agents/tracking" sections={SECTIONS} rightPanel={rightPanel}>
+      <AgentConfigShell
+        agentName="Order Tracking Agent"
+        agentPath="/admin/agents/tracking"
+        agentId="tracking"
+        sections={SECTIONS}
+        rightPanel={rightPanel}
+      >
         <div className="mb-6">
           <InfoBlock>
             Channels: WhatsApp & Facebook. The agent reads your delivery partner API, maps statuses to customer messages, and hands off to the Refund flow when the customer is unsatisfied.
