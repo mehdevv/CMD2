@@ -61,6 +61,8 @@ If you already applied `schema.sql` **before** org slugs existed, run the migrat
 
 2. **Edge function** (creates agent users with the service role — required for “Add sales agent” in the app):
 
+   Deploy from this repo so [`config.toml`](./config.toml) is applied. It sets **`verify_jwt = false`** for `manage-agent` so the browser’s **OPTIONS** preflight (which has no `Authorization` header) is not rejected by the gateway with 401 — the function still checks the JWT on every **POST**.
+
    ```bash
    supabase functions deploy manage-agent --project-ref YOUR_PROJECT_REF
    ```

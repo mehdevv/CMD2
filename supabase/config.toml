@@ -1,0 +1,8 @@
+# Supabase CLI / Edge Functions project config.
+# https://supabase.com/docs/guides/functions/function-configuration
+
+# Browser preflight (OPTIONS) does not send Authorization. With the default
+# verify_jwt=true, Kong rejects OPTIONS with 401 → CORS "preflight not OK".
+# This function validates the JWT itself via createClient + auth.getUser().
+[functions.manage-agent]
+verify_jwt = false
