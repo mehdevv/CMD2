@@ -63,9 +63,13 @@ If you already applied `schema.sql` **before** org slugs existed, run the migrat
 
    Deploy from this repo so [`config.toml`](./config.toml) is applied. It sets **`verify_jwt = false`** for `manage-agent` so the browser’s **OPTIONS** preflight (which has no `Authorization` header) is not rejected by the gateway with 401 — the function still checks the JWT on every **POST**.
 
+   From the repo root, use **`npx`** so the CLI installed by `npm i supabase` is found (plain `supabase` is not on your PATH unless you install it globally):
+
    ```bash
-   supabase functions deploy manage-agent --project-ref YOUR_PROJECT_REF
+   npx supabase functions deploy manage-agent --project-ref YOUR_PROJECT_REF
    ```
+
+   Or: `npm run deploy:manage-agent -- --project-ref YOUR_PROJECT_REF` (same thing; see root `package.json`).
 
    In the Supabase dashboard → **Edge Functions → manage-agent → Secrets**, set:
 

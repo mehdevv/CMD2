@@ -22,6 +22,7 @@ Each plan doc is self-contained: it lists the pages to add, the routes, the data
 | 05 | [`05-milestones.md`](./05-milestones.md) | Phase-by-phase sequencing with acceptance criteria, so you can ship it in 4-5 passes instead of one big bang. |
 | 06 | [`06-ui-polish.md`](./06-ui-polish.md) | UI polish pass: thin scrollbars, stable/trimmed sidebar, unified search field, 1-line card copy, per-bot color identity. |
 | 07 | [`07-supabase-backend.md`](./07-supabase-backend.md) | Wire Supabase: schema, `.env`, RLS, drop all mock data, real auth, real CRM persistence. |
+| 08 | [`08-profile-and-settings.md`](./08-profile-and-settings.md) | Per-user profile page (name, avatar, password, notifications, sessions) and workspace settings (org name, business address, branding, billing, danger zone). |
 
 ---
 

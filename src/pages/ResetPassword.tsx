@@ -15,9 +15,18 @@ export default function ResetPasswordPage() {
   useEffect(() => {
     if (!isSupabaseConfigured) return;
     const supabase = getSupabase();
-    void supabase.auth.getSession().then(({ data: { session } }) => {
-      setReady(Boolean(session));
-    });
+
+    const refresh = () =>
+      void supabase.auth.getSession().then(({ data: { session } }) => {
+        setReady(Boolean(session));
+      });
+
+    refresh();
+    // Hash tokens are applied asynchronously by `detectSessionInUrl`; retry briefly after redirect from `/`.
+    const t1 = window.setTimeout(refresh, 100);
+    const t2 = window.setTimeout(refresh, 400);
+    const t3 = window.setTimeout(refresh, 1000);
+
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
@@ -25,7 +34,12 @@ export default function ResetPasswordPage() {
         setReady(Boolean(session));
       }
     });
-    return () => subscription.unsubscribe();
+    return () => {
+      window.clearTimeout(t1);
+      window.clearTimeout(t2);
+      window.clearTimeout(t3);
+      subscription.unsubscribe();
+    };
   }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -66,7 +80,14 @@ export default function ResetPasswordPage() {
         </div>
 
         {!ready ? (
-          <p className="text-[13px] text-[#9999AA] text-center">Open the link from your email to continue. If this page stays here, request a new reset link.</p>
+          <div className="space-y-2 text-center">
+            <p className="text-[13px] text-[#9999AA]">Confirming your reset link…</p>
+            <p className="text-[12px] text-[#9999AA]">
+              If this does not continue, open the link again or request a new reset. Make sure this app’s URL (for
+              example port <code className="text-[#1A1A3E]">5173</code> vs <code className="text-[#1A1A3E]">3000</code>)
+              matches the address in the email and your Supabase Authentication redirect allow list.
+            </p>
+          </div>
         ) : (
           <form onSubmit={e => void handleSubmit(e)} className="space-y-4">
             <div>

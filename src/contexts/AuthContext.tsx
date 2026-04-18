@@ -36,7 +36,13 @@ async function ensureOrgBootstrap(orgName = 'My Business', orgSlug?: string | nu
 
 function sessionUserToAuthUser(
   session: Session,
-  profile: { name: string; role: string; org_id: string | null },
+  profile: {
+    name: string;
+    role: string;
+    org_id: string | null;
+    avatar_url?: string | null;
+    local_handle?: string | null;
+  },
   orgSlug: string | null
 ): AuthUser {
   return {
@@ -46,6 +52,8 @@ function sessionUserToAuthUser(
     role: profile.role as Role,
     orgId: profile.org_id,
     orgSlug,
+    avatarUrl: profile.avatar_url ?? null,
+    localHandle: profile.local_handle ?? null,
   };
 }
 
@@ -83,6 +91,8 @@ async function buildUserFromSession(session: Session): Promise<AuthUser | null> 
       name: profile.name,
       role: profile.role,
       org_id: orgId,
+      avatar_url: profile.avatar_url,
+      local_handle: profile.local_handle,
     },
     orgSlug
   );
@@ -179,7 +189,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const requestPasswordReset = useCallback(async (email: string) => {
     if (!isSupabaseConfigured) throw new Error('Supabase is not configured');
     const supabase = getSupabase();
-    const base = (import.meta.env.VITE_APP_URL as string | undefined)?.replace(/\/$/, '') || window.location.origin;
+    // Always use the page’s real origin (e.g. https://scalecrm.vercel.app). Preferring `VITE_APP_URL` here breaks
+    // production when that env is still set to localhost from local dev — the email then links to the wrong host.
+    const base = window.location.origin.replace(/\/$/, '');
     const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
       redirectTo: `${base}/reset-password`,
     });

@@ -1,7 +1,7 @@
 import type { ComponentType } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Toaster } from 'sonner';
-import { Switch, Route, Router as WouterRouter, Redirect } from 'wouter';
+import { Switch, Route, Router as WouterRouter, Redirect, useLocation } from 'wouter';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { CrmDataProvider } from '@/contexts/CrmDataContext';
 import LoginPage from '@/pages/Login';
@@ -51,6 +51,10 @@ import OpportunityClosingPage from '@/pages/opportunities/OpportunityClosing';
 import AnalyticsPage from '@/pages/analytics/Analytics';
 import AnalyticsReportsPage from '@/pages/analytics/AnalyticsReports';
 import AnalyticsReportDetailPage from '@/pages/analytics/AnalyticsReportDetail';
+import ProfilePage from '@/pages/profile/ProfilePage';
+import SecurityPage from '@/pages/profile/SecurityPage';
+import NotificationsPage from '@/pages/profile/NotificationsPage';
+import SessionsPage from '@/pages/profile/SessionsPage';
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 30_000, retry: 1 } },
@@ -75,7 +79,21 @@ function ProtectedRoute({
 }
 
 function Router() {
+  const [location] = useLocation();
   const { user, loading } = useAuth();
+
+  // Supabase recovery emails often use the project "Site URL" root (`/#access_token=…&type=recovery`)
+  // instead of `/reset-password`. Without this, `/` matches first and sends the user to the dashboard
+  // while the reset form never mounts. Preserve the hash so `detectSessionInUrl` can finish.
+  if (typeof window !== 'undefined') {
+    const raw = window.location.hash.replace(/^#/, '');
+    if (raw) {
+      const type = new URLSearchParams(raw).get('type')?.toLowerCase();
+      if (type === 'recovery' && location !== '/reset-password') {
+        return <Redirect to={`/reset-password#${raw}`} replace />;
+      }
+    }
+  }
 
   if (loading) return <div className="min-h-screen bg-[#F7F7F8] flex items-center justify-center"><span className="text-[#9999AA] text-[14px]">Loading...</span></div>;
 
@@ -172,6 +190,20 @@ function Router() {
           if (user.role === 'agent') return <AgentDashboard />;
           return <Redirect to="/admin/dashboard" />;
         }}
+      </Route>
+
+      {/* Profile (all signed-in roles) */}
+      <Route path="/profile/security">
+        <ProtectedRoute component={SecurityPage} />
+      </Route>
+      <Route path="/profile/notifications">
+        <ProtectedRoute component={NotificationsPage} />
+      </Route>
+      <Route path="/profile/sessions">
+        <ProtectedRoute component={SessionsPage} />
+      </Route>
+      <Route path="/profile">
+        <ProtectedRoute component={ProfilePage} />
       </Route>
 
       {/* Shared authenticated routes */}

@@ -22,6 +22,7 @@ import {
   Kanban,
   PieChart,
   CreditCard,
+  UserCircle,
 } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDashboardRoute } from '@/lib/auth';
@@ -101,6 +102,10 @@ const NAV_ITEMS: { section: string; items: NavItem[] }[] = [
       { label: 'Order Tracking', href: '/automation/tracking', icon: <Package size={16} />, roles: ['owner'], agentId: 'tracking' },
       { label: 'Refund', href: '/automation/refund', icon: <RefreshCw size={16} />, roles: ['owner'], agentId: 'refund' },
     ],
+  },
+  {
+    section: 'Account',
+    items: [{ label: 'Profile', href: '/profile', icon: <UserCircle size={16} />, roles: ['admin', 'owner', 'agent'] }],
   },
   {
     section: 'Settings',

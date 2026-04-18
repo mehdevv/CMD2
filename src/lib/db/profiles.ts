@@ -9,6 +9,10 @@ export interface ProfileRow {
   status: string;
   org_id: string | null;
   last_active: string | null;
+  local_handle?: string | null;
+  avatar_url?: string | null;
+  preferences?: Record<string, unknown> | null;
+  notification_prefs?: Record<string, unknown> | null;
 }
 
 export async function fetchMyProfile(userId: string): Promise<ProfileRow | null> {

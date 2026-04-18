@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useLocation } from 'wouter';
+import { Link, useLocation } from 'wouter';
 import { Bell } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { roleLabel } from '@/lib/utils';
@@ -57,11 +57,15 @@ export function Topbar({ title, accentColor: accentOverride }: TopbarProps) {
             <DropdownMenuTrigger asChild>
               <button
                 type="button"
-                className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-[#EEF3FD] text-[11px] font-semibold text-[#2B62E8] outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[#2B62E8]"
+                className="relative flex h-7 w-7 flex-shrink-0 items-center justify-center overflow-hidden rounded-full bg-[#EEF3FD] text-[11px] font-semibold text-[#2B62E8] outline-none ring-offset-2 focus-visible:ring-2 focus-visible:ring-[#2B62E8]"
                 data-testid="button-user-menu"
                 aria-label="Account menu"
               >
-                {initials}
+                {user.avatarUrl ? (
+                  <img src={user.avatarUrl} alt="" className="h-full w-full object-cover" />
+                ) : (
+                  initials
+                )}
               </button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52">
@@ -73,6 +77,16 @@ export function Topbar({ title, accentColor: accentOverride }: TopbarProps) {
                   {roleLabel(user.role)}
                 </div>
               </DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem asChild>
+                <Link
+                  href="/profile"
+                  className="relative flex cursor-pointer select-none items-center rounded-sm px-2 py-1.5 text-[13px] text-[#1A1A3E] no-underline outline-none focus:bg-[#F7F7F8]"
+                  data-testid="link-my-profile"
+                >
+                  My profile
+                </Link>
+              </DropdownMenuItem>
               <DropdownMenuSeparator />
               <DropdownMenuItem
                 className="cursor-pointer text-[13px]"
