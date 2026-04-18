@@ -1,12 +1,13 @@
 import { useState } from 'react';
-import type { Channel, Lead } from '@/lib/types';
+import type { Channel } from '@/lib/types';
+import type { AddLeadPayload } from '@/contexts/CrmDataContext';
 import { DialogShell } from '@/components/ui/DialogShell';
 import { FormField } from '@/components/ui/FormField';
 
 export interface AddLeadDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onCreate: (lead: Lead) => void;
+  onCreate: (payload: AddLeadPayload) => void | Promise<void>;
 }
 
 export function AddLeadDialog({ open, onOpenChange, onCreate }: AddLeadDialogProps) {
@@ -14,6 +15,7 @@ export function AddLeadDialog({ open, onOpenChange, onCreate }: AddLeadDialogPro
   const [phone, setPhone] = useState('');
   const [channel, setChannel] = useState<Channel>('whatsapp');
   const [source, setSource] = useState('');
+  const [busy, setBusy] = useState(false);
 
   const reset = () => {
     setName('');
@@ -22,26 +24,22 @@ export function AddLeadDialog({ open, onOpenChange, onCreate }: AddLeadDialogPro
     setSource('');
   };
 
-  const submit = () => {
+  const submit = async () => {
     const trimmed = name.trim();
     if (!trimmed || !phone.trim()) return;
-    const id = `lead-${Date.now()}`;
-    const lead: Lead = {
-      id,
-      name: trimmed,
-      phone: phone.trim(),
-      channel,
-      stage: 'new',
-      aiStatus: 'active',
-      assignedTo: 'Unassigned',
-      lastContact: 'Just now',
-      source: source.trim() || undefined,
-      qualificationScore: 'cold',
-      createdAt: new Date().toISOString(),
-    };
-    onCreate(lead);
-    reset();
-    onOpenChange(false);
+    setBusy(true);
+    try {
+      await onCreate({
+        name: trimmed,
+        phone: phone.trim(),
+        channel,
+        source: source.trim() || undefined,
+      });
+      reset();
+      onOpenChange(false);
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -52,14 +50,19 @@ export function AddLeadDialog({ open, onOpenChange, onCreate }: AddLeadDialogPro
         onOpenChange(v);
       }}
       title="Add lead"
-      description="Creates a new lead in your pipeline (sample app — stored in session only)."
+      description="Creates a new lead in your pipeline and opens a conversation thread."
       footer={
         <>
           <button type="button" className="scale-btn-secondary" onClick={() => onOpenChange(false)}>
             Cancel
           </button>
-          <button type="button" className="scale-btn-primary" disabled={!name.trim() || !phone.trim()} onClick={submit}>
-            Create lead
+          <button
+            type="button"
+            className="scale-btn-primary"
+            disabled={!name.trim() || !phone.trim() || busy}
+            onClick={() => void submit()}
+          >
+            {busy ? 'Saving…' : 'Create lead'}
           </button>
         </>
       }

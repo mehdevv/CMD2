@@ -1,38 +1,223 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
-import { AuthUser, getCurrentUser, login as doLogin, logout as doLogout } from '@/lib/auth';
+import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import type { Session } from '@supabase/supabase-js';
+import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
+import type { AuthUser } from '@/lib/auth';
+import type { Role } from '@/lib/types';
+import { fetchMyProfile, fetchOrgSlug } from '@/lib/db/profiles';
 
 interface AuthContextType {
   user: AuthUser | null;
   login: (email: string, password: string) => Promise<AuthUser | null>;
-  logout: () => void;
+  register: (
+    email: string,
+    password: string,
+    name: string,
+    orgName: string,
+    orgSlug: string
+  ) => Promise<{ needsEmailConfirmation: boolean; user: AuthUser | null }>;
+  requestPasswordReset: (email: string) => Promise<void>;
+  logout: () => Promise<void>;
   loading: boolean;
+  authDisabled: boolean;
+  /** Re-load profile + org slug from the current session (e.g. after `claim_org_slug`). */
+  refreshUser: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | null>(null);
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(() => getCurrentUser());
-  const [loading] = useState(false);
+async function ensureOrgBootstrap(orgName = 'My Business', orgSlug?: string | null): Promise<void> {
+  const supabase = getSupabase();
+  const { error } = await supabase.rpc('bootstrap_my_org', {
+    org_name: orgName,
+    org_slug: orgSlug?.trim() ? orgSlug.trim().toLowerCase() : null,
+  });
+  if (error) throw error;
+}
 
-  const login = async (email: string, password: string): Promise<AuthUser | null> => {
-    const result = doLogin(email, password);
-    if (result) {
-      setUser(result);
-      return result;
+function sessionUserToAuthUser(
+  session: Session,
+  profile: { name: string; role: string; org_id: string | null },
+  orgSlug: string | null
+): AuthUser {
+  return {
+    id: session.user.id,
+    email: session.user.email ?? profile.name,
+    name: profile.name,
+    role: profile.role as Role,
+    orgId: profile.org_id,
+    orgSlug,
+  };
+}
+
+async function buildUserFromSession(session: Session): Promise<AuthUser | null> {
+  let profile = await fetchMyProfile(session.user.id);
+  if (!profile) {
+    await new Promise(r => setTimeout(r, 400));
+    profile = await fetchMyProfile(session.user.id);
+  }
+  if (!profile) return null;
+
+  let orgId = profile.org_id;
+  if (!orgId) {
+    try {
+      await ensureOrgBootstrap();
+    } catch (e) {
+      console.error('bootstrap_my_org failed', e);
     }
-    return null;
-  };
+    const again = await fetchMyProfile(session.user.id);
+    orgId = again?.org_id ?? null;
+  }
 
-  const logout = () => {
-    doLogout();
-    setUser(null);
-  };
+  let orgSlug: string | null = null;
+  if (orgId) {
+    try {
+      orgSlug = await fetchOrgSlug(orgId);
+    } catch (e) {
+      console.error('fetchOrgSlug failed', e);
+    }
+  }
 
-  return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
-      {children}
-    </AuthContext.Provider>
+  return sessionUserToAuthUser(
+    session,
+    {
+      name: profile.name,
+      role: profile.role,
+      org_id: orgId,
+    },
+    orgSlug
   );
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [loading, setLoading] = useState(isSupabaseConfigured);
+
+  const hydrateFromSession = useCallback(async (session: Session | null) => {
+    if (!isSupabaseConfigured) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+    if (!session?.user) {
+      setUser(null);
+      setLoading(false);
+      return;
+    }
+    const next = await buildUserFromSession(session);
+    setUser(next);
+    setLoading(false);
+  }, []);
+
+  useEffect(() => {
+    if (!isSupabaseConfigured) {
+      queueMicrotask(() => setLoading(false));
+      return;
+    }
+    const supabase = getSupabase();
+    let cancelled = false;
+
+    void supabase.auth.getSession().then(({ data: { session } }) => {
+      if (!cancelled) void hydrateFromSession(session);
+    });
+
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, session) => {
+      void hydrateFromSession(session);
+    });
+
+    return () => {
+      cancelled = true;
+      subscription.unsubscribe();
+    };
+  }, [hydrateFromSession]);
+
+  const login = useCallback(async (email: string, password: string): Promise<AuthUser | null> => {
+    if (!isSupabaseConfigured) return null;
+    const supabase = getSupabase();
+    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+    if (error) {
+      console.error(error);
+      return null;
+    }
+    const { data } = await supabase.auth.getSession();
+    if (!data.session) return null;
+    const next = await buildUserFromSession(data.session);
+    setUser(next);
+    setLoading(false);
+    return next;
+  }, []);
+
+  const register = useCallback(
+    async (
+      email: string,
+      password: string,
+      name: string,
+      orgName: string,
+      orgSlug: string
+    ): Promise<{ needsEmailConfirmation: boolean; user: AuthUser | null }> => {
+      if (!isSupabaseConfigured) throw new Error('Supabase is not configured');
+      const supabase = getSupabase();
+      const { data, error } = await supabase.auth.signUp({
+        email: email.trim(),
+        password,
+        options: { data: { name } },
+      });
+      if (error) throw error;
+      if (!data.session) {
+        return { needsEmailConfirmation: true, user: null };
+      }
+      await ensureOrgBootstrap(orgName.trim() || 'My Business', orgSlug.trim().toLowerCase());
+      const next = await buildUserFromSession(data.session);
+      setUser(next);
+      setLoading(false);
+      return { needsEmailConfirmation: false, user: next };
+    },
+    []
+  );
+
+  const requestPasswordReset = useCallback(async (email: string) => {
+    if (!isSupabaseConfigured) throw new Error('Supabase is not configured');
+    const supabase = getSupabase();
+    const base = (import.meta.env.VITE_APP_URL as string | undefined)?.replace(/\/$/, '') || window.location.origin;
+    const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+      redirectTo: `${base}/reset-password`,
+    });
+    if (error) throw error;
+  }, []);
+
+  const logout = useCallback(async () => {
+    if (!isSupabaseConfigured) {
+      setUser(null);
+      return;
+    }
+    const supabase = getSupabase();
+    await supabase.auth.signOut();
+    setUser(null);
+  }, []);
+
+  const refreshUser = useCallback(async () => {
+    if (!isSupabaseConfigured) return;
+    const supabase = getSupabase();
+    const { data } = await supabase.auth.getSession();
+    await hydrateFromSession(data.session);
+  }, [hydrateFromSession]);
+
+  const value = useMemo(
+    () => ({
+      user,
+      login,
+      register,
+      requestPasswordReset,
+      logout,
+      loading,
+      authDisabled: !isSupabaseConfigured,
+      refreshUser,
+    }),
+    [user, login, register, requestPasswordReset, logout, loading, refreshUser]
+  );
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 export function useAuth() {

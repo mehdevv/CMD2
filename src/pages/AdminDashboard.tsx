@@ -7,7 +7,6 @@ import { ChannelHealthList } from '@/components/admin/ChannelHealthList';
 import { PendingTemplatesTable } from '@/components/admin/PendingTemplatesTable';
 import { SystemAlertList } from '@/components/admin/SystemAlertList';
 import { AutomationActivityFeed } from '@/components/admin/AutomationActivityFeed';
-import { MOCK_ACTIVITY_FEED, MOCK_PENDING_TEMPLATES } from '@/lib/mock-data';
 
 const channelHealth = [
   { channel: 'whatsapp' as const, name: 'WhatsApp Business', status: 'connected' as const, msgsToday: 847 },
@@ -41,7 +40,7 @@ export default function AdminDashboard() {
 
       <div className="mb-6 grid gap-6" style={{ gridTemplateColumns: '2fr 1fr' }}>
         <PageSection title="Automation activity">
-          <AutomationActivityFeed items={MOCK_ACTIVITY_FEED} />
+          <AutomationActivityFeed items={[]} />
         </PageSection>
 
         <PageSection title="Channel health">
@@ -51,7 +50,7 @@ export default function AdminDashboard() {
 
       <div className="grid grid-cols-2 gap-6">
         <PageSection title="Pending template approvals" padding="none">
-          <PendingTemplatesTable rows={MOCK_PENDING_TEMPLATES} />
+          <PendingTemplatesTable rows={[]} />
         </PageSection>
 
         <PageSection title="System alerts">
@@ -62,7 +61,7 @@ export default function AdminDashboard() {
                 <span className="mt-0.5 text-[16px] text-[#2B62E8]">ℹ</span>
                 <p className="text-[13px] leading-snug text-[#6B6B80]">
                   Weekly loss digest is ready in{' '}
-                  <Link href="/analytics/reports/rep-seed-1">
+                  <Link href="/analytics/reports">
                     <a className="text-[#2B62E8] hover:underline">Reports</a>
                   </Link>
                   .

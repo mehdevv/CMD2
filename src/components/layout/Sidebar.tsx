@@ -62,6 +62,7 @@ const NAV_ITEMS: { section: string; items: NavItem[] }[] = [
     items: [
       { label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutDashboard size={16} />, roles: ['admin'] },
       { label: 'Dashboard', href: '/dashboard', icon: <LayoutDashboard size={16} />, roles: ['owner', 'agent'] },
+      { label: 'Sales team', href: '/dashboard/agents', icon: <Users size={16} />, roles: ['owner'] },
       { label: 'Leads', href: '/leads', icon: <Users size={16} />, roles: ['admin', 'owner', 'agent'] },
       { label: 'Inbox', href: '/inbox', icon: <MessageSquare size={16} />, roles: ['admin', 'owner', 'agent'] },
     ],

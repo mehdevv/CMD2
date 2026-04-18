@@ -4,7 +4,6 @@ import type { AnalyticsFilters } from '@/lib/types';
 import { useCrmData } from '@/contexts/CrmDataContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { planReport } from '@/lib/report-planner';
-import { MOCK_USERS } from '@/lib/mock-data';
 
 interface AskQuestionCardProps {
   filters: AnalyticsFilters;
@@ -12,20 +11,22 @@ interface AskQuestionCardProps {
 
 export function AskQuestionCard({ filters }: AskQuestionCardProps) {
   const [, setLoc] = useLocation();
-  const { leads, opportunities, addReport } = useCrmData();
+  const { leads, opportunities, teamMembers, addReport } = useCrmData();
   const { user } = useAuth();
   const [q, setQ] = useState('');
 
   const generate = () => {
     if (q.trim().length < 6) return;
-    const report = planReport(
-      q.trim(),
-      { leads, opportunities, users: MOCK_USERS, now: new Date() },
-      filters,
-      user?.name ?? 'User'
-    );
-    addReport(report);
-    setLoc(`/analytics/reports/${report.id}`);
+    void (async () => {
+      const report = planReport(
+        q.trim(),
+        { leads, opportunities, users: teamMembers, now: new Date() },
+        filters,
+        user?.name ?? 'User'
+      );
+      const id = await addReport(report);
+      setLoc(`/analytics/reports/${id}`);
+    })();
   };
 
   return (

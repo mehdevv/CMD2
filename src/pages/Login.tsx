@@ -1,9 +1,10 @@
-import { useState } from 'react';
-import { useLocation } from 'wouter';
+import { useMemo, useState } from 'react';
+import { Link, useLocation } from 'wouter';
 import { Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getDashboardRoute } from '@/lib/auth';
 import { BRAND_WORDMARK_PNG } from '@/lib/brand-assets';
+import { isAgentEmail } from '@/lib/agent-email';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -11,19 +12,24 @@ export default function LoginPage() {
   const [showPass, setShowPass] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-  const { login } = useAuth();
+  const { login, authDisabled } = useAuth();
   const [, setLocation] = useLocation();
+  const lookingLikeAgent = useMemo(() => isAgentEmail(email), [email]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+    if (authDisabled) {
+      setError('Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY to .env');
+      return;
+    }
     setLoading(true);
     const loggedIn = await login(email, password);
     setLoading(false);
     if (loggedIn) {
       setLocation(getDashboardRoute(loggedIn.role));
     } else {
-      setError('Invalid email or password. Try admin@scale.dz / demo');
+      setError('Invalid email or password.');
     }
   };
 
@@ -42,11 +48,6 @@ export default function LoginPage() {
           <p className="text-[14px] text-[#6B6B80]">Sign in to your workspace</p>
         </div>
 
-        {/* Demo hint */}
-        <div className="mb-5 p-3 bg-[#EEF3FD] rounded-md text-[13px] text-[#1E3A8A]">
-          Demo: admin@scale.dz / demo &nbsp;|&nbsp; owner@scale.dz / demo &nbsp;|&nbsp; agent@scale.dz / demo
-        </div>
-
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Email</label>
@@ -55,10 +56,15 @@ export default function LoginPage() {
               value={email}
               onChange={e => setEmail(e.target.value)}
               className="scale-input"
-              placeholder="you@scale.dz"
+              placeholder="you@company.com  or  name@business.scale"
               required
               data-testid="input-email"
             />
+            {lookingLikeAgent && (
+              <p className="text-[12px] text-[#6B6B80] mt-1">
+                Signing in as a sales agent — ask your business admin to reset your password if needed.
+              </p>
+            )}
           </div>
 
           <div>
@@ -82,9 +88,13 @@ export default function LoginPage() {
                 {showPass ? <EyeOff size={14} /> : <Eye size={14} />}
               </button>
             </div>
-            <div className="flex justify-end mt-1">
-              <a href="#" className="text-[13px] text-[#2B62E8] hover:underline">Forgot password?</a>
-            </div>
+            {!lookingLikeAgent && (
+              <div className="flex justify-end mt-1">
+                <Link href="/forgot-password" className="text-[13px] text-[#2B62E8] hover:underline">
+                  Forgot password?
+                </Link>
+              </div>
+            )}
           </div>
 
           {error && (
@@ -101,9 +111,14 @@ export default function LoginPage() {
           </button>
         </form>
 
-        <p className="text-center text-[13px] text-[#9999AA] mt-6">
-          Don't have an account? Contact your admin.
-        </p>
+        {!lookingLikeAgent && (
+          <p className="text-center text-[13px] text-[#9999AA] mt-6">
+            Need a business account?{' '}
+            <Link href="/register" className="text-[#2B62E8] hover:underline">
+              Create one
+            </Link>
+          </p>
+        )}
       </div>
     </div>
   );

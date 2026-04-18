@@ -16,6 +16,8 @@ export interface User {
   status: UserStatus;
   lastActive: string;
   avatar?: string;
+  /** Set for sales agents on the `local@orgslug.scale` namespace. */
+  localHandle?: string;
 }
 
 export interface Lead {
@@ -25,6 +27,8 @@ export interface Lead {
   channel: Channel;
   stage: Stage;
   aiStatus: AIStatus;
+  /** Profile UUID when assigned (from `leads.assigned_to`). */
+  assignedToUserId?: string;
   assignedTo: string;
   lastContact: string;
   dealValue?: number;
@@ -67,6 +71,8 @@ export interface Conversation {
   leadName: string;
   channel: Channel;
   aiStatus: AIStatus;
+  /** Mirrors `conversations.automation_paused` when loaded from Supabase. */
+  automationPaused?: boolean;
   assignedTo: string;
   messages: Message[];
   lastMessage: string;

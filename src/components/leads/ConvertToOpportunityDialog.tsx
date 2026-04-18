@@ -3,7 +3,7 @@ import { useLocation } from 'wouter';
 import type { Lead, Opportunity } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCrmData } from '@/contexts/CrmDataContext';
-import { assignedNameToOwnerId } from '@/lib/lead-utils';
+import { leadAssigneeOwnerId } from '@/lib/lead-utils';
 import {
   Dialog,
   DialogContent,
@@ -26,7 +26,7 @@ export function ConvertToOpportunityDialog({ open, onOpenChange, lead }: Convert
   const [value, setValue] = useState(String(lead.dealValue ?? ''));
   const [expectedClose, setExpectedClose] = useState('');
 
-  const ownerId = assignedNameToOwnerId(lead.assignedTo);
+  const ownerId = leadAssigneeOwnerId(lead, user?.id ?? '');
   const byId = user?.id ?? ownerId;
 
   const handleOpen = (v: boolean) => {
@@ -38,7 +38,7 @@ export function ConvertToOpportunityDialog({ open, onOpenChange, lead }: Convert
     onOpenChange(v);
   };
 
-  const submit = () => {
+  const submit = async () => {
     const id = `opp-${Date.now()}`;
     const now = new Date().toISOString();
     const val = Number(value.replace(/\s/g, '')) || 0;
@@ -72,14 +72,18 @@ export function ConvertToOpportunityDialog({ open, onOpenChange, lead }: Convert
           }
         : undefined,
     };
-    addOpportunity(opp);
-    patchLead(lead.id, {
-      convertedOpportunityId: id,
-      aiStatus: 'completed',
-      stage: 'qualified',
-    });
-    onOpenChange(false);
-    setLocation(`/opportunities/${id}`);
+    try {
+      const newId = await addOpportunity(opp);
+      await patchLead(lead.id, {
+        convertedOpportunityId: newId,
+        aiStatus: 'completed',
+        stage: 'qualified',
+      });
+      onOpenChange(false);
+      setLocation(`/opportunities/${newId}`);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
@@ -107,7 +111,7 @@ export function ConvertToOpportunityDialog({ open, onOpenChange, lead }: Convert
           <button type="button" className="scale-btn-secondary" onClick={() => onOpenChange(false)}>
             Cancel
           </button>
-          <button type="button" className="scale-btn-primary" onClick={submit}>
+          <button type="button" className="scale-btn-primary" onClick={() => void submit()}>
             Create opportunity
           </button>
         </DialogFooter>

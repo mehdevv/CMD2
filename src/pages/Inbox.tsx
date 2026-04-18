@@ -1,17 +1,63 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
-import { MOCK_CONVERSATIONS } from '@/lib/mock-data';
 import type { Conversation } from '@/lib/types';
 import { ConversationListPanel, type ConversationListTab } from '@/components/conversations/ConversationListPanel';
 import { ThreadHeader } from '@/components/conversations/ThreadHeader';
 import { ConversationThread } from '@/components/conversations/ConversationThread';
+import { useCrmData } from '@/contexts/CrmDataContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 export default function InboxPage() {
+  const { user } = useAuth();
+  const { conversations, sendMessage, setConversationTakeover } = useCrmData();
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState<ConversationListTab>('all');
-  const [selected, setSelected] = useState<Conversation | null>(MOCK_CONVERSATIONS[0]);
+  const [selected, setSelected] = useState<Conversation | null>(null);
   const [message, setMessage] = useState('');
   const [takenOver, setTakenOver] = useState(false);
+
+  useEffect(() => {
+    if (conversations.length === 0) {
+      queueMicrotask(() => setSelected(null));
+      return;
+    }
+    queueMicrotask(() => {
+      setSelected(prev => {
+        if (prev && conversations.some(c => c.id === prev.id)) return prev;
+        return conversations[0] ?? null;
+      });
+    });
+  }, [conversations]);
+
+  useEffect(() => {
+    if (!selected) {
+      queueMicrotask(() => setTakenOver(false));
+      return;
+    }
+    queueMicrotask(() => setTakenOver(Boolean(selected.automationPaused)));
+  }, [selected]);
+
+  const handleTakeoverToggle = useCallback(async () => {
+    if (!selected || !user) return;
+    const next = !takenOver;
+    await setConversationTakeover(selected.id, {
+      automationPaused: next,
+      assignedToUserId: next ? user.id : null,
+    });
+    setTakenOver(next);
+  }, [selected, user, takenOver, setConversationTakeover]);
+
+  const handleSend = useCallback(async () => {
+    if (!selected || !message.trim() || !user) return;
+    await sendMessage(selected.id, {
+      sender: 'agent',
+      senderName: user.name,
+      content: message.trim(),
+      status: 'sent',
+      timestamp: new Date().toISOString(),
+    });
+    setMessage('');
+  }, [selected, message, user, sendMessage]);
 
   return (
     <AppShell title="Inbox" noPadding>
@@ -21,7 +67,7 @@ export default function InboxPage() {
           onSearchChange={setSearch}
           tab={tab}
           onTabChange={setTab}
-          conversations={MOCK_CONVERSATIONS}
+          conversations={conversations}
           selectedId={selected?.id ?? null}
           onSelect={setSelected}
         />
@@ -32,7 +78,7 @@ export default function InboxPage() {
               <ThreadHeader
                 conversation={selected}
                 takenOver={takenOver}
-                onTakeoverToggle={() => setTakenOver(v => !v)}
+                onTakeoverToggle={() => void handleTakeoverToggle()}
               />
               <ConversationThread
                 variant="plain"
@@ -42,13 +88,14 @@ export default function InboxPage() {
                 message={message}
                 onMessageChange={setMessage}
                 takenOver={takenOver}
+                onSend={() => void handleSend()}
               />
             </>
           ) : (
             <div className="flex flex-1 items-center justify-center">
               <div className="text-center">
-                <p className="text-[15px] font-medium text-[#1A1A3E]">Select a conversation</p>
-                <p className="mt-1 text-[14px] text-[#6B6B80]">Choose a conversation from the list to start.</p>
+                <p className="text-[15px] font-medium text-[#1A1A3E]">No conversations yet</p>
+                <p className="mt-1 text-[14px] text-[#6B6B80]">Add a lead to open a thread, or check back after inbound messages arrive.</p>
               </div>
             </div>
           )}

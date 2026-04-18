@@ -10,7 +10,7 @@ import { LEAD_LIST_COLUMNS, leadToDataTableRow } from '@/components/leads/LeadRo
 import { useCrmData } from '@/contexts/CrmDataContext';
 import { useAuth } from '@/contexts/AuthContext';
 import type { Stage } from '@/lib/types';
-import { assignedNameToOwnerId, isEnrichmentIncomplete } from '@/lib/lead-utils';
+import { isEnrichmentIncomplete, leadOwnedByUser } from '@/lib/lead-utils';
 
 export default function LeadsPage() {
   const { user } = useAuth();
@@ -24,7 +24,7 @@ export default function LeadsPage() {
 
   const filtered = useMemo(() => {
     return leads.filter(l => {
-      if (user?.role === 'agent' && assignedNameToOwnerId(l.assignedTo) !== user.id) return false;
+      if (user?.role === 'agent' && !leadOwnedByUser(l, user.id)) return false;
       if (search && !l.name.toLowerCase().includes(search.toLowerCase())) return false;
       if (stageFilter && l.stage !== stageFilter) return false;
       if (channelFilter && l.channel !== channelFilter) return false;

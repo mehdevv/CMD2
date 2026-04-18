@@ -1,8 +1,13 @@
 import type { ComponentType } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Toaster } from 'sonner';
 import { Switch, Route, Router as WouterRouter, Redirect } from 'wouter';
 import { AuthProvider, useAuth } from '@/contexts/AuthContext';
 import { CrmDataProvider } from '@/contexts/CrmDataContext';
 import LoginPage from '@/pages/Login';
+import RegisterPage from '@/pages/Register';
+import ForgotPasswordPage from '@/pages/ForgotPassword';
+import ResetPasswordPage from '@/pages/ResetPassword';
 import OnboardingPage from '@/pages/Onboarding';
 import AdminDashboard from '@/pages/AdminDashboard';
 import OwnerDashboard from '@/pages/OwnerDashboard';
@@ -34,6 +39,7 @@ import OwnerAgentFollowUp from '@/pages/owner/automation/OwnerAgentFollowUp';
 import OwnerAgentChat from '@/pages/owner/automation/OwnerAgentChat';
 import OwnerAgentTracking from '@/pages/owner/automation/OwnerAgentTracking';
 import OwnerAgentRefund from '@/pages/owner/automation/OwnerAgentRefund';
+import OwnerAgentsPage from '@/pages/OwnerAgents';
 import OpportunitiesPage from '@/pages/opportunities/Opportunities';
 import OpportunitiesBoardPage from '@/pages/opportunities/OpportunitiesBoard';
 import OpportunityDetailPage from '@/pages/opportunities/OpportunityDetail';
@@ -45,6 +51,10 @@ import OpportunityClosingPage from '@/pages/opportunities/OpportunityClosing';
 import AnalyticsPage from '@/pages/analytics/Analytics';
 import AnalyticsReportsPage from '@/pages/analytics/AnalyticsReports';
 import AnalyticsReportDetailPage from '@/pages/analytics/AnalyticsReportDetail';
+
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { staleTime: 30_000, retry: 1 } },
+});
 
 function ProtectedRoute({
   component: Component,
@@ -72,6 +82,9 @@ function Router() {
   return (
     <Switch>
       <Route path="/login" component={LoginPage} />
+      <Route path="/register" component={RegisterPage} />
+      <Route path="/forgot-password" component={ForgotPasswordPage} />
+      <Route path="/reset-password" component={ResetPasswordPage} />
       <Route path="/onboarding" component={OnboardingPage} />
 
       {/* Root redirect */}
@@ -146,6 +159,9 @@ function Router() {
       </Route>
       <Route path="/automation">
         <ProtectedRoute component={OwnerAutomationOverview} roles={['owner']} />
+      </Route>
+      <Route path="/dashboard/agents">
+        <ProtectedRoute component={OwnerAgentsPage} roles={['owner']} />
       </Route>
 
       {/* Owner/Agent shared routes */}
@@ -230,12 +246,15 @@ function Router() {
 
 export default function App() {
   return (
-    <AuthProvider>
-      <CrmDataProvider>
-        <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
-          <Router />
-        </WouterRouter>
-      </CrmDataProvider>
-    </AuthProvider>
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <CrmDataProvider>
+          <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, '')}>
+            <Toaster position="top-right" richColors />
+            <Router />
+          </WouterRouter>
+        </CrmDataProvider>
+      </AuthProvider>
+    </QueryClientProvider>
   );
 }

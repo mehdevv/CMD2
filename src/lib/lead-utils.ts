@@ -1,15 +1,16 @@
 import type { Lead } from './types';
 
-export function assignedNameToOwnerId(assignedTo: string): string {
-  const map: Record<string, string> = {
-    'Mehdi Kaci': 'agent-1',
-    'Sara Boukhalfa': 'agent-2',
-    'Nassim Rahmani': 'agent-3',
-  };
-  return map[assignedTo] ?? 'agent-1';
+/** Owner profile id for a new opportunity: explicit assignee on the lead, else current user. */
+export function leadAssigneeOwnerId(lead: Lead, fallbackUserId: string): string {
+  return lead.assignedToUserId ?? fallbackUserId;
 }
 
-/** Deterministic mock enrichment from email domain (no network). */
+/** Whether this lead is assigned to the given profile id (RLS-safe). */
+export function leadOwnedByUser(lead: Lead, userId: string): boolean {
+  return lead.assignedToUserId === userId;
+}
+
+/** Deterministic demo enrichment from email domain (no network). */
 export function mockAssistantEnrichment(lead: Lead): Partial<Lead> {
   const email = lead.email?.trim();
   if (!email || !email.includes('@')) {

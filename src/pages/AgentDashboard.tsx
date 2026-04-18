@@ -9,28 +9,20 @@ import { NeedsAttentionList } from '@/components/agent/NeedsAttentionList';
 import { DraftsToApproveList } from '@/components/agent/DraftsToApproveList';
 import { MyOpportunitiesList } from '@/components/agent/MyOpportunitiesList';
 import { TodaysFollowUpsTable } from '@/components/agent/TodaysFollowUpsTable';
-import { MOCK_CONVERSATIONS } from '@/lib/mock-data';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCrmData } from '@/contexts/CrmDataContext';
-import { assignedNameToOwnerId } from '@/lib/lead-utils';
-
-const AI_DRAFTS = MOCK_CONVERSATIONS.slice(0, 3);
-
-const TODAY_FOLLOWUPS = [
-  { contact: 'Mohamed Benali', preview: 'Hey, just following up — are you still interested?', channel: 'whatsapp' as const, time: '10:00 AM', status: 'Scheduled' },
-  { contact: 'Sofiane Meziane', preview: 'Bonjour, je ne veux pas que vous passiez à côté...', channel: 'facebook' as const, time: '2:00 PM', status: 'Scheduled' },
-  { contact: 'Nadia Hamdi', preview: "Last message from me, let me know when you're ready!", channel: 'whatsapp' as const, time: '11:30 AM', status: 'Sent' },
-];
+import { leadOwnedByUser } from '@/lib/lead-utils';
 
 export default function AgentDashboard() {
   const { user } = useAuth();
-  const { leads, opportunities } = useCrmData();
+  const { leads, opportunities, conversations } = useCrmData();
+  const draftConversations = conversations.slice(0, 3);
   const firstName = user?.name.split(' ')[0] ?? 'there';
 
   const myActiveLeadCount = useMemo(
     () =>
       user
-        ? leads.filter(l => assignedNameToOwnerId(l.assignedTo) === user.id && l.stage !== 'closed').length
+        ? leads.filter(l => leadOwnedByUser(l, user.id) && l.stage !== 'closed').length
         : 0,
     [leads, user]
   );
@@ -39,7 +31,7 @@ export default function AgentDashboard() {
     () =>
       user
         ? leads
-            .filter(l => l.aiStatus === 'escalated' && assignedNameToOwnerId(l.assignedTo) === user.id)
+            .filter(l => l.aiStatus === 'escalated' && leadOwnedByUser(l, user.id))
             .slice(0, 3)
         : [],
     [leads, user]
@@ -78,8 +70,8 @@ export default function AgentDashboard() {
         cols={3}
         items={[
           { label: 'My active leads', value: String(myActiveLeadCount) },
-          { label: 'Follow-ups today', value: '5' },
-          { label: 'Messages to approve', value: '3' },
+          { label: 'Follow-ups today', value: '—' },
+          { label: 'Messages to review', value: String(draftConversations.length) },
         ]}
       />
 
@@ -89,7 +81,7 @@ export default function AgentDashboard() {
         </PageSection>
 
         <PageSection title="Messages to approve">
-          <DraftsToApproveList conversations={AI_DRAFTS} />
+          <DraftsToApproveList conversations={draftConversations} />
         </PageSection>
       </div>
 
@@ -106,7 +98,7 @@ export default function AgentDashboard() {
       </PageSection>
 
       <PageSection title={"Today's automated follow-ups"} padding="none">
-        <TodaysFollowUpsTable rows={TODAY_FOLLOWUPS} />
+        <TodaysFollowUpsTable rows={[]} />
       </PageSection>
     </AppShell>
   );

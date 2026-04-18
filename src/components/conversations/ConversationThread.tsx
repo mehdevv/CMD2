@@ -20,6 +20,8 @@ export interface ConversationThreadProps {
   fillParent?: boolean;
   /** Inbox: no outer card chrome (messages + compose only). */
   variant?: 'card' | 'plain';
+  /** When set, Send button calls this after validation (e.g. persist to Supabase). */
+  onSend?: () => void | Promise<void>;
 }
 
 export function ConversationThread({
@@ -34,6 +36,7 @@ export function ConversationThread({
   betweenMessagesAndCompose,
   fillParent,
   variant = 'card',
+  onSend,
 }: ConversationThreadProps) {
   const placeholder = takenOver
     ? 'Write a message...'
@@ -87,8 +90,9 @@ export function ConversationThread({
           <button
             type="button"
             className="scale-btn-primary self-end px-3"
-            disabled={!takenOver || !message}
+            disabled={!takenOver || !message.trim()}
             data-testid={composeMode === 'textarea' ? 'button-send' : 'button-send-inbox'}
+            onClick={() => void onSend?.()}
           >
             {composeMode === 'textarea' ? <Send size={14} /> : 'Send'}
           </button>

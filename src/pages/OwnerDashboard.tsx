@@ -8,7 +8,6 @@ import { PipelineSummaryStrip } from '@/components/dashboards/PipelineSummaryStr
 import { IntelligenceHighlightCard } from '@/components/dashboards/IntelligenceHighlightCard';
 import { TeamPipelineTable } from '@/components/dashboards/TeamPipelineTable';
 import { RecentMeetingList } from '@/components/meetings/RecentMeetingList';
-import { MOCK_AGENTS } from '@/lib/mock-data';
 import { useCrmData } from '@/contexts/CrmDataContext';
 import { selectOpenPipelineValue, selectPipelineByStage, selectWinRate } from '@/lib/analytics';
 
@@ -45,15 +44,11 @@ const INTELLIGENCE = [
   },
 ];
 
-const RECENT_MEETINGS = [
-  { id: '1', name: 'Fatima Zahra Aït', date: 'Today 3:15 PM', summary: 'Interested in pilot program. Main concern is onboarding complexity. Wants revised proposal for 200-unit pack.' },
-  { id: '2', name: 'Bilal Hadjadj', date: 'Yesterday 11:00 AM', summary: 'Positive outcome. Ready to sign. Needs final approval from CEO before committing.' },
-];
-
 const DASH_FILTERS = {} as const;
 
 export default function OwnerDashboard() {
-  const { leads, opportunities } = useCrmData();
+  const { leads, opportunities, teamMembers } = useCrmData();
+  const agentOptions = teamMembers.filter(u => u.role === 'agent');
   const [agentIdFilter, setAgentIdFilter] = useState('');
 
   const openPipe = useMemo(() => selectOpenPipelineValue(opportunities, DASH_FILTERS), [opportunities]);
@@ -114,7 +109,7 @@ export default function OwnerDashboard() {
             style={{ height: 32 }}
           >
             <option value="">All agents</option>
-            {MOCK_AGENTS.map(a => (
+            {agentOptions.map(a => (
               <option key={a.id} value={a.id}>
                 {a.name}
               </option>
@@ -126,7 +121,8 @@ export default function OwnerDashboard() {
       </PageSection>
 
       <PageSection title="Recent meeting summaries">
-        <RecentMeetingList items={RECENT_MEETINGS} />
+        <p className="text-[13px] text-[#9999AA] mb-2">Record notes from a contact to build this list.</p>
+        <RecentMeetingList items={[]} />
       </PageSection>
     </AppShell>
   );

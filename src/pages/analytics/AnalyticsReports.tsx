@@ -7,7 +7,6 @@ import { DataTable } from '@/components/ui/DataTable';
 import { useCrmData } from '@/contexts/CrmDataContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { planReport } from '@/lib/report-planner';
-import { MOCK_USERS } from '@/lib/mock-data';
 import type { AnalyticsFilters } from '@/lib/types';
 import { AskQuestionCard } from '@/components/analytics/AskQuestionCard';
 import { REPORT_LIST_COLUMNS, reportToDataTableRow } from '@/components/analytics/ReportListRow';
@@ -21,7 +20,7 @@ const PRESETS = [
 ];
 
 export default function AnalyticsReportsPage() {
-  const { reports, leads, opportunities, addReport } = useCrmData();
+  const { reports, leads, opportunities, teamMembers, addReport } = useCrmData();
   const { user } = useAuth();
   const [, setLoc] = useLocation();
   const [filters] = useState<AnalyticsFilters>(() => ({
@@ -31,14 +30,16 @@ export default function AnalyticsReportsPage() {
   }));
 
   const runPreset = (text: string) => {
-    const report = planReport(
-      text,
-      { leads, opportunities, users: MOCK_USERS, now: new Date() },
-      filters,
-      user?.name ?? 'User'
-    );
-    addReport(report);
-    setLoc(`/analytics/reports/${report.id}`);
+    void (async () => {
+      const report = planReport(
+        text,
+        { leads, opportunities, users: teamMembers, now: new Date() },
+        filters,
+        user?.name ?? 'User'
+      );
+      const id = await addReport(report);
+      setLoc(`/analytics/reports/${id}`);
+    })();
   };
 
   return (

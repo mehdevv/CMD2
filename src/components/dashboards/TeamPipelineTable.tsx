@@ -3,7 +3,7 @@ import { UserAvatar } from '@/components/ui/UserAvatar';
 import { ChannelDot } from '@/components/ui/ChannelDot';
 import { StageBadge } from '@/components/ui/ScaleBadge';
 import { AIStatusLabel } from '@/components/ui/AIStatusLabel';
-import { assignedNameToOwnerId } from '@/lib/lead-utils';
+import { leadOwnedByUser } from '@/lib/lead-utils';
 import type { Lead } from '@/lib/types';
 
 export interface TeamPipelineTableProps {
@@ -15,7 +15,7 @@ export interface TeamPipelineTableProps {
 
 export function TeamPipelineTable({ leads, maxRows = 8, agentIdFilter }: TeamPipelineTableProps) {
   const filtered = agentIdFilter
-    ? leads.filter(l => assignedNameToOwnerId(l.assignedTo) === agentIdFilter)
+    ? leads.filter(l => agentIdFilter && leadOwnedByUser(l, agentIdFilter))
     : leads;
   const rows = filtered.slice(0, maxRows);
 
