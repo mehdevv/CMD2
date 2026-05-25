@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { Sidebar } from './Sidebar';
 import { Topbar } from './Topbar';
+import { MotionPage } from '@/components/motion';
 
 interface AppShellProps {
   title: string;
@@ -24,7 +25,7 @@ export function AppShell({ title, children, fullHeight, noPadding }: AppShellPro
           maxWidth: noPadding ? undefined : undefined,
         }}
       >
-        {children}
+        <MotionPage className={fullHeight ? 'flex min-h-0 flex-1 flex-col' : undefined}>{children}</MotionPage>
       </main>
     </div>
   );

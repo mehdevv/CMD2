@@ -1,108 +1,160 @@
+import { useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
-import { ProgressBar } from '@/components/ui/ProgressBar';
 import { ScaleBadge } from '@/components/ui/ScaleBadge';
-import { MOCK_INVOICES } from '@/lib/mock-data';
-import { Check, Download } from 'lucide-react';
+import { Check } from 'lucide-react';
 
-const PLANS = [
-  { name: 'Freelancer', price: '$20', users: 'Up to 10', messages: '200,000', features: ['4 AI agents', 'Basic analytics', 'Email support'] },
-  { name: 'E-commerce', price: '$30', users: 'Up to 25', messages: '500,000', features: ['4 AI agents', 'Advanced analytics', 'Priority support', 'Custom templates'], current: true },
-  { name: 'Edu Centers', price: '$50', users: 'Unlimited', messages: '1,000,000', features: ['4 AI agents', 'Full analytics', 'Dedicated support', 'API access'] },
+const DEFAULT_PLANS = [
+  { id: 'freelancer', name: 'Freelancer', price: '20', seats: '10', messages: '200000', enabled: true },
+  { id: 'ecommerce', name: 'E-commerce', price: '30', seats: '25', messages: '500000', enabled: true },
+  { id: 'edu', name: 'Edu Centers', price: '50', seats: '999', messages: '1000000', enabled: true },
 ];
 
 export default function AdminBillingPage() {
+  const [plans, setPlans] = useState(DEFAULT_PLANS);
+  const [defaultCurrency, setDefaultCurrency] = useState('USD');
+  const [trialDays, setTrialDays] = useState('14');
+  const [invoicePrefix, setInvoicePrefix] = useState('SCL');
+  const [taxRate, setTaxRate] = useState('19');
+  const [provider, setProvider] = useState('stripe');
+  const [webhookUrl, setWebhookUrl] = useState('https://api.scale.dz/webhooks/billing');
+
+  const updatePlan = (id: string, field: 'price' | 'seats' | 'messages', value: string) => {
+    setPlans(prev => prev.map(p => (p.id === id ? { ...p, [field]: value } : p)));
+  };
+
+  const togglePlan = (id: string) => {
+    setPlans(prev => prev.map(p => (p.id === id ? { ...p, enabled: !p.enabled } : p)));
+  };
+
   return (
-    <AppShell title="Billing">
-      {/* Current plan */}
-      <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Current plan</h2>
-      <div className="scale-card max-w-lg mb-8">
-        <div className="flex items-start justify-between mb-4">
-          <div>
-            <div className="text-[18px] font-semibold text-[#1A1A3E]">E-commerce Plan</div>
-            <div className="text-[14px] text-[#6B6B80] mt-0.5">$30 / month · Renews May 1, 2026</div>
-          </div>
-          <a href="#plans" className="scale-btn-ghost text-[13px]">Change plan</a>
-        </div>
-        <div className="space-y-4">
-          <div>
-            <ProgressBar value={420000} max={500000} label="Messages" showValues />
-          </div>
-          <div>
-            <ProgressBar value={5} max={25} label="Seats" showValues />
-          </div>
-        </div>
-      </div>
-
-      {/* Plans */}
-      <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4" id="plans">All plans</h2>
-      <div className="grid grid-cols-3 gap-4 mb-8">
-        {PLANS.map(plan => (
-          <div
-            key={plan.name}
-            className="scale-card"
-            style={{ borderColor: plan.current ? '#2B62E8' : '#E4E4E8' }}
-            data-testid={`card-plan-${plan.name.toLowerCase().replace(' ', '-')}`}
-          >
-            <div className="flex items-start justify-between mb-1">
-              <div className="text-[15px] font-medium text-[#1A1A3E]">{plan.name}</div>
-              {plan.current && <ScaleBadge variant="accent">Current plan</ScaleBadge>}
-            </div>
-            <div className="text-[22px] font-semibold text-[#1A1A3E] mb-3">{plan.price}<span className="text-[13px] font-normal text-[#6B6B80]">/mo</span></div>
-            <div className="text-[13px] text-[#6B6B80] mb-1">{plan.users} users</div>
-            <div className="text-[13px] text-[#6B6B80] mb-4">{plan.messages} messages/mo</div>
-            <ul className="space-y-1.5 mb-5">
-              {plan.features.map(f => (
-                <li key={f} className="flex items-center gap-1.5 text-[13px] text-[#6B6B80]">
-                  <Check size={12} className="text-[#16A34A]" /> {f}
-                </li>
-              ))}
-            </ul>
-            {plan.current ? (
-              <div className="text-[13px] text-[#9999AA] text-center py-1.5">Your current plan</div>
-            ) : (
-              <button className="scale-btn-secondary w-full justify-center text-[13px]" data-testid={`button-upgrade-${plan.name.toLowerCase()}`}>
-                Upgrade
-              </button>
-            )}
-          </div>
-        ))}
-      </div>
-
-      {/* Invoices */}
-      <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Invoice history</h2>
-      <div className="scale-card p-0 overflow-hidden mb-8">
-        <table className="w-full">
-          <thead>
-            <tr style={{ background: '#F7F7F8', borderBottom: '1px solid #E4E4E8' }}>
-              <th className="text-left py-2 px-4 text-[12px] font-medium text-[#6B6B80]">Date</th>
-              <th className="text-left py-2 px-4 text-[12px] font-medium text-[#6B6B80]">Description</th>
-              <th className="text-left py-2 px-4 text-[12px] font-medium text-[#6B6B80]">Amount</th>
-              <th className="text-left py-2 px-4 text-[12px] font-medium text-[#6B6B80]">Status</th>
-              <th className="py-2 px-4" />
-            </tr>
-          </thead>
-          <tbody>
-            {MOCK_INVOICES.map(inv => (
-              <tr key={inv.id} className="border-b border-[#E4E4E8] last:border-0 hover:bg-[#F7F7F8]" style={{ height: 48 }} data-testid={`row-invoice-${inv.id}`}>
-                <td className="px-4 text-[13px] text-[#6B6B80]">{inv.date}</td>
-                <td className="px-4 text-[14px] text-[#1A1A3E]">{inv.description}</td>
-                <td className="px-4 text-[14px] font-medium text-[#1A1A3E]">${String(inv.amount)}</td>
-                <td className="px-4"><ScaleBadge variant={inv.status === 'paid' ? 'success' : 'warning'}>{inv.status.charAt(0).toUpperCase() + inv.status.slice(1)}</ScaleBadge></td>
-                <td className="px-4">
-                  <button className="text-[#6B6B80] hover:text-[#2B62E8]" title="Download PDF" data-testid={`button-download-invoice-${inv.id}`}><Download size={14} /></button>
-                </td>
-              </tr>
+    <AppShell title="Billing settings">
+      <p className="text-[14px] text-[#6B6B80] mb-6">
+        Configure subscription plans and payment infrastructure for all workspaces on the platform.
+      </p>
+      <div className="max-w-4xl space-y-8">
+        <section>
+          <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-1">Plan catalog</h2>
+          <p className="text-[13px] text-[#6B6B80] mb-4">
+            Plans shown to business owners when they subscribe or upgrade. Changes apply to new checkouts.
+          </p>
+          <div className="space-y-3">
+            {plans.map(plan => (
+              <div key={plan.id} className="scale-card" data-testid={`admin-plan-${plan.id}`}>
+                <div className="flex items-start justify-between gap-4 mb-4">
+                  <div>
+                    <div className="text-[15px] font-medium text-[#1A1A3E]">{plan.name}</div>
+                    <div className="text-[13px] text-[#6B6B80] mt-0.5">Public plan · billed monthly</div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <ScaleBadge variant={plan.enabled ? 'success' : 'default'}>
+                      {plan.enabled ? 'Active' : 'Hidden'}
+                    </ScaleBadge>
+                    <button
+                      type="button"
+                      className="scale-btn-ghost text-[13px]"
+                      onClick={() => togglePlan(plan.id)}
+                      data-testid={`button-toggle-plan-${plan.id}`}
+                    >
+                      {plan.enabled ? 'Hide plan' : 'Activate plan'}
+                    </button>
+                  </div>
+                </div>
+                <div className="grid grid-cols-3 gap-4">
+                  <div>
+                    <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Price (USD/mo)</label>
+                    <input
+                      type="number"
+                      value={plan.price}
+                      onChange={e => updatePlan(plan.id, 'price', e.target.value)}
+                      className="scale-input w-full"
+                      data-testid={`input-plan-price-${plan.id}`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Seat cap</label>
+                    <input
+                      type="number"
+                      value={plan.seats}
+                      onChange={e => updatePlan(plan.id, 'seats', e.target.value)}
+                      className="scale-input w-full"
+                      data-testid={`input-plan-seats-${plan.id}`}
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Messages / month</label>
+                    <input
+                      type="number"
+                      value={plan.messages}
+                      onChange={e => updatePlan(plan.id, 'messages', e.target.value)}
+                      className="scale-input w-full"
+                      data-testid={`input-plan-messages-${plan.id}`}
+                    />
+                  </div>
+                </div>
+              </div>
             ))}
-          </tbody>
-        </table>
-      </div>
+          </div>
+          <button type="button" className="scale-btn-primary mt-4 text-[13px]" data-testid="button-save-plans">
+            Save plan catalog
+          </button>
+        </section>
 
-      {/* Payment method */}
-      <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Payment method</h2>
-      <div className="scale-card max-w-sm">
-        <div className="text-[14px] text-[#6B6B80] mb-0.5">Visa ending in 4242</div>
-        <div className="text-[13px] text-[#9999AA] mb-3">Expires 12/27 · billing@scale.dz</div>
-        <button className="scale-btn-ghost text-[13px] px-0" data-testid="button-update-payment">Update payment method</button>
+        <section className="scale-card max-w-2xl">
+          <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Billing defaults</h2>
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Default currency</label>
+              <select value={defaultCurrency} onChange={e => setDefaultCurrency(e.target.value)} className="scale-input w-full" data-testid="select-default-currency">
+                <option value="USD">USD</option>
+                <option value="DZD">DZD</option>
+                <option value="EUR">EUR</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Free trial (days)</label>
+              <input type="number" value={trialDays} onChange={e => setTrialDays(e.target.value)} className="scale-input w-full" data-testid="input-trial-days" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Invoice prefix</label>
+              <input type="text" value={invoicePrefix} onChange={e => setInvoicePrefix(e.target.value)} className="scale-input w-full" data-testid="input-invoice-prefix" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Default tax rate (%)</label>
+              <input type="number" value={taxRate} onChange={e => setTaxRate(e.target.value)} className="scale-input w-full" data-testid="input-tax-rate" />
+            </div>
+          </div>
+          <button type="button" className="scale-btn-secondary mt-4 text-[13px]" data-testid="button-save-billing-defaults">
+            Save defaults
+          </button>
+        </section>
+
+        <section className="scale-card max-w-2xl">
+          <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-1">Payment provider</h2>
+          <p className="text-[13px] text-[#6B6B80] mb-4">Platform-wide checkout integration. Business owners never see these keys.</p>
+          <div className="space-y-4">
+            <div>
+              <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Provider</label>
+              <select value={provider} onChange={e => setProvider(e.target.value)} className="scale-input w-full max-w-xs" data-testid="select-payment-provider">
+                <option value="stripe">Stripe</option>
+                <option value="chargily">Chargily Pay</option>
+              </select>
+            </div>
+            <div>
+              <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Webhook URL</label>
+              <input type="url" value={webhookUrl} onChange={e => setWebhookUrl(e.target.value)} className="scale-input w-full" data-testid="input-webhook-url" />
+            </div>
+            <div>
+              <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Secret key</label>
+              <input type="password" value="sk_live_••••••••••••4242" readOnly className="scale-input w-full" data-testid="input-provider-secret" />
+              <p className="text-[12px] text-[#9999AA] mt-1.5 flex items-center gap-1">
+                <Check size={12} className="text-[#16A34A]" /> Connected · rotate in production dashboard
+              </p>
+            </div>
+          </div>
+          <button type="button" className="scale-btn-secondary mt-4 text-[13px]" data-testid="button-save-provider">
+            Save provider settings
+          </button>
+        </section>
       </div>
     </AppShell>
   );

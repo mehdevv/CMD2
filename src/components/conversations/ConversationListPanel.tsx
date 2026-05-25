@@ -1,6 +1,7 @@
 import { cn } from '@/lib/utils';
 import type { Conversation } from '@/lib/types';
 import { ConversationListRow } from '@/components/conversations/ConversationListRow';
+import { MotionStagger } from '@/components/motion';
 import { SearchField } from '@/components/ui/SearchField';
 
 export type ConversationListTab = 'all' | 'ai' | 'human' | 'pending';
@@ -67,7 +68,7 @@ export function ConversationListPanel({
         ))}
       </div>
 
-      <div className="scale-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain">
+      <MotionStagger className="scale-scroll min-h-0 flex-1 overflow-y-auto overscroll-contain">
         {filtered.map(c => (
           <ConversationListRow
             key={c.id}
@@ -76,7 +77,7 @@ export function ConversationListPanel({
             onSelect={() => onSelect(c)}
           />
         ))}
-      </div>
+      </MotionStagger>
     </div>
   );
 }

@@ -11,16 +11,16 @@ High-level feature matrix so you can quickly see who has access to what.
 | **Dashboard** | KPIs + activity feed + channel health + pending templates + alerts | ✅ (admin) | — | — |
 | **Dashboard** | KPIs + pipeline strip + intelligence cards + team pipeline + meeting summaries | — | ✅ | — |
 | **Dashboard** | My leads + my opportunities + follow-ups + drafts to approve | — | — | ✅ |
-| **Leads** | Kanban + list + filters + enrichment + add lead | ✅ | ✅ | ✅ |
-| **Leads** | Open contact detail + enrichment + conversation + deal card + meeting shortcuts + convert to opportunity | ✅ | ✅ | ✅ |
-| **Opportunities** | List + board + detail + stage tabs + Won/Lost (mock CRM state) | ✅ | ✅ | ✅ |
-| **Inbox** | Triaged conversation list + take-over / release + compose | ✅ | ✅ | ✅ |
-| **Meetings** | Pre-meeting brief | ✅ | ✅ | ✅ |
-| **Meetings** | Post-meeting notes (voice + text) with assistant summary | ✅ | ✅ | ✅ |
-| **Intelligence** | Objections / Opportunities / Risk tabs | ✅ | ✅ | — |
-| **Performance** | Agent metrics + leaderboard + weekly digest | ✅ | ✅ | — |
-| **Analytics** | KPIs + charts + URL filters + ask-question entry | ✅ | ✅ | — |
-| **Reports** | List + detail + print export + share link | ✅ | ✅ | — |
+| **Leads** | Kanban + list + filters + enrichment + add lead | — | ✅ | ✅ |
+| **Leads** | Open contact detail + enrichment + conversation + deal card + meeting shortcuts + convert to opportunity | — | ✅ | ✅ |
+| **Opportunities** | List + board + detail + stage tabs + Won/Lost (mock CRM state) | — | ✅ | ✅ |
+| **Inbox** | Triaged conversation list + take-over / release + compose | — | ✅ | ✅ |
+| **Meetings** | Pre-meeting brief | — | ✅ | ✅ |
+| **Meetings** | Post-meeting notes (voice + text) with assistant summary | — | ✅ | ✅ |
+| **Intelligence** | Objections / Opportunities / Risk tabs | — | ✅ | — |
+| **Performance** | Agent metrics + leaderboard + weekly digest | — | ✅ | — |
+| **Analytics** | KPIs + charts + URL filters + ask-question entry | — | ✅ | — |
+| **Reports** | List + detail + print export + share link | — | ✅ | — |
 | **Automation (admin)** | Overview of 4 agents | ✅ | — | — |
 | **Automation (admin)** | Lead Follow-Up config (LLM + prompts + sequence + triggers + escalations) | ✅ | — | — |
 | **Automation (admin)** | Client Chat config (LLM + FAQ + rules + triggers + escalations) | ✅ | — | — |
@@ -35,7 +35,8 @@ High-level feature matrix so you can quickly see who has access to what.
 | **Settings** | Channels (connect / disconnect / webhook / API token) | ✅ | — | — |
 | **Settings** | Templates (CRUD + approval status) | ✅ | — | — |
 | **Settings** | Rules (refund policy + IF/THEN + test) | ✅ | — | — |
-| **Settings** | Billing (plan + invoices + payment method) | ✅ | — | — |
+| **Settings** | Billing settings (plan catalog, provider, defaults) | ✅ | — | — |
+| **Account** | Billing (plan, invoices, payment method) | — | ✅ | — |
 
 ## Feature groups (functional)
 
@@ -71,11 +72,13 @@ Cross-cutting automation features:
 - Take-over from inbox / contact detail (pauses automation on that thread)
 
 ### Platform / admin
+- Platform supervision (dashboard, activity log) — **no client CRM**
 - User management with 3 roles
 - Multi-channel connections (WA / IG / FB; Telegram + TikTok roadmapped)
 - Message template library with approval workflow (WhatsApp template policy)
 - Rule engine (refund policy + IF/THEN rules)
-- Billing + plan selection
+- Billing settings (plan catalog, payment provider) — platform admin only
+- Business billing (subscription, invoices) — owner workspace
 - Webhook + API token exposure for integrations
 
 ### Design system & copy

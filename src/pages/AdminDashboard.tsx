@@ -61,8 +61,8 @@ export default function AdminDashboard() {
                 <span className="mt-0.5 text-[16px] text-[#2B62E8]">ℹ</span>
                 <p className="text-[13px] leading-snug text-[#6B6B80]">
                   Weekly loss digest is ready in{' '}
-                  <Link href="/analytics/reports">
-                    <a className="text-[#2B62E8] hover:underline">Reports</a>
+                  <Link href="/admin/automation/activity">
+                    <a className="text-[#2B62E8] hover:underline">Activity log</a>
                   </Link>
                   .
                 </p>

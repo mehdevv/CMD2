@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react';
 import { Send } from 'lucide-react';
 import type { AIStatus, Message } from '@/lib/types';
-import { MessageBubble } from '@/components/conversations/MessageBubble';
+import { MessageBubbleMotion } from '@/components/motion/MessageBubbleMotion';
 import { AIStatusLabel } from '@/components/ui/AIStatusLabel';
 
 export type ConversationComposeMode = 'textarea' | 'input';
@@ -58,8 +58,8 @@ export function ConversationThread({
             : 'scale-scroll max-h-[480px] flex-1 space-y-4 overflow-y-auto overscroll-contain p-5'
         }
       >
-        {messages.map(m => (
-          <MessageBubble key={m.id} message={m} />
+        {messages.map((m, i) => (
+          <MessageBubbleMotion key={m.id} message={m} index={i} />
         ))}
       </div>
 

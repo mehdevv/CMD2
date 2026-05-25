@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { ExternalLink, Pencil } from 'lucide-react';
 import type { Lead } from '@/lib/types';
+import { useAuth } from '@/contexts/AuthContext';
+import { logAutomationActivity } from '@/lib/db/automation';
 import { isEnrichmentIncomplete, mockAssistantEnrichment } from '@/lib/lead-utils';
 import { EmptyState } from '@/components/ui/EmptyState';
 import { EnrichmentDialog } from './EnrichmentDialog';
@@ -12,6 +14,7 @@ interface EnrichmentCardProps {
 }
 
 export function EnrichmentCard({ lead, onPatch }: EnrichmentCardProps) {
+  const { user } = useAuth();
   const [open, setOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const incomplete = isEnrichmentIncomplete(lead);
@@ -19,7 +22,17 @@ export function EnrichmentCard({ lead, onPatch }: EnrichmentCardProps) {
   const handleReEnrich = () => {
     setBusy(true);
     window.setTimeout(() => {
-      onPatch(mockAssistantEnrichment(lead));
+      const patch = mockAssistantEnrichment(lead);
+      onPatch(patch);
+      if (user?.orgId) {
+        void logAutomationActivity({
+          orgId: user.orgId,
+          kind: 'enrichment',
+          agentId: 'followup',
+          leadId: lead.id,
+          summary: 'Assistant enrichment completed — company and pain points updated',
+        });
+      }
       setBusy(false);
     }, 1200);
   };

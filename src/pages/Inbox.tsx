@@ -1,4 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { toast } from 'sonner';
 import { AppShell } from '@/components/layout/AppShell';
 import type { Conversation } from '@/lib/types';
 import { ConversationListPanel, type ConversationListTab } from '@/components/conversations/ConversationListPanel';
@@ -6,10 +7,15 @@ import { ThreadHeader } from '@/components/conversations/ThreadHeader';
 import { ConversationThread } from '@/components/conversations/ConversationThread';
 import { useCrmData } from '@/contexts/CrmDataContext';
 import { useAuth } from '@/contexts/AuthContext';
+import { conversationsForRole } from '@/lib/agent-crm';
 
 export default function InboxPage() {
   const { user } = useAuth();
-  const { conversations, sendMessage, setConversationTakeover } = useCrmData();
+  const { leads, conversations, sendMessage, setConversationTakeover } = useCrmData();
+  const scopedConversations = useMemo(
+    () => conversationsForRole(leads, conversations, user),
+    [leads, conversations, user]
+  );
   const [search, setSearch] = useState('');
   const [tab, setTab] = useState<ConversationListTab>('all');
   const [selected, setSelected] = useState<Conversation | null>(null);
@@ -17,17 +23,17 @@ export default function InboxPage() {
   const [takenOver, setTakenOver] = useState(false);
 
   useEffect(() => {
-    if (conversations.length === 0) {
+    if (scopedConversations.length === 0) {
       queueMicrotask(() => setSelected(null));
       return;
     }
     queueMicrotask(() => {
       setSelected(prev => {
-        if (prev && conversations.some(c => c.id === prev.id)) return prev;
-        return conversations[0] ?? null;
+        if (prev && scopedConversations.some(c => c.id === prev.id)) return prev;
+        return scopedConversations[0] ?? null;
       });
     });
-  }, [conversations]);
+  }, [scopedConversations]);
 
   useEffect(() => {
     if (!selected) {
@@ -45,6 +51,7 @@ export default function InboxPage() {
       assignedToUserId: next ? user.id : null,
     });
     setTakenOver(next);
+    toast.success(next ? 'You took over — automation paused' : 'Released — automation resumed');
   }, [selected, user, takenOver, setConversationTakeover]);
 
   const handleSend = useCallback(async () => {
@@ -67,7 +74,7 @@ export default function InboxPage() {
           onSearchChange={setSearch}
           tab={tab}
           onTabChange={setTab}
-          conversations={conversations}
+          conversations={scopedConversations}
           selectedId={selected?.id ?? null}
           onSelect={setSelected}
         />

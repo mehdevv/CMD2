@@ -14,6 +14,10 @@ function lastAutomationAgentLabel(messages: Conversation['messages']): string {
 }
 
 export function DraftsToApproveList({ conversations }: DraftsToApproveListProps) {
+  if (conversations.length === 0) {
+    return <p className="text-[13px] text-[#9999AA]">No automation drafts waiting — you&apos;re caught up.</p>;
+  }
+
   return (
     <div className="space-y-0">
       {conversations.map((conv, i) => (

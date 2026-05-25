@@ -34,6 +34,7 @@ import AdminChannelsPage from '@/pages/AdminChannels';
 import AdminTemplatesPage from '@/pages/AdminTemplates';
 import AdminRulesPage from '@/pages/AdminRules';
 import AdminBillingPage from '@/pages/AdminBilling';
+import OwnerBillingPage from '@/pages/OwnerBilling';
 import OwnerAutomationOverview from '@/pages/owner/automation/OwnerAutomationOverview';
 import OwnerAgentFollowUp from '@/pages/owner/automation/OwnerAgentFollowUp';
 import OwnerAgentChat from '@/pages/owner/automation/OwnerAgentChat';
@@ -192,6 +193,10 @@ function Router() {
         }}
       </Route>
 
+      <Route path="/billing">
+        <ProtectedRoute component={OwnerBillingPage} roles={['owner']} />
+      </Route>
+
       {/* Profile (all signed-in roles) */}
       <Route path="/profile/security">
         <ProtectedRoute component={SecurityPage} />
@@ -206,66 +211,64 @@ function Router() {
         <ProtectedRoute component={ProfilePage} />
       </Route>
 
-      {/* Shared authenticated routes */}
+      {/* CRM — business accounts only (owner + agent); platform admin supervises via /admin/* */}
       <Route path="/leads">
-        <ProtectedRoute component={LeadsPage} />
+        <ProtectedRoute component={LeadsPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/leads/:id">
-        <ProtectedRoute component={ContactDetailPage} />
+        <ProtectedRoute component={ContactDetailPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/inbox">
-        <ProtectedRoute component={InboxPage} />
+        <ProtectedRoute component={InboxPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/meetings/brief/:id">
-        <ProtectedRoute component={MeetingBriefPage} />
+        <ProtectedRoute component={MeetingBriefPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/meetings/notes/:id">
-        <ProtectedRoute component={MeetingNotesPage} />
+        <ProtectedRoute component={MeetingNotesPage} roles={['owner', 'agent']} />
       </Route>
 
-      {/* Pipeline (shared) — specific paths before :id */}
+      {/* Pipeline — business accounts only */}
       <Route path="/opportunities/board">
-        <ProtectedRoute component={OpportunitiesBoardPage} />
+        <ProtectedRoute component={OpportunitiesBoardPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/opportunities/:id/qualification">
-        <ProtectedRoute component={OpportunityQualificationPage} />
+        <ProtectedRoute component={OpportunityQualificationPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/opportunities/:id/need-analysis">
-        <ProtectedRoute component={OpportunityNeedAnalysisPage} />
+        <ProtectedRoute component={OpportunityNeedAnalysisPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/opportunities/:id/proposal">
-        <ProtectedRoute component={OpportunityProposalPage} />
+        <ProtectedRoute component={OpportunityProposalPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/opportunities/:id/negotiation">
-        <ProtectedRoute component={OpportunityNegotiationPage} />
+        <ProtectedRoute component={OpportunityNegotiationPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/opportunities/:id/closing">
-        <ProtectedRoute component={OpportunityClosingPage} />
+        <ProtectedRoute component={OpportunityClosingPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/opportunities/:id">
-        <ProtectedRoute component={OpportunityDetailPage} />
+        <ProtectedRoute component={OpportunityDetailPage} roles={['owner', 'agent']} />
       </Route>
       <Route path="/opportunities">
-        <ProtectedRoute component={OpportunitiesPage} />
+        <ProtectedRoute component={OpportunitiesPage} roles={['owner', 'agent']} />
       </Route>
 
-      {/* Analytics & reports (admin/owner) */}
+      {/* Business insights — owner only */}
       <Route path="/analytics/reports/:id">
-        <ProtectedRoute component={AnalyticsReportDetailPage} roles={['admin', 'owner']} />
+        <ProtectedRoute component={AnalyticsReportDetailPage} roles={['owner']} />
       </Route>
       <Route path="/analytics/reports">
-        <ProtectedRoute component={AnalyticsReportsPage} roles={['admin', 'owner']} />
+        <ProtectedRoute component={AnalyticsReportsPage} roles={['owner']} />
       </Route>
       <Route path="/analytics">
-        <ProtectedRoute component={AnalyticsPage} roles={['admin', 'owner']} />
+        <ProtectedRoute component={AnalyticsPage} roles={['owner']} />
       </Route>
-
-      {/* Intelligence & Performance (admin/owner) */}
       <Route path="/intelligence">
-        <ProtectedRoute component={IntelligencePage} roles={['admin', 'owner']} />
+        <ProtectedRoute component={IntelligencePage} roles={['owner']} />
       </Route>
       <Route path="/performance">
-        <ProtectedRoute component={PerformancePage} roles={['admin', 'owner']} />
+        <ProtectedRoute component={PerformancePage} roles={['owner']} />
       </Route>
 
       {/* 404 fallback */}

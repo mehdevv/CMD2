@@ -1,5 +1,6 @@
 import { memo, useLayoutEffect, useRef } from 'react';
 import { Link, useLocation } from 'wouter';
+import { motion, useReducedMotion } from 'framer-motion';
 import {
   LayoutDashboard,
   Users,
@@ -29,6 +30,7 @@ import { getDashboardRoute } from '@/lib/auth';
 import { BRAND_WORDMARK_PNG } from '@/lib/brand-assets';
 import { cn } from '@/lib/utils';
 import { AGENT_BRAND, type AgentId } from '@/lib/agent-brand';
+import { springSnappy } from '@/lib/motion';
 
 interface NavItem {
   label: string;
@@ -64,24 +66,24 @@ const NAV_ITEMS: { section: string; items: NavItem[] }[] = [
       { label: 'Dashboard', href: '/admin/dashboard', icon: <LayoutDashboard size={16} />, roles: ['admin'] },
       { label: 'Dashboard', href: '/dashboard', icon: <LayoutDashboard size={16} />, roles: ['owner', 'agent'] },
       { label: 'Sales team', href: '/dashboard/agents', icon: <Users size={16} />, roles: ['owner'] },
-      { label: 'Leads', href: '/leads', icon: <Users size={16} />, roles: ['admin', 'owner', 'agent'] },
-      { label: 'Inbox', href: '/inbox', icon: <MessageSquare size={16} />, roles: ['admin', 'owner', 'agent'] },
+      { label: 'Leads', href: '/leads', icon: <Users size={16} />, roles: ['owner', 'agent'] },
+      { label: 'Inbox', href: '/inbox', icon: <MessageSquare size={16} />, roles: ['owner', 'agent'] },
     ],
   },
   {
     section: 'Pipeline',
     items: [
-      { label: 'Opportunities', href: '/opportunities', icon: <Briefcase size={16} />, roles: ['admin', 'owner', 'agent'] },
-      { label: 'Board', href: '/opportunities/board', icon: <Kanban size={16} />, roles: ['admin', 'owner', 'agent'] },
+      { label: 'Opportunities', href: '/opportunities', icon: <Briefcase size={16} />, roles: ['owner', 'agent'] },
+      { label: 'Board', href: '/opportunities/board', icon: <Kanban size={16} />, roles: ['owner', 'agent'] },
     ],
   },
   {
     section: 'Insights',
     items: [
-      { label: 'Intelligence', href: '/intelligence', icon: <TrendingUp size={16} />, roles: ['admin', 'owner'] },
-      { label: 'Performance', href: '/performance', icon: <BarChart3 size={16} />, roles: ['admin', 'owner'] },
-      { label: 'Analytics', href: '/analytics', icon: <PieChart size={16} />, roles: ['admin', 'owner'] },
-      { label: 'Reports', href: '/analytics/reports', icon: <ScrollText size={16} />, roles: ['admin', 'owner'] },
+      { label: 'Intelligence', href: '/intelligence', icon: <TrendingUp size={16} />, roles: ['owner'] },
+      { label: 'Performance', href: '/performance', icon: <BarChart3 size={16} />, roles: ['owner'] },
+      { label: 'Analytics', href: '/analytics', icon: <PieChart size={16} />, roles: ['owner'] },
+      { label: 'Reports', href: '/analytics/reports', icon: <ScrollText size={16} />, roles: ['owner'] },
     ],
   },
   {
@@ -105,7 +107,10 @@ const NAV_ITEMS: { section: string; items: NavItem[] }[] = [
   },
   {
     section: 'Account',
-    items: [{ label: 'Profile', href: '/profile', icon: <UserCircle size={16} />, roles: ['admin', 'owner', 'agent'] }],
+    items: [
+      { label: 'Profile', href: '/profile', icon: <UserCircle size={16} />, roles: ['admin', 'owner', 'agent'] },
+      { label: 'Billing', href: '/billing', icon: <CreditCard size={16} />, roles: ['owner'] },
+    ],
   },
   {
     section: 'Settings',
@@ -114,7 +119,7 @@ const NAV_ITEMS: { section: string; items: NavItem[] }[] = [
       { label: 'Channels', href: '/admin/channels', icon: <Wifi size={16} />, roles: ['admin'] },
       { label: 'Templates', href: '/admin/templates', icon: <FileText size={16} />, roles: ['admin'] },
       { label: 'Rules', href: '/admin/rules', icon: <ShieldCheck size={16} />, roles: ['admin'] },
-      { label: 'Billing', href: '/admin/billing', icon: <CreditCard size={16} />, roles: ['admin'] },
+      { label: 'Billing settings', href: '/admin/billing', icon: <CreditCard size={16} />, roles: ['admin'] },
     ],
   },
 ];
@@ -124,6 +129,7 @@ function SidebarInner() {
   const { user } = useAuth();
   const navScrollRef = useRef<HTMLElement>(null);
   const savedNavScroll = useRef(0);
+  const reduceMotion = useReducedMotion();
 
   useLayoutEffect(() => {
     const el = navScrollRef.current;
@@ -175,7 +181,7 @@ function SidebarInner() {
               const brandIdle = Boolean(brandTokens && !brandActive);
               return (
                 <Link key={item.href} href={item.href}>
-                  <a
+                  <motion.a
                     className={cn(
                       'flex h-9 cursor-pointer items-center gap-2.5 border-l-[3px] px-3 text-[14px] transition-colors',
                       !brandActive && !brandIdle && 'border-transparent',
@@ -198,6 +204,7 @@ function SidebarInner() {
                             }
                           : undefined
                     }
+                    whileHover={reduceMotion ? undefined : { x: 3, transition: springSnappy }}
                     data-testid={`nav-link-${item.label.toLowerCase().replace(' ', '-')}`}
                   >
                     <span
@@ -221,7 +228,7 @@ function SidebarInner() {
                     >
                       {item.label}
                     </span>
-                  </a>
+                  </motion.a>
                 </Link>
               );
             })}

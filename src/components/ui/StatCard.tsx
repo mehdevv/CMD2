@@ -11,7 +11,7 @@ export interface StatCardProps {
 export function StatCard({ label, value, delta, deltaPositive, className }: StatCardProps) {
   const deltaText = delta ? `${deltaPositive ? '+' : ''}${delta}` : '';
   return (
-    <div className={cn('scale-card', className)}>
+    <div className={cn('scale-card scale-card-motion h-full', className)}>
       <div className="truncate text-[28px] font-semibold leading-tight text-[#1A1A3E]" title={String(value)}>
         {value}
       </div>

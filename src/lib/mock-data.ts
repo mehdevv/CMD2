@@ -1,7 +1,6 @@
 import {
   Lead,
   Conversation,
-  Message,
   Template,
   MeetingBrief,
   MeetingNote,
@@ -14,6 +13,7 @@ import {
   Rule,
 } from './types';
 import { MOCK_OPPORTUNITIES_SEED, MOCK_LOSS_REASONS } from './mock-opportunities-seed';
+import { buildMockConversations } from './mock-agent-conversations';
 
 export { MOCK_LOSS_REASONS, MOCK_OPPORTUNITIES_SEED };
 
@@ -120,29 +120,7 @@ export const MOCK_LEADS: Lead[] = [
   { id: 'lead-20', name: 'Imene Guerfi', phone: '+213 555 100 200', channel: 'whatsapp', stage: 'closed', aiStatus: 'completed', assignedTo: 'Sara Boukhalfa', lastContact: '14d ago', dealValue: 33000, source: 'WhatsApp', tags: ['closed-won'], convertedOpportunityId: 'opp-12', createdAt: '2026-03-05T09:00:00.000Z' },
 ];
 
-export const MOCK_CONVERSATIONS: Conversation[] = MOCK_LEADS.slice(0, 15).map((lead, i) => ({
-  id: `conv-${lead.id}`,
-  leadId: lead.id,
-  leadName: lead.name,
-  channel: lead.channel,
-  aiStatus: lead.aiStatus,
-  assignedTo: lead.assignedTo,
-  lastMessage: i % 3 === 0 ? "Merci pour votre message, je reviens vers vous très vite." : i % 3 === 1 ? "Je suis intéressé par votre offre, pouvez-vous m'envoyer plus de détails ?" : "Bonjour, quand est-ce que je peux recevoir ma commande ?",
-  lastTime: lead.lastContact,
-  messages: generateMessages(lead.name, i),
-}));
-
-function generateMessages(contactName: string, seed: number): Message[] {
-  const msgs: Message[] = [
-    { id: `m-${seed}-1`, sender: 'contact', senderName: contactName, content: "Bonjour, je voudrais en savoir plus sur vos produits.", timestamp: "10:02 AM" },
-    { id: `m-${seed}-2`, sender: 'ai', senderName: 'Client Chat', content: `Bonjour ${contactName.split(' ')[0]} ! Merci pour votre intérêt. Je suis là pour répondre à toutes vos questions. Qu'est-ce qui vous intéresse en particulier ?`, timestamp: "10:02 AM", status: 'read' },
-    { id: `m-${seed}-3`, sender: 'contact', senderName: contactName, content: "Je cherche une solution pour gérer mes commandes et mes clients.", timestamp: "10:15 AM" },
-    { id: `m-${seed}-4`, sender: 'ai', senderName: 'Client Chat', content: "Excellent choix ! Notre plateforme Scale automatise le suivi des leads et la communication avec vos clients sur WhatsApp, Instagram et Facebook. Souhaitez-vous une démonstration ?", timestamp: "10:15 AM", status: 'delivered' },
-    { id: `m-${seed}-5`, sender: 'agent', senderName: 'Mehdi Kaci', content: "Je reprends la conversation. Bonjour, je peux vous arranger un appel demo pour demain matin, ça vous convient ?", timestamp: "11:30 AM", status: 'read' },
-    { id: `m-${seed}-6`, sender: 'contact', senderName: contactName, content: "Oui parfait, 10h ça me convient.", timestamp: "11:45 AM" },
-  ];
-  return msgs;
-}
+export const MOCK_CONVERSATIONS: Conversation[] = buildMockConversations(MOCK_LEADS);
 
 export const MOCK_TEMPLATES: Template[] = [
   { id: 'tpl-1', name: 'Lead Welcome WA', channel: 'whatsapp', body: 'Bonjour {{name}} ! Merci de nous avoir contacté. Notre équipe va vous répondre dans les plus brefs délais. À tout de suite ! 🛍️', status: 'approved', usedIn: 3 },

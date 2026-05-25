@@ -76,6 +76,7 @@ export default function MeetingNotesPage() {
         title={opp?.name ?? lead!.name}
         existingNote={existingNote}
         leadId={lead!.id}
+        opportunityId={opp?.id}
       />
     </AppShell>
   );

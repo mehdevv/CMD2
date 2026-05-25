@@ -1,8 +1,12 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
-import { MOCK_AI_AGENT_METRICS as rawMetrics, MOCK_LEADERBOARD } from '@/lib/mock-data';
+import { useCrmData } from '@/contexts/CrmDataContext';
+import { buildAutomationMetrics, buildLeaderboard } from '@/lib/performance-from-crm';
 
 export default function PerformancePage() {
+  const { leads, opportunities, teamMembers } = useCrmData();
+  const rawMetrics = useMemo(() => buildAutomationMetrics(leads, opportunities), [leads, opportunities]);
+  const leaderboard = useMemo(() => buildLeaderboard(leads, opportunities, teamMembers), [leads, opportunities, teamMembers]);
   const [digestDay, setDigestDay] = useState('Monday');
   const [digestEmail, setDigestEmail] = useState('');
   const [includes, setIncludes] = useState({ kpis: true, intelligence: true, agentStats: true });
@@ -45,7 +49,7 @@ export default function PerformancePage() {
             </tr>
           </thead>
           <tbody>
-            {MOCK_LEADERBOARD.map(row => (
+            {leaderboard.map(row => (
               <tr key={row.rank} className="border-b border-[#E4E4E8] last:border-0 hover:bg-[#F7F7F8]" style={{ height: 48 }} data-testid={`row-leaderboard-${row.rank}`}>
                 <td className="px-4 text-[14px] font-medium text-[#9999AA]">#{row.rank}</td>
                 <td className="px-4">

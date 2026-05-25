@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useLocation } from 'wouter';
+import { useQueryClient } from '@tanstack/react-query';
 import type { Lead, Opportunity } from '@/lib/types';
 import { useAuth } from '@/contexts/AuthContext';
 import { useCrmData } from '@/contexts/CrmDataContext';
+import { logAutomationActivity } from '@/lib/db/automation';
 import { leadAssigneeOwnerId } from '@/lib/lead-utils';
 import {
   Dialog,
@@ -22,6 +24,7 @@ export function ConvertToOpportunityDialog({ open, onOpenChange, lead }: Convert
   const { user } = useAuth();
   const { addOpportunity, patchLead } = useCrmData();
   const [, setLocation] = useLocation();
+  const qc = useQueryClient();
   const [dealName, setDealName] = useState('');
   const [value, setValue] = useState(String(lead.dealValue ?? ''));
   const [expectedClose, setExpectedClose] = useState('');
@@ -79,6 +82,16 @@ export function ConvertToOpportunityDialog({ open, onOpenChange, lead }: Convert
         aiStatus: 'completed',
         stage: 'qualified',
       });
+      if (user?.orgId) {
+        await logAutomationActivity({
+          orgId: user.orgId,
+          kind: 'opportunity',
+          leadId: lead.id,
+          opportunityId: newId,
+          summary: `Converted to opportunity — ${dealName.trim() || lead.name} (${lead.assignedTo})`,
+        });
+        await qc.invalidateQueries({ queryKey: ['automation', 'lead', lead.id] });
+      }
       onOpenChange(false);
       setLocation(`/opportunities/${newId}`);
     } catch (e) {

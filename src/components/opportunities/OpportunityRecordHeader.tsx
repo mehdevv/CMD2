@@ -3,6 +3,7 @@ import { ExternalLink } from 'lucide-react';
 import { ChannelDot } from '@/components/ui/ChannelDot';
 import { OpportunityStageBadge } from '@/components/opportunities/OpportunityStageBadge';
 import { StageSLABadge } from '@/components/opportunities/StageSLABadge';
+import { useAuth } from '@/contexts/AuthContext';
 import type { Opportunity, OpportunityStage } from '@/lib/types';
 import { legalNextStages, stageLabel } from '@/lib/pipeline';
 
@@ -19,7 +20,12 @@ export function OpportunityRecordHeader({
   onMarkWon,
   onMarkLost,
 }: OpportunityRecordHeaderProps) {
+  const { user } = useAuth();
   const nextOptions = legalNextStages(opp);
+  const ownerLabel =
+    user?.role === 'agent' && opp.ownerId === user.id
+      ? 'You (assigned owner)'
+      : opp.ownerName;
 
   return (
     <div className="mb-6 flex flex-col gap-4 border-b border-[#E4E4E8] pb-4 lg:flex-row lg:items-start lg:justify-between">
@@ -30,6 +36,10 @@ export function OpportunityRecordHeader({
           {opp.company && <span>{opp.company}</span>}
           <span>·</span>
           <span>{opp.value.toLocaleString()} DZD</span>
+          <span>·</span>
+          <span className="rounded bg-[#EEF3FD] px-2 py-0.5 text-[12px] font-medium text-[#1E3A8A]">
+            Owner: {ownerLabel}
+          </span>
           <OpportunityStageBadge stage={opp.stage} />
           <StageSLABadge stage={opp.stage} stageEnteredAt={opp.stageEnteredAt} />
         </div>

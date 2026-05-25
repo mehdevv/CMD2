@@ -4,6 +4,7 @@ import { getSupabase, isSupabaseConfigured } from '@/lib/supabase';
 import type { AuthUser } from '@/lib/auth';
 import type { Role } from '@/lib/types';
 import { fetchMyProfile, fetchOrgSlug } from '@/lib/db/profiles';
+import { clearDemoSession, loadDemoSession, saveDemoSession, tryDemoLogin } from '@/lib/demo-auth';
 
 interface AuthContextType {
   user: AuthUser | null;
@@ -103,6 +104,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(isSupabaseConfigured);
 
   const hydrateFromSession = useCallback(async (session: Session | null) => {
+    const demo = loadDemoSession();
+    if (demo) {
+      setUser(demo);
+      setLoading(false);
+      return;
+    }
     if (!isSupabaseConfigured) {
       setUser(null);
       setLoading(false);
@@ -119,6 +126,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
+    const demo = loadDemoSession();
+    if (demo) {
+      queueMicrotask(() => {
+        setUser(demo);
+        setLoading(false);
+      });
+      return;
+    }
     if (!isSupabaseConfigured) {
       queueMicrotask(() => setLoading(false));
       return;
@@ -143,19 +158,38 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, [hydrateFromSession]);
 
   const login = useCallback(async (email: string, password: string): Promise<AuthUser | null> => {
-    if (!isSupabaseConfigured) return null;
-    const supabase = getSupabase();
-    const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
-    if (error) {
-      console.error(error);
-      return null;
+    const demoUser = tryDemoLogin(email, password);
+
+    if (isSupabaseConfigured) {
+      const supabase = getSupabase();
+      const { error } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
+      if (!error) {
+        clearDemoSession();
+        const { data } = await supabase.auth.getSession();
+        if (!data.session) {
+          if (demoUser) {
+            saveDemoSession(demoUser);
+            setUser(demoUser);
+            setLoading(false);
+            return demoUser;
+          }
+          return null;
+        }
+        const next = await buildUserFromSession(data.session);
+        setUser(next);
+        setLoading(false);
+        return next;
+      }
+      console.warn('Supabase sign-in failed, trying demo fallback:', error.message);
     }
-    const { data } = await supabase.auth.getSession();
-    if (!data.session) return null;
-    const next = await buildUserFromSession(data.session);
-    setUser(next);
-    setLoading(false);
-    return next;
+
+    if (demoUser) {
+      saveDemoSession(demoUser);
+      setUser(demoUser);
+      setLoading(false);
+      return demoUser;
+    }
+    return null;
   }, []);
 
   const register = useCallback(
@@ -199,6 +233,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const logout = useCallback(async () => {
+    clearDemoSession();
     if (!isSupabaseConfigured) {
       setUser(null);
       return;

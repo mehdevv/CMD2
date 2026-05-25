@@ -9,6 +9,22 @@ import { listReports, insertReport, updateReport } from '@/lib/db/reports';
 import { listConversations, insertMessage, setConversationTakeover } from '@/lib/db/conversations';
 import { fetchOrgProfiles } from '@/lib/db/profiles';
 import { derivePaymentStatus } from '@/lib/pipeline';
+import { isDemoUser } from '@/lib/demo-auth';
+import {
+  demoAddLead,
+  demoAddOpportunity,
+  demoAddReport,
+  demoListConversations,
+  demoListLeads,
+  demoListOpportunities,
+  demoListReports,
+  demoListTeam,
+  demoSendMessage,
+  demoSetConversationTakeover,
+  demoSyncOpportunity,
+  demoUpdateLead,
+  demoUpdateReport,
+} from '@/lib/demo-crm-store';
 
 export type AddLeadPayload = {
   name: string;
@@ -27,7 +43,7 @@ interface CrmDataContextValue {
   crmError: Error | null;
   refetchCrm: () => Promise<void>;
   patchLead: (id: string, patch: Partial<Lead>) => Promise<void>;
-  addLead: (input: AddLeadPayload) => Promise<void>;
+  addLead: (input: AddLeadPayload) => Promise<string>;
   patchOpportunity: (id: string, patch: Partial<Opportunity>) => Promise<void>;
   addOpportunity: (o: Opportunity) => Promise<string>;
   addReport: (r: AnalyticsReport) => Promise<string>;
@@ -49,43 +65,52 @@ const qk = {
   team: ['crm', 'team'] as const,
 };
 
+function invalidateLeadActivity(qc: ReturnType<typeof useQueryClient>, leadId?: string) {
+  void qc.invalidateQueries({ queryKey: ['automation', 'lead'] });
+  if (leadId) {
+    void qc.invalidateQueries({ queryKey: ['automation', 'lead', leadId] });
+  }
+}
+
 export function CrmDataProvider({ children }: { children: ReactNode }) {
   const { user, authDisabled } = useAuth();
   const qc = useQueryClient();
-  const enabled = Boolean(user?.orgId) && !authDisabled && isSupabaseConfigured;
+  const demoMode = isDemoUser(user);
+  const supabaseEnabled = Boolean(user?.orgId) && !authDisabled && isSupabaseConfigured && !demoMode;
+  const demoEnabled = demoMode && Boolean(user?.orgId);
 
   const leadsQuery = useQuery({
-    queryKey: qk.leads,
-    queryFn: listLeads,
-    enabled,
+    queryKey: [...qk.leads, demoMode ? 'demo' : 'live'],
+    queryFn: demoMode ? demoListLeads : listLeads,
+    enabled: supabaseEnabled || demoEnabled,
   });
 
   const oppsQuery = useQuery({
-    queryKey: qk.opportunities,
-    queryFn: listOpportunities,
-    enabled,
+    queryKey: [...qk.opportunities, demoMode ? 'demo' : 'live'],
+    queryFn: demoMode ? demoListOpportunities : listOpportunities,
+    enabled: supabaseEnabled || demoEnabled,
   });
 
   const reportsQuery = useQuery({
-    queryKey: qk.reports,
-    queryFn: listReports,
-    enabled,
+    queryKey: [...qk.reports, demoMode ? 'demo' : 'live'],
+    queryFn: demoMode ? demoListReports : listReports,
+    enabled: supabaseEnabled || demoEnabled,
   });
 
   const convQuery = useQuery({
-    queryKey: qk.conversations,
-    queryFn: listConversations,
-    enabled,
+    queryKey: [...qk.conversations, demoMode ? 'demo' : 'live'],
+    queryFn: demoMode ? demoListConversations : listConversations,
+    enabled: supabaseEnabled || demoEnabled,
   });
 
   const teamQuery = useQuery({
-    queryKey: qk.team,
-    queryFn: fetchOrgProfiles,
-    enabled,
+    queryKey: [...qk.team, demoMode ? 'demo' : 'live'],
+    queryFn: demoMode ? demoListTeam : fetchOrgProfiles,
+    enabled: supabaseEnabled || demoEnabled,
   });
 
   const crmLoading =
-    enabled &&
+    (supabaseEnabled || demoEnabled) &&
     (leadsQuery.isLoading || oppsQuery.isLoading || reportsQuery.isLoading || convQuery.isLoading || teamQuery.isLoading);
 
   const crmError =
@@ -108,18 +133,33 @@ export function CrmDataProvider({ children }: { children: ReactNode }) {
 
   const patchLead = useCallback(
     async (id: string, patch: Partial<Lead>) => {
-      if (!enabled) return;
+      if (demoMode) {
+        demoUpdateLead(id, patch);
+        await qc.invalidateQueries({ queryKey: qk.leads });
+        await qc.invalidateQueries({ queryKey: qk.conversations });
+        invalidateLeadActivity(qc, id);
+        return;
+      }
+      if (!supabaseEnabled) return;
       await updateLead(id, patch);
       await qc.invalidateQueries({ queryKey: qk.leads });
       await qc.invalidateQueries({ queryKey: qk.conversations });
+      invalidateLeadActivity(qc, id);
     },
-    [enabled, qc]
+    [demoMode, supabaseEnabled, qc]
   );
 
   const addLead = useCallback(
-    async (input: AddLeadPayload) => {
+    async (input: AddLeadPayload): Promise<string> => {
       if (!user?.orgId) throw new Error('No organization');
-      await insertLead(user.orgId, {
+      if (demoMode) {
+        const id = demoAddLead(input, user.id);
+        await qc.invalidateQueries({ queryKey: qk.leads });
+        await qc.invalidateQueries({ queryKey: qk.conversations });
+        invalidateLeadActivity(qc, id);
+        return id;
+      }
+      const id = await insertLead(user.orgId, {
         name: input.name,
         phone: input.phone,
         channel: input.channel,
@@ -128,14 +168,15 @@ export function CrmDataProvider({ children }: { children: ReactNode }) {
       });
       await qc.invalidateQueries({ queryKey: qk.leads });
       await qc.invalidateQueries({ queryKey: qk.conversations });
+      invalidateLeadActivity(qc, id);
+      return id;
     },
-    [user, qc]
+    [user, demoMode, qc]
   );
 
   const patchOpportunity = useCallback(
     async (id: string, patch: Partial<Opportunity>) => {
-      if (!enabled) return;
-      const opps = qc.getQueryData<Opportunity[]>(qk.opportunities) ?? [];
+      const opps = qc.getQueryData<Opportunity[]>([...qk.opportunities, demoMode ? 'demo' : 'live']) ?? [];
       const current = opps.find(o => o.id === id);
       if (!current) return;
       const next: Opportunity = { ...current, ...patch };
@@ -143,56 +184,96 @@ export function CrmDataProvider({ children }: { children: ReactNode }) {
         next.paymentStatus = derivePaymentStatus(next.payments ?? []);
       }
       next.updatedAt = new Date().toISOString();
+      if (demoMode) {
+        demoSyncOpportunity(next);
+        await qc.invalidateQueries({ queryKey: qk.opportunities });
+        await qc.invalidateQueries({ queryKey: qk.leads });
+        invalidateLeadActivity(qc, next.leadId);
+        return;
+      }
+      if (!supabaseEnabled) return;
       await syncOpportunity(next);
       await qc.invalidateQueries({ queryKey: qk.opportunities });
+      invalidateLeadActivity(qc, next.leadId);
     },
-    [enabled, qc]
+    [demoMode, supabaseEnabled, qc]
   );
 
   const addOpportunity = useCallback(
     async (o: Opportunity) => {
       if (!user?.orgId) throw new Error('No organization');
+      if (demoMode) {
+        const id = demoAddOpportunity(o);
+        await qc.invalidateQueries({ queryKey: qk.opportunities });
+        invalidateLeadActivity(qc, o.leadId);
+        return id;
+      }
       const id = await insertOpportunity(user.orgId, o);
       await qc.invalidateQueries({ queryKey: qk.opportunities });
       return id;
     },
-    [user, qc]
+    [user, demoMode, qc]
   );
 
   const addReport = useCallback(
     async (r: AnalyticsReport) => {
       if (!user?.orgId) throw new Error('No organization');
+      if (demoMode) {
+        const id = demoAddReport(r);
+        await qc.invalidateQueries({ queryKey: qk.reports });
+        return id;
+      }
       const id = await insertReport(user.orgId, r, user.id);
       await qc.invalidateQueries({ queryKey: qk.reports });
       return id;
     },
-    [user, qc]
+    [user, demoMode, qc]
   );
 
   const patchReport = useCallback(
     async (id: string, patch: Partial<AnalyticsReport>) => {
-      if (!enabled) return;
+      if (demoMode) {
+        demoUpdateReport(id, patch);
+        await qc.invalidateQueries({ queryKey: qk.reports });
+        return;
+      }
+      if (!supabaseEnabled) return;
       await updateReport(id, patch);
       await qc.invalidateQueries({ queryKey: qk.reports });
     },
-    [enabled, qc]
+    [demoMode, supabaseEnabled, qc]
   );
 
   const sendMessage = useCallback(
     async (conversationId: string, msg: Omit<Message, 'id'>) => {
       if (!user?.orgId) throw new Error('No organization');
+      if (demoMode) {
+        demoSendMessage(conversationId, msg);
+        await qc.invalidateQueries({ queryKey: qk.conversations });
+        return;
+      }
       await insertMessage(conversationId, user.orgId, msg);
       await qc.invalidateQueries({ queryKey: qk.conversations });
     },
-    [user, qc]
+    [user, demoMode, qc]
   );
 
   const setConversationTakeoverCb = useCallback(
     async (conversationId: string, opts: { automationPaused: boolean; assignedToUserId: string | null }) => {
+      const convs = qc.getQueryData<Conversation[]>([...qk.conversations, demoMode ? 'demo' : 'live']) ?? [];
+      const leadId = convs.find(c => c.id === conversationId)?.leadId;
+      if (demoMode) {
+        demoSetConversationTakeover(conversationId, opts);
+        await qc.invalidateQueries({ queryKey: qk.conversations });
+        await qc.invalidateQueries({ queryKey: qk.leads });
+        invalidateLeadActivity(qc, leadId);
+        return;
+      }
       await setConversationTakeover(conversationId, opts);
       await qc.invalidateQueries({ queryKey: qk.conversations });
+      invalidateLeadActivity(qc, leadId);
     },
-    [qc]
+    [demoMode, qc]
   );
 
   const value = useMemo(

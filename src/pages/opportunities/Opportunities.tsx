@@ -56,12 +56,20 @@ export default function OpportunitiesPage() {
     [opportunities, user, q, stage, outcome]
   );
 
+  const scopeOpps = useMemo(
+    () =>
+      user?.role === 'agent'
+        ? opportunities.filter(o => o.ownerId === user.id)
+        : opportunities,
+    [opportunities, user]
+  );
+
   const filters = {};
-  const openPipe = selectOpenPipelineValue(opportunities, filters);
-  const winRate = selectWinRate(opportunities, filters);
-  const avgCycle = selectAvgCycleDays(opportunities, filters);
-  const wonRev = selectWonRevenue(opportunities, filters);
-  const wonCount = opportunities.filter(o => o.stage === 'won' || o.outcome === 'won').length;
+  const openPipe = selectOpenPipelineValue(scopeOpps, filters);
+  const winRate = selectWinRate(scopeOpps, filters);
+  const avgCycle = selectAvgCycleDays(scopeOpps, filters);
+  const wonRev = selectWonRevenue(scopeOpps, filters);
+  const wonCount = scopeOpps.filter(o => o.stage === 'won' || o.outcome === 'won').length;
 
   const stages: OpportunityStage[] = [
     'qualification',

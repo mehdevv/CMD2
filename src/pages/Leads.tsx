@@ -1,4 +1,6 @@
 import { useMemo, useState } from 'react';
+import { useLocation } from 'wouter';
+import { toast } from 'sonner';
 import { AppShell } from '@/components/layout/AppShell';
 import { PageHeader } from '@/components/layout/PageHeader';
 import { PageSection } from '@/components/layout/PageSection';
@@ -15,6 +17,7 @@ import { isEnrichmentIncomplete, leadOwnedByUser } from '@/lib/lead-utils';
 export default function LeadsPage() {
   const { user } = useAuth();
   const { leads, addLead } = useCrmData();
+  const [, setLocation] = useLocation();
   const [view, setView] = useState<'kanban' | 'list'>('kanban');
   const [search, setSearch] = useState('');
   const [stageFilter, setStageFilter] = useState('');
@@ -54,7 +57,15 @@ export default function LeadsPage() {
         onAddLead={() => setAddOpen(true)}
       />
 
-      <AddLeadDialog open={addOpen} onOpenChange={setAddOpen} onCreate={addLead} />
+      <AddLeadDialog
+        open={addOpen}
+        onOpenChange={setAddOpen}
+        onCreate={async payload => {
+          const id = await addLead(payload);
+          toast.success('Lead created — automation started');
+          setLocation(`/leads/${id}`);
+        }}
+      />
 
       {view === 'kanban' ? (
         <LeadsKanbanBoard leadsByStage={byStage} />

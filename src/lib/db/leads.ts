@@ -1,6 +1,7 @@
 import { getSupabase } from '@/lib/supabase';
 import type { Channel, Lead } from '@/lib/types';
 import { channelFromDb, channelToDb, formatLastContact } from '@/lib/db/map-common';
+import { simulateLeadFollowUp } from '@/lib/db/automation';
 
 type LeadRow = {
   id: string;
@@ -181,15 +182,32 @@ export async function insertLead(
   if (error) throw error;
   const leadId = data.id as string;
 
-  const { error: cErr } = await supabase.from('conversations').insert({
-    org_id: orgId,
-    lead_id: leadId,
-    channel: channelToDb(input.channel),
-    ai_status: 'active',
-    last_message: null,
-    last_time: now,
-  });
+  const { data: conv, error: cErr } = await supabase
+    .from('conversations')
+    .insert({
+      org_id: orgId,
+      lead_id: leadId,
+      channel: channelToDb(input.channel),
+      ai_status: 'active',
+      last_message: null,
+      last_time: now,
+    })
+    .select('id')
+    .single();
   if (cErr) throw cErr;
+
+  try {
+    await simulateLeadFollowUp({
+      orgId,
+      leadId,
+      leadName: input.name,
+      channel: input.channel,
+      conversationId: conv.id as string,
+    });
+  } catch (e) {
+    console.error('simulateLeadFollowUp failed', e);
+  }
+
   return leadId;
 }
 

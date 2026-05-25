@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils';
+import { MotionFade } from '@/components/motion';
 
 export interface PageSectionProps {
   title?: string;
@@ -13,7 +14,8 @@ export function PageSection({ title, description, action, padding = 'default', c
   const flush = padding === 'none';
 
   return (
-    <div className={cn('scale-card', flush && 'p-0 overflow-hidden', className)}>
+    <MotionFade>
+    <div className={cn('scale-card scale-card-motion', flush && 'p-0 overflow-hidden', className)}>
       {title || description || action ? (
         <div
           className={cn(
@@ -30,5 +32,6 @@ export function PageSection({ title, description, action, padding = 'default', c
       ) : null}
       <div className={cn(flush && (title || description || action) && 'px-0 pb-0')}>{children}</div>
     </div>
+    </MotionFade>
   );
 }

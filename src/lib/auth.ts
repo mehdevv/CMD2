@@ -14,7 +14,12 @@ export interface AuthUser {
   avatarUrl?: string | null;
   /** Sales agent handle segment (`local_handle`); optional for owners/admins. */
   localHandle?: string | null;
+  /** Local prototype session — no Supabase auth (tester accounts on `/login`). */
+  isDemo?: boolean;
 }
+
+/** Roles that run day-to-day CRM (leads, inbox, pipeline, meetings). Platform admin supervises only. */
+export const BUSINESS_CRM_ROLES = ['owner', 'agent'] as const;
 
 export function getDashboardRoute(role: Role): string {
   if (role === 'admin') return '/admin/dashboard';

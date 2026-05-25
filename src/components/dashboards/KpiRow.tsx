@@ -1,5 +1,6 @@
 import { StatCard, type StatCardProps } from '@/components/ui/StatCard';
 import { cn } from '@/lib/utils';
+import { MotionItem, MotionStagger } from '@/components/motion';
 
 const COLS: Record<2 | 3 | 4 | 5, string> = {
   2: 'grid-cols-2',
@@ -18,10 +19,12 @@ export interface KpiRowProps {
 
 export function KpiRow({ items, cols = 4, gridClassName, className }: KpiRowProps) {
   return (
-    <div className={cn('grid gap-4 mb-8', gridClassName ?? COLS[cols], className)}>
+    <MotionStagger className={cn('grid gap-4 mb-8', gridClassName ?? COLS[cols], className)}>
       {items.map((item, i) => (
-        <StatCard key={`${item.label}-${String(item.value)}-${i}`} {...item} />
+        <MotionItem key={`${item.label}-${String(item.value)}-${i}`}>
+          <StatCard {...item} />
+        </MotionItem>
       ))}
-    </div>
+    </MotionStagger>
   );
 }

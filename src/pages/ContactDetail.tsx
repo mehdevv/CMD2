@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'wouter';
+import { toast } from 'sonner';
 import { AppShell } from '@/components/layout/AppShell';
 import { useCrmData } from '@/contexts/CrmDataContext';
 import { useAuth } from '@/contexts/AuthContext';
@@ -11,6 +12,8 @@ import { MeetingShortcutsCard } from '@/components/leads/MeetingShortcutsCard';
 import { HistoryCard } from '@/components/leads/HistoryCard';
 import { FollowUpLog } from '@/components/leads/FollowUpLog';
 import { ConversationThread } from '@/components/conversations/ConversationThread';
+import { agentCanAccessLead, historyItemsFromActivity } from '@/lib/agent-crm';
+import { useLeadFollowUpLog } from '@/hooks/useLeadFollowUpLog';
 
 export default function ContactDetailPage() {
   const { id } = useParams();
@@ -21,7 +24,7 @@ export default function ContactDetailPage() {
 
   const [takenOver, setTakenOver] = useState(false);
   const [message, setMessage] = useState('');
-  const [showFollowUpLog, setShowFollowUpLog] = useState(false);
+  const [showFollowUpLog, setShowFollowUpLog] = useState(true);
   const [convertOpen, setConvertOpen] = useState(false);
 
   useEffect(() => {
@@ -43,6 +46,7 @@ export default function ContactDetailPage() {
       assignedToUserId: next ? user.id : null,
     });
     setTakenOver(next);
+    toast.success(next ? 'You took over — automation paused' : 'Released — automation resumed');
   }, [conversation, user, takenOver, setConversationTakeover]);
 
   const handleSend = useCallback(async () => {
@@ -57,6 +61,12 @@ export default function ContactDetailPage() {
     setMessage('');
   }, [conversation, message, user, sendMessage]);
 
+  const { data: activity = [], refetch: refetchActivity } = useLeadFollowUpLog(lead?.id ?? '');
+
+  useEffect(() => {
+    if (lead?.id) void refetchActivity();
+  }, [lead?.id, lead?.stage, lead?.enrichedAt, refetchActivity]);
+
   if (!lead) {
     return (
       <AppShell title="Contact">
@@ -68,7 +78,22 @@ export default function ContactDetailPage() {
     );
   }
 
+  if (!agentCanAccessLead(lead, user)) {
+    return (
+      <AppShell title="Contact">
+        <p className="text-[14px] text-[#6B6B80]">This lead is assigned to another rep.</p>
+        <Link href="/leads">
+          <a className="mt-2 inline-block text-[14px] text-[#2B62E8]">Back to my leads</a>
+        </Link>
+      </AppShell>
+    );
+  }
+
   const messages = conversation?.messages ?? [];
+  const historyItems = historyItemsFromActivity(
+    activity.map(a => ({ summary: a.summary, at: a.at, kind: a.kind })),
+    lead
+  );
 
   return (
     <AppShell title={lead.name}>
@@ -92,7 +117,12 @@ export default function ContactDetailPage() {
             threadAiStatus={lead.aiStatus}
             onRequestTakeover={() => void handleTakeoverToggle()}
             betweenMessagesAndCompose={
-              <FollowUpLog open={showFollowUpLog} onOpenChange={setShowFollowUpLog} />
+              <FollowUpLog
+                leadId={lead.id}
+                messages={messages}
+                open={showFollowUpLog}
+                onOpenChange={setShowFollowUpLog}
+              />
             }
             onSend={() => void handleSend()}
           />
@@ -102,7 +132,7 @@ export default function ContactDetailPage() {
           <EnrichmentCard lead={lead} onPatch={patch => void patchLead(lead.id, patch)} />
           <DealAsideCard lead={lead} />
           <MeetingShortcutsCard leadId={lead.id} />
-          <HistoryCard />
+          <HistoryCard items={historyItems} />
         </div>
       </div>
     </AppShell>

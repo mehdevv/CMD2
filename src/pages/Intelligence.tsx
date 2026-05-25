@@ -1,16 +1,8 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { AppShell } from '@/components/layout/AppShell';
-import { MOCK_INTELLIGENCE } from '@/lib/mock-data';
+import { useCrmData } from '@/contexts/CrmDataContext';
+import { buildIntelligenceFromCrm, buildLeadFunnel } from '@/lib/intelligence-from-crm';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
-
-const objections = MOCK_INTELLIGENCE.filter(i => i.type === 'objection');
-const opportunities = MOCK_INTELLIGENCE.filter(i => i.type === 'opportunity');
-const risks = MOCK_INTELLIGENCE.filter(i => i.type === 'risk');
-
-const objectionChartData = objections.map(o => ({
-  name: o.headline.length > 30 ? o.headline.slice(0, 30) + '…' : o.headline,
-  count: o.frequency ?? 0,
-}));
 
 const BEST_RESPONSES = [
   '"Notre ROI moyen est de 3x en 90 jours. Je peux vous envoyer le cas client."',
@@ -25,17 +17,27 @@ const SCRIPT_IMPROVEMENTS = [
   'Shorten the refund policy message — current version loses attention after line 3',
 ];
 
-const FUNNEL_DATA = [
-  { stage: 'New', count: 6, conversion: '100%' },
-  { stage: 'Contacted', count: 4, conversion: '67%' },
-  { stage: 'Qualified', count: 3, conversion: '75%' },
-  { stage: 'Proposal', count: 3, conversion: '100%' },
-  { stage: 'Closed', count: 3, conversion: '100%' },
+const FUNNEL_DATA_FALLBACK = [
+  { stage: 'New', count: 0, conversion: '100%' },
+  { stage: 'Contacted', count: 0, conversion: '—' },
+  { stage: 'Qualified', count: 0, conversion: '—' },
+  { stage: 'Proposal', count: 0, conversion: '—' },
+  { stage: 'Closed', count: 0, conversion: '—' },
 ];
 
 type Tab = 'objections' | 'opportunities' | 'risk';
 
 export default function IntelligencePage() {
+  const { leads, opportunities, teamMembers } = useCrmData();
+  const intelligence = useMemo(() => buildIntelligenceFromCrm(leads, opportunities), [leads, opportunities]);
+  const objections = intelligence.filter(i => i.type === 'objection');
+  const oppSignals = intelligence.filter(i => i.type === 'opportunity');
+  const risks = intelligence.filter(i => i.type === 'risk');
+  const objectionChartData = objections.map(o => ({
+    name: o.headline.length > 30 ? o.headline.slice(0, 30) + '…' : o.headline,
+    count: o.frequency ?? 0,
+  }));
+  const funnelData = leads.length ? buildLeadFunnel(leads) : FUNNEL_DATA_FALLBACK;
   const [tab, setTab] = useState<Tab>('objections');
 
   return (
@@ -62,9 +64,9 @@ export default function IntelligencePage() {
           </select>
           <select className="scale-input w-36" data-testid="select-agent-filter">
             <option>All agents</option>
-            <option>Mehdi Kaci</option>
-            <option>Sara Boukhalfa</option>
-            <option>Nassim Rahmani</option>
+            {teamMembers.filter(m => m.role === 'agent').map(m => (
+              <option key={m.id}>{m.name}</option>
+            ))}
           </select>
         </div>
       </div>
@@ -128,7 +130,7 @@ export default function IntelligencePage() {
                 </tr>
               </thead>
               <tbody>
-                {opportunities.map(opp => (
+                {oppSignals.map(opp => (
                   <tr key={opp.id} className="border-b border-[#E4E4E8] last:border-0 hover:bg-[#F7F7F8]" style={{ height: 48 }}>
                     <td className="px-4 text-[14px] font-medium text-[#1A1A3E]">{opp.headline.split(' ')[0]}</td>
                     <td className="px-4 text-[13px] text-[#6B6B80] max-w-xs">{opp.detail}</td>
@@ -153,7 +155,7 @@ export default function IntelligencePage() {
                 </tr>
               </thead>
               <tbody>
-                {FUNNEL_DATA.map(row => (
+                {funnelData.map(row => (
                   <tr key={row.stage} className="border-t border-[#E4E4E8]" style={{ height: 44 }}>
                     <td className="text-[14px] font-medium text-[#1A1A3E]">{row.stage}</td>
                     <td className="text-[13px] text-[#6B6B80]">{row.count}</td>

@@ -1,20 +1,63 @@
 import { useState, type ReactNode } from 'react';
 import { Link } from 'wouter';
 import { Check } from 'lucide-react';
+import { toast } from 'sonner';
 import type { MeetingNote } from '@/lib/types';
 import { VoiceRecorder } from '@/components/meetings/VoiceRecorder';
+import { useAuth } from '@/contexts/AuthContext';
+import { buildNoteSummaryFromText, saveMeetingNote } from '@/lib/db/meetings';
+import { logAutomationActivity } from '@/lib/db/automation';
 
 export interface MeetingNotesShellProps {
   breadcrumb: ReactNode;
   title: string;
   existingNote: MeetingNote;
   leadId: string;
+  opportunityId?: string;
 }
 
-export function MeetingNotesShell({ breadcrumb, title, existingNote, leadId }: MeetingNotesShellProps) {
+export function MeetingNotesShell({ breadcrumb, title, existingNote, leadId, opportunityId }: MeetingNotesShellProps) {
+  const { user } = useAuth();
   const [showText, setShowText] = useState(false);
   const [textNotes, setTextNotes] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [savedNote, setSavedNote] = useState(existingNote);
+  const [saving, setSaving] = useState(false);
+
+  const persistNote = async (rawText: string) => {
+    if (!user?.orgId) {
+      toast.error('Not signed in');
+      return;
+    }
+    setSaving(true);
+    try {
+      const draft = buildNoteSummaryFromText(rawText || `Meeting with ${title}`, title);
+      await saveMeetingNote(user.orgId, {
+        leadId,
+        opportunityId,
+        summary: draft.summary,
+        objections: draft.objections,
+        opportunities: draft.opportunities,
+        nextSteps: draft.nextSteps,
+      });
+      await logAutomationActivity({
+        orgId: user.orgId,
+        kind: 'other',
+        agentId: 'followup',
+        leadId,
+        opportunityId,
+        summary: 'Post-meeting note saved — follow-up scheduled in 24h',
+      });
+      setSavedNote({ ...draft, leadId, leadName: title, opportunityId });
+      setSubmitted(true);
+      toast.success('Meeting note saved');
+    } catch (e) {
+      console.error(e);
+      toast.error('Could not save meeting note');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   return (
     <div className="mx-auto max-w-[680px]">
@@ -24,7 +67,7 @@ export function MeetingNotesShell({ breadcrumb, title, existingNote, leadId }: M
       {!submitted ? (
         <>
           <div className="scale-card mb-6">
-            <VoiceRecorder onStop={() => setSubmitted(true)} />
+            <VoiceRecorder onStop={() => void persistNote(`Voice note for ${title}`)} />
             {!showText && (
               <button
                 type="button"
@@ -48,12 +91,12 @@ export function MeetingNotesShell({ breadcrumb, title, existingNote, leadId }: M
                 />
                 <button
                   type="button"
-                  onClick={() => setSubmitted(true)}
+                  onClick={() => void persistNote(textNotes)}
                   className="scale-btn-primary mt-3"
-                  disabled={!textNotes}
+                  disabled={!textNotes || saving}
                   data-testid="button-submit-notes"
                 >
-                  Generate summary
+                  {saving ? 'Saving…' : 'Generate summary'}
                 </button>
               </div>
             )}
@@ -64,12 +107,12 @@ export function MeetingNotesShell({ breadcrumb, title, existingNote, leadId }: M
           <div className="mb-8 space-y-6">
             <div>
               <div className="mb-2 text-[11px] font-medium tracking-wide text-[#9999AA]">MEETING SUMMARY</div>
-              <p className="text-[14px] leading-relaxed text-[#1A1A3E]">{existingNote.summary}</p>
+              <p className="text-[14px] leading-relaxed text-[#1A1A3E]">{savedNote.summary}</p>
             </div>
             <div>
               <div className="mb-2 text-[11px] font-medium tracking-wide text-[#9999AA]">OBJECTIONS CAPTURED</div>
               <div className="space-y-1.5">
-                {existingNote.objections.map((o, i) => (
+                {savedNote.objections.map((o, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <span className="mt-0.5 flex-shrink-0 text-[14px] text-[#9999AA]">—</span>
                     <p className="text-[14px] text-[#1A1A3E]">{o}</p>
@@ -80,7 +123,7 @@ export function MeetingNotesShell({ breadcrumb, title, existingNote, leadId }: M
             <div>
               <div className="mb-2 text-[11px] font-medium tracking-wide text-[#9999AA]">OPPORTUNITIES</div>
               <div className="space-y-1.5">
-                {existingNote.opportunities.map((o, i) => (
+                {savedNote.opportunities.map((o, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <span className="mt-0.5 flex-shrink-0 text-[14px] text-[#9999AA]">—</span>
                     <p className="text-[14px] text-[#1A1A3E]">{o}</p>
@@ -91,7 +134,7 @@ export function MeetingNotesShell({ breadcrumb, title, existingNote, leadId }: M
             <div>
               <div className="mb-2 text-[11px] font-medium tracking-wide text-[#9999AA]">NEXT STEPS</div>
               <div className="space-y-1.5">
-                {existingNote.nextSteps.map((s, i) => (
+                {savedNote.nextSteps.map((s, i) => (
                   <div key={i} className="flex items-start gap-2">
                     <span className="mt-0.5 flex-shrink-0 text-[14px] text-[#9999AA]">—</span>
                     <p className="text-[14px] text-[#1A1A3E]">{s}</p>
