@@ -59,7 +59,7 @@ export default function AdminBillingPage() {
                     </button>
                   </div>
                 </div>
-                <div className="grid grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                   <div>
                     <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Price (USD/mo)</label>
                     <input
@@ -101,7 +101,7 @@ export default function AdminBillingPage() {
 
         <section className="scale-card max-w-2xl">
           <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Billing defaults</h2>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div>
               <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Default currency</label>
               <select value={defaultCurrency} onChange={e => setDefaultCurrency(e.target.value)} className="scale-input w-full" data-testid="select-default-currency">

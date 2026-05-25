@@ -340,7 +340,7 @@ export default function AdminAgentChat() {
         </SectionBlock>
 
         <SectionBlock id="metrics" title="Tracked metrics" description="Performance for Client Chat (sample values).">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { label: 'Questions answered by automation', value: '214 / 248', hint: 'Last 7 days' },
               { label: 'Escalation rate', value: '8%', hint: '→ human takeover' },

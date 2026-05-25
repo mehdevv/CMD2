@@ -34,7 +34,7 @@ export function WorkspaceBillingPanel() {
 
       {/* Plans */}
       <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4" id="plans">All plans</h2>
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-8">
         {PLANS.map(plan => (
           <div
             key={plan.name}

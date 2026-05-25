@@ -13,14 +13,11 @@ export interface AnchorSection {
 interface AgentConfigShellProps {
   agentName: string;
   agentPath: string;
-  /** When set, applies this bot’s brand to the top bar, left rail, and active section. */
   agentId?: AgentId;
   sections: AnchorSection[];
   rightPanel: ReactNode;
   children: ReactNode;
-  /** Breadcrumb root link (default: /admin/agents) */
   overviewHref?: string;
-  /** Breadcrumb root label (default: Automation) */
   overviewLabel?: string;
 }
 
@@ -63,28 +60,28 @@ export function AgentConfigShell({
 
   return (
     <AppShell title={agentName} noPadding>
-      <div className="flex" style={{ minHeight: 'calc(100vh - 56px)' }}>
+      <div className="flex min-h-0 flex-col lg:flex-row" style={{ minHeight: 'calc(100dvh - 3.5rem)' }}>
         <aside
           className={cn(
-            'scale-scroll sticky top-14 flex-shrink-0 self-start overflow-y-auto overscroll-contain border-r border-[#E4E4E8] px-4 pt-8',
-            brand && 'border-l-[4px]'
+            'flex-shrink-0 border-b border-[#E4E4E8] bg-white lg:sticky lg:top-14 lg:w-[200px] lg:self-start lg:border-b-0 lg:border-r',
+            brand && 'border-l-[4px] lg:border-l-[4px]'
           )}
           style={{
-            width: 200,
-            maxHeight: 'calc(100vh - 56px)',
             backgroundColor: brand ? brand.tint : '#ffffff',
             ...(brand ? { borderLeftColor: brand.solid } : {}),
           }}
         >
-          <div className="mb-6 flex items-center gap-1 text-[12px] text-[#9999AA]">
-            <Link href={overviewHref}>
-              <a className="hover:text-[#1A1A3E]">{overviewLabel}</a>
-            </Link>
-            <ChevronRight size={11} />
-            <span className="truncate text-[#1A1A3E]">{agentName.replace(' Agent', '')}</span>
+          <div className="px-4 pt-4 lg:pt-8">
+            <div className="mb-3 flex items-center gap-1 text-[12px] text-[#9999AA] lg:mb-6">
+              <Link href={overviewHref}>
+                <a className="hover:text-[#1A1A3E]">{overviewLabel}</a>
+              </Link>
+              <ChevronRight size={11} />
+              <span className="truncate text-[#1A1A3E]">{agentName.replace(' Agent', '')}</span>
+            </div>
           </div>
 
-          <nav className="space-y-0.5">
+          <nav className="scale-scroll flex gap-1 overflow-x-auto px-3 pb-3 lg:block lg:max-h-[calc(100dvh-8rem)] lg:space-y-0.5 lg:overflow-y-auto lg:overscroll-contain lg:px-4 lg:pb-8">
             {sections.map(s => {
               const active = activeSection === s.id;
               return (
@@ -93,7 +90,7 @@ export function AgentConfigShell({
                   type="button"
                   onClick={() => scrollTo(s.id)}
                   className={cn(
-                    'w-full rounded px-3 py-2 text-left text-[13px] transition-colors',
+                    'flex-shrink-0 rounded px-3 py-2 text-left text-[13px] transition-colors lg:w-full',
                     active && brand && 'border-l-[3px] font-medium',
                     active && !brand && 'bg-[#EEF3FD] font-medium text-[#1E3A8A]',
                     !active && 'text-[#6B6B80] hover:bg-white hover:text-[#1A1A3E]'
@@ -115,14 +112,11 @@ export function AgentConfigShell({
           </nav>
         </aside>
 
-        <div className="scale-scroll min-w-0 flex-1 overflow-y-auto overscroll-contain px-10 py-8">
-          <div style={{ maxWidth: 720 }}>{children}</div>
+        <div className="scale-scroll min-w-0 flex-1 overflow-y-auto overscroll-contain px-4 py-6 sm:px-6 lg:px-10 lg:py-8">
+          <div className="mx-auto w-full max-w-[720px]">{children}</div>
         </div>
 
-        <aside
-          className="scale-scroll sticky top-14 flex-shrink-0 self-start overflow-y-auto overscroll-contain bg-[#F7F7F8] px-4 pt-8"
-          style={{ width: 256, maxHeight: 'calc(100vh - 56px)' }}
-        >
+        <aside className="scale-scroll flex-shrink-0 border-t border-[#E4E4E8] bg-[#F7F7F8] px-4 py-6 lg:sticky lg:top-14 lg:w-64 lg:self-start lg:border-t-0 lg:py-8 lg:max-h-[calc(100dvh-3.5rem)] lg:overflow-y-auto">
           {rightPanel}
         </aside>
       </div>

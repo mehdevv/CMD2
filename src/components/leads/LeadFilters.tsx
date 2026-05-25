@@ -40,7 +40,7 @@ export function LeadFilters({
 }: LeadFiltersProps) {
   return (
     <div className="mb-5 flex flex-wrap items-center gap-2">
-      <div className="min-w-[14rem] max-w-sm flex-1">
+      <div className="mb-5 flex w-full min-w-0 flex-1 flex-col gap-2 sm:min-w-[14rem] sm:max-w-sm">
         <SearchField
           value={search}
           onChange={onSearchChange}

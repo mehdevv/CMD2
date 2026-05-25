@@ -90,9 +90,9 @@ export default function AdminTemplatesPage() {
       {/* Editor Modal */}
       {showEditor && (
         <div className="fixed inset-0 flex items-center justify-center z-50" style={{ background: 'rgba(0,0,0,0.3)' }}>
-          <div className="bg-white border border-[#E4E4E8] rounded-lg overflow-hidden w-full max-w-[640px] flex">
+          <div className="bg-white border border-[#E4E4E8] rounded-lg overflow-hidden w-full max-w-[640px] flex flex-col md:flex-row mx-4 max-h-[90vh] overflow-y-auto">
             {/* Form */}
-            <div className="flex-1 p-6 border-r border-[#E4E4E8]">
+            <div className="flex-1 p-6 border-b border-[#E4E4E8] md:border-b-0 md:border-r">
               <div className="flex items-center justify-between mb-5">
                 <h3 className="text-[17px] font-semibold text-[#1A1A3E]">New template</h3>
                 <button onClick={() => setShowEditor(false)} className="text-[#9999AA] hover:text-[#6B6B80]"><X size={18} /></button>

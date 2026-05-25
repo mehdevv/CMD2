@@ -21,7 +21,7 @@ export function MessageBubble({ message }: MessageBubbleProps) {
       </div>
       <div
         className={cn(
-          'max-w-sm rounded-md px-3 py-2 text-[14px] text-[#1A1A3E]',
+          'max-w-[min(20rem,85vw)] rounded-md px-3 py-2 text-[14px] text-[#1A1A3E]',
           sender === 'ai' && brand && 'border-l-4',
           sender === 'ai' && !brand && 'bg-[#F7F7F8]',
           sender === 'agent' && 'bg-[#EEF3FD]',

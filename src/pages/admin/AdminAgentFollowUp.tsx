@@ -456,7 +456,7 @@ export default function AdminAgentFollowUp() {
         </SectionBlock>
 
         <SectionBlock id="metrics" title="Tracked metrics" description="KPIs for this agent (connected to analytics when available).">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {[
               { label: 'Sequence completion rate', value: '68%', hint: 'Reached final step or goal' },
               { label: 'Reply rate per step', value: 'Step1 41% · Step2 22%', hint: 'Last 7 days' },

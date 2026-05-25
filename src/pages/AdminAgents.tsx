@@ -159,7 +159,7 @@ export default function AdminAgentsPage() {
             <div className="space-y-6">
               <div className="scale-card">
                 <h3 className="text-[15px] font-medium text-[#1A1A3E] mb-4">Refund policy</h3>
-                <div className="grid grid-cols-3 gap-4 mb-4">
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-4">
                   <div>
                     <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Refund window (days)</label>
                     <input type="number" value={refundWindow} onChange={e => setRefundWindow(e.target.value)} className="scale-input" data-testid="input-refund-window" />

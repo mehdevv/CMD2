@@ -89,7 +89,7 @@ export default function IntelligencePage() {
             </ResponsiveContainer>
           </div>
 
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
             <div className="scale-card">
               <h3 className="text-[15px] font-medium text-[#1A1A3E] mb-4">Best responses that worked</h3>
               <div className="space-y-3">
@@ -119,7 +119,7 @@ export default function IntelligencePage() {
       {/* Opportunities Tab */}
       {tab === 'opportunities' && (
         <div className="space-y-6">
-          <div className="scale-card p-0 overflow-hidden">
+          <div className="scale-card scale-table-scroll p-0 overflow-hidden">
             <table className="w-full">
               <thead>
                 <tr style={{ background: '#F7F7F8', borderBottom: '1px solid #E4E4E8' }}>
@@ -144,9 +144,9 @@ export default function IntelligencePage() {
             </table>
           </div>
 
-          <div className="scale-card">
-            <h3 className="text-[15px] font-medium text-[#1A1A3E] mb-4">Stage conversion rates</h3>
-            <table className="w-full">
+          <div className="scale-card scale-table-scroll">
+            <h3 className="text-[15px] font-medium text-[#1A1A3E] mb-4 px-4 pt-4 sm:px-5">Stage conversion rates</h3>
+            <table className="w-full min-w-[320px]">
               <thead>
                 <tr>
                   <th className="text-left py-2 text-[12px] font-medium text-[#6B6B80]">Stage</th>
@@ -171,11 +171,11 @@ export default function IntelligencePage() {
       {/* Risk Tab */}
       {tab === 'risk' && (
         <div className="space-y-6">
-          <div className="scale-card p-0 overflow-hidden">
-            <div className="px-5 py-3 border-b border-[#E4E4E8]">
+          <div className="scale-card scale-table-scroll p-0 overflow-hidden">
+            <div className="px-4 py-3 border-b border-[#E4E4E8] sm:px-5">
               <h3 className="text-[15px] font-medium text-[#1A1A3E]">At-risk accounts</h3>
             </div>
-            <table className="w-full">
+            <table className="w-full min-w-[480px]">
               <thead>
                 <tr style={{ background: '#F7F7F8', borderBottom: '1px solid #E4E4E8' }}>
                   <th className="text-left py-2 px-4 text-[12px] font-medium text-[#6B6B80]">Contact</th>

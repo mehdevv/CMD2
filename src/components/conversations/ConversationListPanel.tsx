@@ -21,6 +21,7 @@ export interface ConversationListPanelProps {
   conversations: Conversation[];
   selectedId: string | null;
   onSelect: (c: Conversation) => void;
+  className?: string;
 }
 
 export function ConversationListPanel({
@@ -31,6 +32,7 @@ export function ConversationListPanel({
   conversations,
   selectedId,
   onSelect,
+  className,
 }: ConversationListPanelProps) {
   const filtered = conversations.filter(c => {
     if (search && !c.leadName.toLowerCase().includes(search.toLowerCase())) return false;
@@ -41,7 +43,12 @@ export function ConversationListPanel({
   });
 
   return (
-    <div className="flex w-[320px] flex-shrink-0 flex-col border-r border-[#E4E4E8] bg-white">
+    <div
+      className={cn(
+        'flex w-full flex-shrink-0 flex-col border-r border-[#E4E4E8] bg-white md:w-[min(320px,40vw)]',
+        className
+      )}
+    >
       <div className="border-b border-[#E4E4E8] p-3">
         <SearchField
           value={search}
@@ -51,14 +58,14 @@ export function ConversationListPanel({
         />
       </div>
 
-      <div className="flex border-b border-[#E4E4E8]">
+      <div className="flex overflow-x-auto border-b border-[#E4E4E8] md:overflow-visible">
         {TABS.map(t => (
           <button
             key={t.id}
             type="button"
             onClick={() => onTabChange(t.id)}
             className={cn(
-              'flex-1 py-2 text-[12px] font-medium transition-colors',
+              'min-w-[4.5rem] flex-1 whitespace-nowrap px-1 py-2 text-[11px] font-medium transition-colors sm:text-[12px]',
               tab === t.id ? 'border-b-2 border-[#2B62E8] text-[#1A1A3E]' : 'text-[#6B6B80] hover:text-[#1A1A3E]'
             )}
             data-testid={`button-tab-${t.id}`}

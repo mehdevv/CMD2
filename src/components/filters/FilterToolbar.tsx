@@ -21,7 +21,7 @@ export function FilterToolbar({ search, filters, right, className }: FilterToolb
     <div className={cn('mb-5 flex flex-wrap items-center justify-between gap-3', className)}>
       <div className="flex min-w-0 flex-1 flex-wrap items-center gap-3">
         {search ? (
-          <div className="max-w-md min-w-[12rem] flex-1">
+          <div className="max-w-md min-w-0 flex-1 sm:min-w-[12rem]">
             <SearchField
               value={search.value}
               onChange={search.onChange}

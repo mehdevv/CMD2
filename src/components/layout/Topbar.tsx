@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'wouter';
-import { Bell } from 'lucide-react';
+import { Bell, Menu } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
+import { useMobileNav } from '@/contexts/MobileNavContext';
 import { roleLabel } from '@/lib/utils';
 import { getAgentBrandSolidForPathname } from '@/lib/agent-brand';
 import { SearchField } from '@/components/ui/SearchField';
@@ -16,27 +17,35 @@ import {
 
 interface TopbarProps {
   title: string;
-  /** Optional override for the bottom accent (defaults from route for agent pages). */
   accentColor?: string;
 }
 
 export function Topbar({ title, accentColor: accentOverride }: TopbarProps) {
   const [location] = useLocation();
   const { user, logout } = useAuth();
+  const { toggle } = useMobileNav();
   const [query, setQuery] = useState('');
   const initials = user?.name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2) ?? '?';
   const accentColor = accentOverride ?? getAgentBrandSolidForPathname(location);
 
   return (
-    <header
-      className="fixed right-0 top-0 z-40 flex h-14 items-center justify-between border-b border-[#E4E4E8] bg-white px-6"
-      style={{ left: 220 }}
-    >
-      <span className="min-w-0 flex-1 truncate pr-4 text-[15px] font-semibold text-[#1A1A3E]" title={title}>
-        {title}
-      </span>
-      <div className="flex flex-shrink-0 items-center gap-3">
-        <div className="w-48 flex-shrink-0">
+    <header className="scale-app-topbar fixed right-0 top-0 z-40 flex h-14 items-center justify-between gap-2 border-b border-[#E4E4E8] bg-white px-3 sm:px-6">
+      <div className="flex min-w-0 flex-1 items-center gap-2 sm:gap-3">
+        <button
+          type="button"
+          className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-md text-[#6B6B80] transition-colors hover:bg-[#F7F7F8] hover:text-[#1A1A3E] md:hidden"
+          onClick={toggle}
+          aria-label="Open menu"
+          data-testid="button-mobile-menu"
+        >
+          <Menu size={20} />
+        </button>
+        <span className="min-w-0 flex-1 truncate text-[14px] font-semibold text-[#1A1A3E] sm:text-[15px]" title={title}>
+          {title}
+        </span>
+      </div>
+      <div className="flex flex-shrink-0 items-center gap-2 sm:gap-3">
+        <div className="hidden min-w-0 sm:block sm:w-40 md:w-48">
           <SearchField
             value={query}
             onChange={setQuery}

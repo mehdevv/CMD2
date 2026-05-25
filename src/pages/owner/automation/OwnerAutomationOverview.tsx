@@ -43,7 +43,7 @@ export default function OwnerAutomationOverview() {
     <AppShell title="Automation">
       <OwnerAutomationExplainer />
 
-      <div className="grid grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
         {AGENTS.map(agent => (
           <AutomationAgentTile
             key={agent.id}

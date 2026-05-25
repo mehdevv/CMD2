@@ -31,7 +31,7 @@ export default function AdminRulesPage() {
         <div className="scale-card">
           <h3 className="text-[15px] font-medium text-[#1A1A3E] mb-4">Refund policy</h3>
           <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <div>
                 <label className="block text-[13px] font-medium text-[#1A1A3E] mb-1.5">Refund window</label>
                 <div className="flex items-center gap-2">
@@ -95,7 +95,7 @@ export default function AdminRulesPage() {
         {/* Test */}
         <div className="scale-card">
           <h3 className="text-[15px] font-medium text-[#1A1A3E] mb-4">Test a scenario</h3>
-          <div className="grid grid-cols-3 gap-3 mb-4">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 mb-4">
             <div>
               <label className="block text-[12px] text-[#6B6B80] mb-1">Order value (DZD)</label>
               <input type="number" value={testValues.value} onChange={e => setTestValues(p => ({ ...p, value: e.target.value }))} className="scale-input" placeholder="e.g. 1500" data-testid="input-test-value" />

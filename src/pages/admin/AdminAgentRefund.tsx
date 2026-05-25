@@ -175,7 +175,7 @@ export default function AdminAgentRefund() {
 
         <SectionBlock id="policy" title="Refund policy parameters" description="Numbers the automation uses before involving a person.">
           <div className="scale-card space-y-4">
-            <div className="grid grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
               <FieldGroup label="Refund window (days)">
                 <input type="number" className="scale-input w-full" value={refundWindow} onChange={e => setRefundWindow(e.target.value)} />
               </FieldGroup>

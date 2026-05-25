@@ -107,8 +107,8 @@ export default function ContactDetailPage() {
 
       <ConvertToOpportunityDialog open={convertOpen} onOpenChange={setConvertOpen} lead={lead} />
 
-      <div className="flex gap-6" style={{ minHeight: 600 }}>
-        <div className="flex flex-col" style={{ flex: '0 0 55%' }}>
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-start" style={{ minHeight: 400 }}>
+        <div className="flex min-w-0 flex-1 flex-col lg:max-w-[55%]">
           <ConversationThread
             messages={messages}
             message={message}
@@ -128,7 +128,7 @@ export default function ContactDetailPage() {
           />
         </div>
 
-        <div className="scale-scroll max-h-[600px] flex-1 space-y-0 overflow-y-auto overscroll-contain rounded-lg border border-[#E4E4E8] bg-white">
+        <div className="scale-scroll min-w-0 flex-1 space-y-0 overflow-y-auto overscroll-contain rounded-lg border border-[#E4E4E8] bg-white lg:max-h-[min(600px,70vh)]">
           <EnrichmentCard lead={lead} onPatch={patch => void patchLead(lead.id, patch)} />
           <DealAsideCard lead={lead} />
           <MeetingShortcutsCard leadId={lead.id} />

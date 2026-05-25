@@ -14,7 +14,7 @@ export default function PerformancePage() {
   return (
     <AppShell title="Performance">
       <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Automation performance</h2>
-      <div className="grid grid-cols-2 gap-4 mb-8">
+      <div className="grid grid-cols-1 gap-4 mb-8 sm:grid-cols-2">
         {rawMetrics.map((agent) => (
           <div key={agent.name} className="scale-card">
             <h4 className="text-[15px] font-medium text-[#1A1A3E] mb-4">{agent.name}</h4>
@@ -36,7 +36,7 @@ export default function PerformancePage() {
 
       {/* Leaderboard */}
       <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Sales agent leaderboard</h2>
-      <div className="scale-card p-0 overflow-hidden mb-8">
+      <div className="scale-card scale-table-scroll p-0 overflow-hidden mb-8">
         <table className="w-full">
           <thead>
             <tr style={{ background: '#F7F7F8', borderBottom: '1px solid #E4E4E8' }}>

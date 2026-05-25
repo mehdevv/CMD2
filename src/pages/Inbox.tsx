@@ -8,9 +8,12 @@ import { ConversationThread } from '@/components/conversations/ConversationThrea
 import { useCrmData } from '@/contexts/CrmDataContext';
 import { useAuth } from '@/contexts/AuthContext';
 import { conversationsForRole } from '@/lib/agent-crm';
+import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 export default function InboxPage() {
   const { user } = useAuth();
+  const isMobile = useIsMobile();
   const { leads, conversations, sendMessage, setConversationTakeover } = useCrmData();
   const scopedConversations = useMemo(
     () => conversationsForRole(leads, conversations, user),
@@ -21,6 +24,7 @@ export default function InboxPage() {
   const [selected, setSelected] = useState<Conversation | null>(null);
   const [message, setMessage] = useState('');
   const [takenOver, setTakenOver] = useState(false);
+  const [mobileShowThread, setMobileShowThread] = useState(false);
 
   useEffect(() => {
     if (scopedConversations.length === 0) {
@@ -36,12 +40,30 @@ export default function InboxPage() {
   }, [scopedConversations]);
 
   useEffect(() => {
+    if (!isMobile) {
+      queueMicrotask(() => setMobileShowThread(false));
+    }
+  }, [isMobile]);
+
+  useEffect(() => {
     if (!selected) {
       queueMicrotask(() => setTakenOver(false));
       return;
     }
     queueMicrotask(() => setTakenOver(Boolean(selected.automationPaused)));
   }, [selected]);
+
+  const handleSelect = useCallback(
+    (c: Conversation) => {
+      setSelected(c);
+      if (isMobile) setMobileShowThread(true);
+    },
+    [isMobile]
+  );
+
+  const handleBackToList = useCallback(() => {
+    setMobileShowThread(false);
+  }, []);
 
   const handleTakeoverToggle = useCallback(async () => {
     if (!selected || !user) return;
@@ -66,26 +88,31 @@ export default function InboxPage() {
     setMessage('');
   }, [selected, message, user, sendMessage]);
 
+  const showList = !isMobile || !mobileShowThread;
+  const showThread = !isMobile || mobileShowThread;
+
   return (
     <AppShell title="Inbox" noPadding>
-      <div className="flex" style={{ height: 'calc(100vh - 56px)' }}>
+      <div className="flex min-h-0 flex-1 flex-col md:flex-row" style={{ minHeight: 'calc(100dvh - 3.5rem)' }}>
         <ConversationListPanel
+          className={cn(!showList && 'hidden md:flex')}
           search={search}
           onSearchChange={setSearch}
           tab={tab}
           onTabChange={setTab}
           conversations={scopedConversations}
           selectedId={selected?.id ?? null}
-          onSelect={setSelected}
+          onSelect={handleSelect}
         />
 
-        <div className="flex min-h-0 min-w-0 flex-1 flex-col bg-white">
+        <div className={cn('flex min-h-0 min-w-0 flex-1 flex-col bg-white', !showThread && 'hidden md:flex')}>
           {selected ? (
             <>
               <ThreadHeader
                 conversation={selected}
                 takenOver={takenOver}
                 onTakeoverToggle={() => void handleTakeoverToggle()}
+                onBack={isMobile ? handleBackToList : undefined}
               />
               <ConversationThread
                 variant="plain"
@@ -99,10 +126,12 @@ export default function InboxPage() {
               />
             </>
           ) : (
-            <div className="flex flex-1 items-center justify-center">
+            <div className="flex flex-1 items-center justify-center p-6">
               <div className="text-center">
                 <p className="text-[15px] font-medium text-[#1A1A3E]">No conversations yet</p>
-                <p className="mt-1 text-[14px] text-[#6B6B80]">Add a lead to open a thread, or check back after inbound messages arrive.</p>
+                <p className="mt-1 text-[14px] text-[#6B6B80]">
+                  Add a lead to open a thread, or check back after inbound messages arrive.
+                </p>
               </div>
             </div>
           )}

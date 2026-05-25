@@ -48,7 +48,7 @@ export default function LoginPage() {
     <div className="min-h-screen flex items-center justify-center px-4 py-10">
       <MotionStagger className="w-full max-w-[440px] space-y-5">
         <MotionItem>
-          <MotionAuthPanel className="scale-card scale-card-motion rounded-2xl p-10 w-full shadow-[var(--shadow-elevated)]">
+          <MotionAuthPanel className="scale-card scale-card-motion rounded-2xl p-6 sm:p-10 w-full shadow-[var(--shadow-elevated)]">
           <MotionFade className="flex flex-col items-center mb-8">
             <motion.img
               src={BRAND_WORDMARK_PNG}

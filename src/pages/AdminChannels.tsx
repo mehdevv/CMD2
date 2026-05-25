@@ -46,7 +46,7 @@ export default function AdminChannelsPage() {
 
       {/* Available channels */}
       <h2 className="text-[15px] font-semibold text-[#1A1A3E] mb-4">Add a channel</h2>
-      <div className="grid grid-cols-3 gap-4 mb-8">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 mb-8">
         {AVAILABLE.map(ch => (
           <div key={ch.channel} className="scale-card hover:border-[#C8C8D0] transition-colors" data-testid={`card-add-channel-${ch.channel}`}>
             <div className="flex items-center gap-2 mb-2">

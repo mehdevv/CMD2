@@ -60,9 +60,9 @@ export function MeetingNotesShell({ breadcrumb, title, existingNote, leadId, opp
   };
 
   return (
-    <div className="mx-auto max-w-[680px]">
+    <div className="mx-auto w-full max-w-[680px] px-0 sm:px-0">
       <div className="mb-6 flex items-center gap-1.5 text-[13px] text-[#6B6B80]">{breadcrumb}</div>
-      <h1 className="mb-6 text-[22px] font-semibold text-[#1A1A3E]">{title}</h1>
+      <h1 className="mb-6 text-[18px] font-semibold text-[#1A1A3E] sm:text-[22px]">{title}</h1>
 
       {!submitted ? (
         <>

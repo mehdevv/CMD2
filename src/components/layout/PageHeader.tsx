@@ -34,7 +34,7 @@ export function PageHeader({ title, subtitle, breadcrumb, actions, className }: 
             ))}
           </nav>
         ) : null}
-        <h1 className="text-[22px] font-semibold text-[#1A1A3E]">{title}</h1>
+        <h1 className="text-[18px] font-semibold text-[#1A1A3E] sm:text-[22px]">{title}</h1>
         {subtitle ? <p className="text-[13px] text-[#6B6B80] mt-1">{subtitle}</p> : null}
       </div>
       {actions ? <div className="flex flex-shrink-0 flex-wrap items-center gap-2 mt-3 sm:mt-0">{actions}</div> : null}

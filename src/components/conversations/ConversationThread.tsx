@@ -54,7 +54,7 @@ export function ConversationThread({
       <div
         className={
           fillParent
-            ? 'scale-scroll min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-6'
+            ? 'scale-scroll min-h-0 flex-1 space-y-4 overflow-y-auto overscroll-contain p-4 sm:p-6'
             : 'scale-scroll max-h-[480px] flex-1 space-y-4 overflow-y-auto overscroll-contain p-5'
         }
       >

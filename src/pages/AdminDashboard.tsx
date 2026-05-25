@@ -38,7 +38,7 @@ export default function AdminDashboard() {
         ]}
       />
 
-      <div className="mb-6 grid gap-6" style={{ gridTemplateColumns: '2fr 1fr' }}>
+      <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]">
         <PageSection title="Automation activity">
           <AutomationActivityFeed items={[]} />
         </PageSection>
@@ -48,7 +48,7 @@ export default function AdminDashboard() {
         </PageSection>
       </div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <PageSection title="Pending template approvals" padding="none">
           <PendingTemplatesTable rows={[]} />
         </PageSection>
